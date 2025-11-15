@@ -70,6 +70,19 @@ HES Core is a professional IoT-enabled Head-End System for smart meter managemen
 - Communication failure tracking
 - Event analysis and reporting
 
+### 6. AI-Powered Monitoring
+- **Intelligent Consumption Analysis**: AI analyzes consumption patterns to detect trends and predict future usage
+- **Anomaly Detection**: Automatically identifies unusual consumption spikes, drops, and patterns
+- **Smart Alert Prioritization**: AI prioritizes alerts based on severity, age, and impact
+- **Predictive Insights**: Generates actionable insights for:
+  - Revenue protection opportunities
+  - System efficiency improvements
+  - Security threat detection
+  - Maintenance recommendations
+  - Cost-saving opportunities
+- **Confidence Scoring**: All AI-detected anomalies include confidence scores (0-100%)
+- **Automated Monitoring**: AI runs every 15 minutes to continuously analyze system health
+
 ## CSV Import Templates
 
 The system provides CSV templates for bulk operations:
@@ -219,6 +232,15 @@ GET    /api/events                    # Get system events
 GET    /api/alerts                    # Get alerts
 ```
 
+### AI Monitoring Operations
+```
+GET    /api/ai/insights               # Get AI-generated insights and recommendations
+GET    /api/ai/anomalies              # Get detected anomalies
+GET    /api/ai/consumption-pattern/:meterId  # Analyze consumption pattern for specific meter
+GET    /api/ai/alerts/prioritized     # Get AI-prioritized alerts
+POST   /api/ai/analyze                # Run comprehensive AI analysis (admin only)
+```
+
 ## Security
 
 - JWT-based authentication
@@ -251,6 +273,7 @@ GET /health - System health status
 ### Scheduled Jobs
 - Meter status check: Every 30 seconds
 - Anomaly detection: Every 5 minutes
+- AI monitoring and analysis: Every 15 minutes
 - Alert cleanup: Daily at midnight
 
 ### Logs

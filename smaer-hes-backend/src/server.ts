@@ -20,11 +20,13 @@ import dashboardRoutes from './routes/dashboard.routes';
 import remoteRoutes from './routes/remote.routes';
 import obisRoutes from './routes/obis.routes';
 import templateRoutes from './routes/template.routes';
+import aiRoutes from './routes/ai.routes';
 
 // Import services
 import { MeterStatusService } from './services/meterStatus.service';
 import { AlertService } from './services/alert.service';
 import { AnomalyDetectionService } from './services/anomalyDetection.service';
+import aiMonitoringService from './services/aiMonitoring.service';
 
 // Load environment variables
 dotenv.config();
@@ -80,6 +82,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/remote', remoteRoutes);
 app.use('/api/obis', obisRoutes);
 app.use('/api/templates', templateRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -130,7 +133,17 @@ function initializeServices() {
       console.error('Error in anomaly detection:', error);
     }
   });
-  
+
+  // Run AI monitoring and analysis (every 15 minutes)
+  cron.schedule('*/15 * * * *', async () => {
+    try {
+      await aiMonitoringService.detectAnomalies();
+      console.log('✓ AI monitoring completed');
+    } catch (error) {
+      console.error('Error in AI monitoring:', error);
+    }
+  });
+
   // Clean old events (daily at midnight)
   cron.schedule('0 0 * * *', async () => {
     try {
