@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<ArrayOfSeason xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <season>
+    <Pdu_Str />
+    <Pdu_Data_Type>null_data</Pdu_Data_Type>
+    <season_profile_name>
+      <Pdu_Str>1</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>31</Pdu_value>
+    </season_profile_name>
+    <season_start>
+      <Pdu_Str>XXXX-03-25 XX:XX:XX</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>FFFF0319FFFFFFFFFF800000</Pdu_value>
+    </season_start>
+    <week_name>
+      <Pdu_Str>1</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>31</Pdu_value>
+    </week_name>
+  </season>
+  <season>
+    <Pdu_Str />
+    <Pdu_Data_Type>null_data</Pdu_Data_Type>
+    <season_profile_name>
+      <Pdu_Str>2</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>32</Pdu_value>
+    </season_profile_name>
+    <season_start>
+      <Pdu_Str>XXXX-07-01 XX:XX:XX</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>FFFF0701FFFFFFFFFF800000</Pdu_value>
+    </season_start>
+    <week_name>
+      <Pdu_Str>2</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>32</Pdu_value>
+    </week_name>
+  </season>
+  <season>
+    <Pdu_Str />
+    <Pdu_Data_Type>null_data</Pdu_Data_Type>
+    <season_profile_name>
+      <Pdu_Str>3</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>33</Pdu_value>
+    </season_profile_name>
+    <season_start>
+      <Pdu_Str>XXXX-11-01 XX:XX:XX</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>FFFF0B01FFFFFFFFFF800000</Pdu_value>
+    </season_start>
+    <week_name>
+      <Pdu_Str>3</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>33</Pdu_value>
+    </week_name>
+  </season>
+  <season>
+    <Pdu_Str />
+    <Pdu_Data_Type>null_data</Pdu_Data_Type>
+    <season_profile_name>
+      <Pdu_Str>4</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>34</Pdu_value>
+    </season_profile_name>
+    <season_start>
+      <Pdu_Str>XXXX-12-28 XX:XX:XX</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>FFFF0C1CFFFFFFFFFF800000</Pdu_value>
+    </season_start>
+    <week_name>
+      <Pdu_Str>4</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>34</Pdu_value>
+    </week_name>
+  </season>
+</ArrayOfSeason>
