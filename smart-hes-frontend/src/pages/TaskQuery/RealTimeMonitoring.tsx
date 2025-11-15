@@ -80,39 +80,9 @@ interface ObisParameter {
   writable: boolean;
   unit?: string;
   description?: string;
+  group?: string;
+  accessRight?: string;
 }
-
-const OBIS_PARAMETERS: ObisParameter[] = [
-  // Energy Parameters
-  { code: '1.0.1.8.0.255', name: 'Total Active Energy', category: 'Energy', readable: true, writable: false, unit: 'kWh' },
-  { code: '1.0.2.8.0.255', name: 'Total Reactive Energy', category: 'Energy', readable: true, writable: false, unit: 'kVArh' },
-  { code: '1.0.15.8.0.255', name: 'Total Energy', category: 'Energy', readable: true, writable: false, unit: 'kWh' },
-  
-  // Voltage Parameters
-  { code: '1.0.32.7.0.255', name: 'Voltage L1', category: 'Voltage', readable: true, writable: false, unit: 'V' },
-  { code: '1.0.52.7.0.255', name: 'Voltage L2', category: 'Voltage', readable: true, writable: false, unit: 'V' },
-  { code: '1.0.72.7.0.255', name: 'Voltage L3', category: 'Voltage', readable: true, writable: false, unit: 'V' },
-  
-  // Current Parameters
-  { code: '1.0.31.7.0.255', name: 'Current L1', category: 'Current', readable: true, writable: false, unit: 'A' },
-  { code: '1.0.51.7.0.255', name: 'Current L2', category: 'Current', readable: true, writable: false, unit: 'A' },
-  { code: '1.0.71.7.0.255', name: 'Current L3', category: 'Current', readable: true, writable: false, unit: 'A' },
-  
-  // Power Parameters
-  { code: '1.0.1.7.0.255', name: 'Total Active Power', category: 'Power', readable: true, writable: false, unit: 'kW' },
-  { code: '1.0.3.7.0.255', name: 'Total Reactive Power', category: 'Power', readable: true, writable: false, unit: 'kVAr' },
-  { code: '1.0.9.7.0.255', name: 'Total Apparent Power', category: 'Power', readable: true, writable: false, unit: 'kVA' },
-  
-  // System Parameters
-  { code: '1.0.13.7.0.255', name: 'Power Factor', category: 'System', readable: true, writable: false, unit: '' },
-  { code: '1.0.14.7.0.255', name: 'Frequency', category: 'System', readable: true, writable: false, unit: 'Hz' },
-  { code: '0.0.96.1.0.255', name: 'Meter Serial Number', category: 'System', readable: true, writable: false },
-  
-  // Control Parameters
-  { code: '0.0.96.3.10.255', name: 'Relay Control', category: 'Control', readable: true, writable: true },
-  { code: '1.0.0.4.2.255', name: 'Current Tariff', category: 'Control', readable: true, writable: true },
-  { code: '0.0.96.2.0.255', name: 'Meter Mode', category: 'Control', readable: true, writable: true },
-];
 
 const RealTimeMonitoring: React.FC = () => {
   const [meters, setMeters] = useState<Meter[]>([]);
@@ -124,18 +94,21 @@ const RealTimeMonitoring: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [refreshInterval, setRefreshInterval] = useState(30);
-  
+  const [obisParameters, setObisParameters] = useState<ObisParameter[]>([]);
+  const [loadingParameters, setLoadingParameters] = useState(false);
+
   const { socket } = useSocket();
 
   useEffect(() => {
     fetchMeters();
-    
+    fetchObisParameters();
+
     // Set up auto-refresh
     let interval: NodeJS.Timeout;
     if (autoRefresh) {
       interval = setInterval(fetchMeters, refreshInterval * 1000);
     }
-    
+
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -167,7 +140,7 @@ const RealTimeMonitoring: React.FC = () => {
       if (filterStatus !== 'all') {
         params.status = filterStatus;
       }
-      
+
       const response = await axios.get('/meters', { params });
       setMeters(response.data.data);
     } catch (error) {
@@ -175,6 +148,61 @@ const RealTimeMonitoring: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchObisParameters = async () => {
+    try {
+      setLoadingParameters(true);
+      const response = await axios.get('/obis/functions');
+
+      if (response.data.success) {
+        // Transform OBIS functions to ObisParameter format
+        const parameters: ObisParameter[] = response.data.data.map((func: any) => ({
+          code: func.code,
+          name: func.name || func.code,
+          category: categorizeObisCode(func.code, func.group),
+          readable: true,
+          writable: func.accessRight === 'RW' || func.accessRight === 'W',
+          unit: func.unit,
+          description: func.description,
+          group: func.group,
+          accessRight: func.accessRight
+        }));
+
+        setObisParameters(parameters);
+      }
+    } catch (error) {
+      console.error('Failed to fetch OBIS parameters:', error);
+      toast.error('Failed to load OBIS parameters');
+    } finally {
+      setLoadingParameters(false);
+    }
+  };
+
+  // Helper function to categorize OBIS codes
+  const categorizeObisCode = (code: string, group?: string): string => {
+    if (group) return group;
+
+    // Parse OBIS code and categorize based on C field
+    const match = code.match(/\d+-\d+:(\d+)\.\d+\.\d+\.\d+/);
+    if (!match) return 'General';
+
+    const cField = parseInt(match[1]);
+
+    if (cField >= 1 && cField <= 9) return 'Energy';
+    if (cField >= 11 && cField <= 29) return 'Demand';
+    if (cField >= 31 && cField <= 39) return 'Current';
+    if (cField >= 41 && cField <= 49) return 'Voltage';
+    if (cField >= 51 && cField <= 59) return 'Voltage';
+    if (cField >= 61 && cField <= 69) return 'Power';
+    if (cField >= 71 && cField <= 79) return 'Current';
+    if (cField >= 81 && cField <= 89) return 'Angle';
+    if (cField >= 91 && cField <= 99) return 'Frequency';
+    if (cField === 0 || cField === 96) return 'System';
+    if (cField === 13) return 'Power Factor';
+    if (cField === 14) return 'Frequency';
+
+    return 'General';
   };
 
   const updateMeterReading = (data: any) => {
@@ -252,17 +280,17 @@ const RealTimeMonitoring: React.FC = () => {
       toast.error('Please select at least one meter');
       return;
     }
-    
+
     const writableParams = Array.from(selectedParameters).filter(code => {
-      const param = OBIS_PARAMETERS.find(p => p.code === code);
+      const param = obisParameters.find(p => p.code === code);
       return param?.writable;
     });
-    
+
     if (writableParams.length === 0) {
       toast.error('Please select at least one writable parameter');
       return;
     }
-    
+
     // Open dialog to get values for writable parameters
     // Implementation would include a form to input values
     toast('Execute command dialog would open here');
@@ -306,7 +334,7 @@ const RealTimeMonitoring: React.FC = () => {
     meter.customer?.customerName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const parameterCategories = Array.from(new Set(OBIS_PARAMETERS.map(p => p.category)));
+  const parameterCategories = Array.from(new Set(obisParameters.map(p => p.category)));
 
   return (
     <Box>
@@ -530,13 +558,16 @@ const RealTimeMonitoring: React.FC = () => {
       </TableContainer>
 
       {/* Parameters Selection Dialog */}
-      <Dialog 
-        open={parametersDialog} 
-        onClose={() => setParametersDialog(false)} 
-        maxWidth="md" 
+      <Dialog
+        open={parametersDialog}
+        onClose={() => setParametersDialog(false)}
+        maxWidth="md"
         fullWidth
       >
-        <DialogTitle>Select Parameters to Read/Write</DialogTitle>
+        <DialogTitle>
+          Select Parameters to Read/Write
+          {loadingParameters && <LinearProgress sx={{ mt: 1 }} />}
+        </DialogTitle>
         <DialogContent>
           {parameterCategories.map((category) => (
             <Box key={category} sx={{ mb: 3 }}>
@@ -544,11 +575,11 @@ const RealTimeMonitoring: React.FC = () => {
                 {category}
               </Typography>
               <Grid container spacing={1}>
-                {OBIS_PARAMETERS.filter(p => p.category === category).map((param) => (
+                {obisParameters.filter(p => p.category === category).map((param) => (
                   <Grid item xs={12} md={6} key={param.code}>
-                    <Box 
-                      sx={{ 
-                        display: 'flex', 
+                    <Box
+                      sx={{
+                        display: 'flex',
                         alignItems: 'center',
                         p: 1,
                         borderRadius: 1,
@@ -602,8 +633,8 @@ const RealTimeMonitoring: React.FC = () => {
           <Button onClick={() => setParametersDialog(false)}>
             Cancel
           </Button>
-          <Button 
-            onClick={() => setParametersDialog(false)} 
+          <Button
+            onClick={() => setParametersDialog(false)}
             variant="contained"
             disabled={selectedParameters.size === 0}
           >

@@ -24,6 +24,8 @@ import obisRoutes from './routes/obis.routes';
 import { MeterStatusService } from './services/meterStatus.service';
 import { AlertService } from './services/alert.service';
 import { AnomalyDetectionService } from './services/anomalyDetection.service';
+import { meterPollingService } from './services/meterPolling.service';
+import { obisFunctionService } from './services/obisFunction.service';
 
 // Load environment variables
 dotenv.config();
@@ -51,6 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Global Socket.io instance
 export const socketIO = io;
+export { io };
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI!)
@@ -111,6 +114,17 @@ io.on('connection', (socket) => {
 
 // Initialize services
 function initializeServices() {
+  // Load OBIS function database
+  console.log('📊 Loading OBIS function database...');
+  obisFunctionService.loadFunctions();
+  console.log('✅ OBIS function database loaded');
+
+  // Start meter polling service (default: every 60 seconds)
+  const pollingInterval = parseInt(process.env.METER_POLLING_INTERVAL || '60000');
+  console.log(`🔄 Starting meter polling service (interval: ${pollingInterval}ms)...`);
+  meterPollingService.start(pollingInterval);
+  console.log('✅ Meter polling service started');
+
   // Start meter status monitoring (every 30 seconds)
   cron.schedule('*/30 * * * * *', async () => {
     try {
@@ -119,7 +133,7 @@ function initializeServices() {
       console.error('Error checking meter status:', error);
     }
   });
-  
+
   // Run anomaly detection (every 5 minutes)
   cron.schedule('*/5 * * * *', async () => {
     try {
@@ -128,7 +142,7 @@ function initializeServices() {
       console.error('Error in anomaly detection:', error);
     }
   });
-  
+
   // Clean old events (daily at midnight)
   cron.schedule('0 0 * * *', async () => {
     try {
