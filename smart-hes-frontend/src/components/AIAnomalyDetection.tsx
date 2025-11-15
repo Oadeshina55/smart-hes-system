@@ -67,11 +67,12 @@ export const AIAnomalyDetection: React.FC = () => {
   const fetchAnomalies = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/ai/anomalies');
-      setAnomalies(response.data.data);
+      const response = await axios.get('ai/anomalies');
+      setAnomalies(response.data.data || []);
     } catch (error: any) {
       toast.error('Failed to load anomaly detection');
       console.error(error);
+      setAnomalies([]);
     } finally {
       setLoading(false);
     }

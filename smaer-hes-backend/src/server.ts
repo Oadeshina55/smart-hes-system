@@ -21,6 +21,7 @@ import remoteRoutes from './routes/remote.routes';
 import obisRoutes from './routes/obis.routes';
 import templateRoutes from './routes/template.routes';
 import aiRoutes from './routes/ai.routes';
+import dlmsRoutes from './routes/dlms.routes';
 
 // Import services
 import { MeterStatusService } from './services/meterStatus.service';
@@ -83,6 +84,7 @@ app.use('/api/remote', remoteRoutes);
 app.use('/api/obis', obisRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/dlms', dlmsRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

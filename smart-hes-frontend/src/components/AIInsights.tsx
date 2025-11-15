@@ -64,11 +64,12 @@ export const AIInsights: React.FC = () => {
   const fetchInsights = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/ai/insights');
-      setInsights(response.data.data);
+      const response = await axios.get('ai/insights');
+      setInsights(response.data.data || []);
     } catch (error: any) {
       toast.error('Failed to load AI insights');
       console.error(error);
+      setInsights([]);
     } finally {
       setLoading(false);
     }
