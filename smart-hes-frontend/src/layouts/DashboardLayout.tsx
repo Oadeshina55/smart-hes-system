@@ -275,8 +275,8 @@ const DashboardLayout: React.FC = () => {
     <div>
       <Toolbar sx={{
         background: mode === 'light'
-          ? 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)'
-          : 'linear-gradient(135deg, #5BA3FF 0%, #00D4FF 100%)',
+          ? 'linear-gradient(135deg, #003A5D 0%, #00758F 100%)'
+          : 'linear-gradient(135deg, #004070 0%, #008FA0 100%)',
         color: 'white',
         display: 'flex',
         alignItems: 'center',
@@ -447,7 +447,7 @@ const DashboardLayout: React.FC = () => {
           </IconButton>
 
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 600, fontSize: '1.125rem' }}>
-            New Hampshire Energy Management System
+            New Hampshire Capital - Head End System
           </Typography>
 
           <IconButton onClick={toggleTheme} color="inherit" sx={{ mr: 1 }}>
