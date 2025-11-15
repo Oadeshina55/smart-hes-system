@@ -190,12 +190,12 @@ export default function EnergyConsumption() {
 	};
 
 	return (
-		<Box sx={{ p: 2 }}>
-			<Typography variant="h4" sx={{ mb: 3 }}>Energy Consumption Report</Typography>
+		<Box sx={{ p: 3 }}>
+			<Typography variant="h4" sx={{ mb: 3, fontWeight: 700, color: '#344767' }}>Energy Consumption Report</Typography>
 
 			{/* Filters */}
-			<Paper sx={{ p: 3, mb: 3 }}>
-				<Typography variant="h6" sx={{ mb: 2 }}>Report Filters</Typography>
+			<Paper sx={{ p: 3, mb: 3, borderRadius: 3 }}>
+				<Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>Report Filters</Typography>
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={6}>
 						<TextField
@@ -274,7 +274,10 @@ export default function EnergyConsumption() {
 							fullWidth
 							onClick={generateReport}
 							disabled={loading}
-							sx={{ height: '56px' }}
+							sx={{
+								height: '56px',
+								background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
+							}}
 						>
 							{loading ? <CircularProgress size={24} /> : 'Generate Report'}
 						</Button>
@@ -286,42 +289,42 @@ export default function EnergyConsumption() {
 			{consumptionData.length > 0 && (
 				<Grid container spacing={2} sx={{ mb: 3 }}>
 					<Grid item xs={12} sm={6} md={3}>
-						<Card>
+						<Card sx={{ borderRadius: 3 }}>
 							<CardContent>
-								<Typography color="textSecondary" gutterBottom>
+								<Typography color="textSecondary" gutterBottom sx={{ fontSize: '0.875rem' }}>
 									Total Energy
 								</Typography>
-								<Typography variant="h5">{stats.totalEnergy.toFixed(2)} kWh</Typography>
+								<Typography variant="h5" sx={{ fontWeight: 700 }}>{stats.totalEnergy.toFixed(2)} kWh</Typography>
 							</CardContent>
 						</Card>
 					</Grid>
 					<Grid item xs={12} sm={6} md={3}>
-						<Card>
+						<Card sx={{ borderRadius: 3 }}>
 							<CardContent>
-								<Typography color="textSecondary" gutterBottom>
+								<Typography color="textSecondary" gutterBottom sx={{ fontSize: '0.875rem' }}>
 									Avg Power
 								</Typography>
-								<Typography variant="h5">{stats.avgPower.toFixed(2)} kW</Typography>
+								<Typography variant="h5" sx={{ fontWeight: 700 }}>{stats.avgPower.toFixed(2)} kW</Typography>
 							</CardContent>
 						</Card>
 					</Grid>
 					<Grid item xs={12} sm={6} md={3}>
-						<Card>
+						<Card sx={{ borderRadius: 3 }}>
 							<CardContent>
-								<Typography color="textSecondary" gutterBottom>
+								<Typography color="textSecondary" gutterBottom sx={{ fontSize: '0.875rem' }}>
 									Avg Voltage
 								</Typography>
-								<Typography variant="h5">{stats.avgVoltage.toFixed(2)} V</Typography>
+								<Typography variant="h5" sx={{ fontWeight: 700 }}>{stats.avgVoltage.toFixed(2)} V</Typography>
 							</CardContent>
 						</Card>
 					</Grid>
 					<Grid item xs={12} sm={6} md={3}>
-						<Card>
+						<Card sx={{ borderRadius: 3 }}>
 							<CardContent>
-								<Typography color="textSecondary" gutterBottom>
+								<Typography color="textSecondary" gutterBottom sx={{ fontSize: '0.875rem' }}>
 									Avg Current
 								</Typography>
-								<Typography variant="h5">{stats.avgCurrent.toFixed(2)} A</Typography>
+								<Typography variant="h5" sx={{ fontWeight: 700 }}>{stats.avgCurrent.toFixed(2)} A</Typography>
 							</CardContent>
 						</Card>
 					</Grid>
@@ -330,8 +333,8 @@ export default function EnergyConsumption() {
 
 			{/* Chart */}
 			{chartData.length > 0 && (
-				<Paper sx={{ p: 2, mb: 3 }}>
-					<Typography variant="h6" sx={{ mb: 2 }}>
+				<Paper sx={{ p: 3, mb: 3, borderRadius: 3 }}>
+					<Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
 						Energy & Power Trend
 					</Typography>
 					<ResponsiveContainer width="100%" height={300}>
@@ -372,25 +375,25 @@ export default function EnergyConsumption() {
 
 			{/* Data Table */}
 			{consumptionData.length > 0 && (
-				<TableContainer component={Paper}>
+				<TableContainer component={Paper} sx={{ borderRadius: 3 }}>
 					<Table>
-						<TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+						<TableHead>
 							<TableRow>
-								<TableCell>Meter</TableCell>
-								<TableCell>Area</TableCell>
-								<TableCell>Timestamp</TableCell>
-								<TableCell align="right">Active Energy (kWh)</TableCell>
-								<TableCell align="right">Active Power (kW)</TableCell>
-								<TableCell align="right">Voltage (V)</TableCell>
-								<TableCell align="right">Current (A)</TableCell>
-								<TableCell align="right">Power Factor</TableCell>
-								<TableCell align="right">Frequency (Hz)</TableCell>
+								<TableCell sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Meter</TableCell>
+								<TableCell sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Area</TableCell>
+								<TableCell sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Timestamp</TableCell>
+								<TableCell align="right" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Active Energy (kWh)</TableCell>
+								<TableCell align="right" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Active Power (kW)</TableCell>
+								<TableCell align="right" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Voltage (V)</TableCell>
+								<TableCell align="right" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Current (A)</TableCell>
+								<TableCell align="right" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Power Factor</TableCell>
+								<TableCell align="right" sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 600 }}>Frequency (Hz)</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{consumptionData.map((row, idx) => (
-								<TableRow key={idx}>
-									<TableCell>{row.meter?.meterNumber}</TableCell>
+								<TableRow key={idx} hover>
+									<TableCell sx={{ fontWeight: 600 }}>{row.meter?.meterNumber}</TableCell>
 									<TableCell>{row.area?.name}</TableCell>
 									<TableCell>{new Date(row.timestamp).toLocaleString()}</TableCell>
 									<TableCell align="right">{row.energy.activeEnergy.toFixed(2)}</TableCell>
@@ -407,7 +410,7 @@ export default function EnergyConsumption() {
 			)}
 
 			{consumptionData.length === 0 && !loading && (
-				<Paper sx={{ p: 3, textAlign: 'center' }}>
+				<Paper sx={{ p: 4, textAlign: 'center', borderRadius: 3 }}>
 					<Typography color="textSecondary">No data available. Configure filters and click "Generate Report".</Typography>
 				</Paper>
 			)}
