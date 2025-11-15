@@ -350,8 +350,8 @@ class AIMonitoringService {
             priorityScore += 30;
         }
 
-        // Adjust for severity
-        switch (alert.severity) {
+        // Adjust for priority
+        switch (alert.priority) {
           case 'critical':
             priorityScore += 30;
             break;
