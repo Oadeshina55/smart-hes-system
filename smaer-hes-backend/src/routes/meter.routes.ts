@@ -3,11 +3,14 @@ import { authenticate, authorize } from '../middleware/auth.middleware';
 import { Meter } from '../models/Meter.model';
 import { parseObisForBrand } from '../utils/obisParser';
 import { Consumption } from '../models/Consumption.model';
+import { MeterReading, IObisReading } from '../models/MeterReading.model';
 import { Event, EVENT_TYPES } from '../models/Event.model';
 import { Alert, ALERT_TYPES } from '../models/Alert.model';
 import { Area } from '../models/Area.model';
 import { SimCard } from '../models/SimCard.model';
 import { MeterStatusService } from '../services/meterStatus.service';
+import { meterPollingService } from '../services/meterPolling.service';
+import { obisFunctionService } from '../services/obisFunction.service';
 import { socketIO } from '../server';
 import multer from 'multer';
 import csv from 'csv-parser';
@@ -317,21 +320,28 @@ router.post('/data-ingestion', async (req, res) => {
     const {
       meterNumber,
       readings,
+      obisReadings,
       events,
       timestamp,
       authentication,
     } = req.body;
-    
+
     // Find meter
     const meter = await Meter.findOne({ meterNumber });
-    
+
     if (!meter) {
       return res.status(404).json({
         success: false,
         message: 'Meter not found',
       });
     }
-    
+
+    // Process OBIS readings if provided
+    let processedObisReadings: IObisReading[] = [];
+    if (obisReadings) {
+      processedObisReadings = processObisReadings(obisReadings, meter.brand);
+    }
+
     // Update meter readings
     if (readings) {
       meter.currentReading = {
@@ -343,25 +353,25 @@ router.post('/data-ingestion', async (req, res) => {
         powerFactor: readings.powerFactor || meter.currentReading.powerFactor,
         timestamp: new Date(timestamp || Date.now()),
       };
-      
+
       // Update tamper status if provided
       if (readings.tamperStatus) {
         meter.tamperStatus = {
           ...meter.tamperStatus,
           ...readings.tamperStatus,
         };
-        
+
         // Check for tamper alerts
         await MeterStatusService.checkTamperStatus(meter);
       }
     }
-    
+
     // Update meter status and last seen
     meter.status = 'online';
     meter.lastSeen = new Date();
     await meter.save();
-    
-    // Store consumption data
+
+    // Store consumption data (legacy format)
     if (readings) {
       await Consumption.create({
         meter: meter._id,
@@ -402,14 +412,28 @@ router.post('/data-ingestion', async (req, res) => {
         frequency: readings.frequency || 50,
       });
     }
-    
+
+    // Store detailed OBIS readings
+    if (processedObisReadings.length > 0) {
+      await MeterReading.create({
+        meter: meter._id,
+        meterNumber: meter.meterNumber,
+        timestamp: new Date(timestamp || Date.now()),
+        readings: processedObisReadings,
+        readingType: 'push',
+        source: 'meter-push',
+        communicationStatus: 'success'
+      });
+    }
+
     // Emit real-time update via socket
     socketIO.emit('meter-reading-update', {
       meterId: meter._id,
       meterNumber: meter.meterNumber,
       reading: meter.currentReading,
+      obisReadings: processedObisReadings,
     });
-    
+
     res.json({
       success: true,
       message: 'Data ingested successfully',
@@ -423,5 +447,202 @@ router.post('/data-ingestion', async (req, res) => {
     });
   }
 });
+
+// Read specific OBIS parameters from meter (on-demand)
+router.post('/:id/read-obis', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+  try {
+    const { obisCodes } = req.body;
+
+    if (!obisCodes || !Array.isArray(obisCodes)) {
+      return res.status(400).json({
+        success: false,
+        message: 'obisCodes array is required'
+      });
+    }
+
+    const result = await meterPollingService.pollMeterOnDemand(req.params.id, obisCodes);
+
+    res.json({
+      success: true,
+      message: 'OBIS parameters read successfully',
+      data: result
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to read OBIS parameters',
+      error: error.message
+    });
+  }
+});
+
+// Write specific OBIS parameter to meter
+router.post('/:id/write-obis', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+  try {
+    const { obisCode, value } = req.body;
+
+    if (!obisCode || value === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'obisCode and value are required'
+      });
+    }
+
+    const result = await meterPollingService.writeObisParameter(req.params.id, obisCode, value);
+
+    // Create event
+    const meter = await Meter.findById(req.params.id);
+    if (meter) {
+      await Event.create({
+        meter: meter._id,
+        eventType: 'OBIS_PARAMETER_WRITTEN',
+        eventCode: 'OBIS_PARAMETER_WRITTEN',
+        severity: 'info',
+        category: 'configuration',
+        description: `OBIS parameter ${obisCode} set to ${value}`,
+        timestamp: new Date()
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'OBIS parameter written successfully',
+      data: result
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to write OBIS parameter',
+      error: error.message
+    });
+  }
+});
+
+// Get latest OBIS readings for a meter
+router.get('/:id/obis-readings', authenticate, async (req: any, res) => {
+  try {
+    const latestReading = await MeterReading.getLatestReading(req.params.id);
+
+    if (!latestReading) {
+      return res.status(404).json({
+        success: false,
+        message: 'No readings found for this meter'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: latestReading
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch OBIS readings',
+      error: error.message
+    });
+  }
+});
+
+// Get OBIS reading history for a meter
+router.get('/:id/obis-readings/history', authenticate, async (req: any, res) => {
+  try {
+    const { startDate, endDate, obisCode } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        message: 'startDate and endDate are required'
+      });
+    }
+
+    let readings;
+
+    if (obisCode) {
+      // Get time series for specific OBIS code
+      readings = await MeterReading.getObisTimeSeries(
+        req.params.id,
+        obisCode as string,
+        new Date(startDate as string),
+        new Date(endDate as string)
+      );
+    } else {
+      // Get all readings in range
+      readings = await MeterReading.getReadingsInRange(
+        req.params.id,
+        new Date(startDate as string),
+        new Date(endDate as string)
+      );
+    }
+
+    res.json({
+      success: true,
+      data: readings
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch OBIS reading history',
+      error: error.message
+    });
+  }
+});
+
+// Helper function to process OBIS readings
+function processObisReadings(obisData: any, brand?: string): IObisReading[] {
+  const readings: IObisReading[] = [];
+
+  // Handle array format
+  if (Array.isArray(obisData)) {
+    for (const item of obisData) {
+      const obisFunction = obisFunctionService.getFunction(item.obisCode, brand);
+      const reading: IObisReading = {
+        obisCode: item.obisCode,
+        name: obisFunction?.name || item.name,
+        value: item.value,
+        unit: obisFunction?.unit || item.unit,
+        scaler: obisFunction?.scaler || item.scaler,
+        dataType: obisFunction?.dataType || item.dataType,
+        classId: obisFunction?.classId || item.classId,
+        attributeId: obisFunction?.attributeId || item.attributeId,
+        quality: item.quality || 'good'
+      };
+
+      // Calculate actual value with scaler
+      if (reading.scaler !== undefined && typeof item.value === 'number') {
+        reading.actualValue = item.value * Math.pow(10, reading.scaler);
+      }
+
+      readings.push(reading);
+    }
+  }
+  // Handle object format { "obisCode": value, ... }
+  else if (typeof obisData === 'object') {
+    for (const [obisCode, value] of Object.entries(obisData)) {
+      if (obisCode.match(/\d+-\d+:\d+\.\d+\.\d+\.\d+/)) {
+        const obisFunction = obisFunctionService.getFunction(obisCode, brand);
+        const reading: IObisReading = {
+          obisCode: obisCode,
+          name: obisFunction?.name,
+          value: value,
+          unit: obisFunction?.unit,
+          scaler: obisFunction?.scaler,
+          dataType: obisFunction?.dataType,
+          classId: obisFunction?.classId,
+          attributeId: obisFunction?.attributeId,
+          quality: 'good'
+        };
+
+        // Calculate actual value with scaler
+        if (reading.scaler !== undefined && typeof value === 'number') {
+          reading.actualValue = (value as number) * Math.pow(10, reading.scaler);
+        }
+
+        readings.push(reading);
+      }
+    }
+  }
+
+  return readings;
+}
 
 export default router;
