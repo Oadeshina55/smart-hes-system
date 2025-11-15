@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2025-11-15T12:53:12.957Z",
+  "totals": {
+    "hexing": 389,
+    "hexcell": 913,
+    "unified": 1083
+  },
+  "groups": {
+    "unified": [
+      "General"
+    ],
+    "hexing": [
+      "General"
+    ],
+    "hexcell": [
+      "General"
+    ]
+  },
+  "groupCounts": {
+    "unified": 1,
+    "hexing": 1,
+    "hexcell": 1
+  }
+}

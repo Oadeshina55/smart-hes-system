@@ -1,0 +1,992 @@
+"IBEDC AMI System Unified OBIS List
+""√""means the meter has this function, ""X""means the meter does not have the function or does not provide the OBIS and description!"										
+YES/NO	Name/Attributes	Class Id	OBIS Code	"Attribute Id
+Right Id:R/RW"	Method Id	Data Type	Data Length	Scaler	Unit	Description
+	1 Product Information									
+√	Meter Serial number	1	{0000600100FF}	2:R;		octet-string	6			
+√	Hardware version	1	{0000600101FF}	2:R;		visible-string	14			
+√	Firmware version	1	{0100000200FF}	2:R;		visible-string	13			
+√	SGC	1	{0000605A04FF}	2:R;		visible-string	6			
+√	Related voltage	3	{0100000600FF}	2:R;3:R;		long-unsigned	2	-1	V	
+√	Related Normal Current	3	{0100000601FF}	2:R;3:R;		double-long-unsigned	4	-3	A	
+√	Related Maximum Current	3	{0100000603FF}	2:R;3:R;		double-long-unsigned	4	-3	A	
+√	Related Frequency	3	{0100000602FF}	2:R;3:R;		long-unsigned	2	-2	Hz	
+√	Constant of Active Energy(LED)	1	{0100000300FF}	2:R;		long-unsigned	2			
+√	Constant of Reactive Energy(LED)	1	{0100000301FF}	2:R;		long-unsigned	2			
+√	Meter run status	1	{000061610CFF}	2:R;		bit-string	32			
+√	Meter tamper status	1	{0000600500FF}	2:R;		bit-string	8			
+√	Meter function control config	1	{0100812784FF}	2:R;		double-long-unsigned	4			
+√	Relay control function config	1	{0100812884FF}	2:R;		double-long-unsigned	4			
+√	Number of MD RESET	1	{0100011F02FF}	2:R;		double-long-unsigned	4			
+√	Energy display decimal places	1	{0000605000FF}	2:RW;		unsigned	1			
+√	Power display decimal places	1	{0000605100FF}	2:RW;		unsigned	1			
+√	Prepay mode	1	{0000603C00FF}	2:RW;		unsigned	1			
+	2 Clock									
+√	Clock	8	{0000010000FF}	2:RW;		octet-string	12			
+	3 Energy									
+√	Total active energy	3	01000F0800FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Active energy [TOU 1]	3	01000F0801FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Active energy [TOU 2]	3	01000F0802FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Active energy [TOU 3]	3	01000F0803FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Active energy [TOU 4]	3	01000F0804FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month active energy	3	01000F080001	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month active energy [TOU 1]	3	01000F080101	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month active energy [TOU 2]	3	01000F080201	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month active energy [TOU 3]	3	01000F080301	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month active energy [TOU 4]	3	01000F080401	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month active energy	3	01000F080002	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month active energy [TOU 1]	3	01000F080102	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month active energy [TOU 2]	3	01000F080202	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month active energy [TOU 3]	3	01000F080302	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month active energy [TOU 4]	3	01000F080402	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month active energy	3	01000F080003	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month active energy [TOU 1]	3	01000F080103	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month active energy [TOU 2]	3	01000F080203	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month active energy [TOU 3]	3	01000F080303	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month active energy [TOU 4]	3	01000F080403	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month active energy	3	01000F080004	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month active energy [TOU 1]	3	01000F080104	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month active energy [TOU 2]	3	01000F080204	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month active energy [TOU 3]	3	01000F080304	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month active energy [TOU 4]	3	01000F080404	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month active energy	3	01000F080005	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month active energy [TOU 1]	3	01000F080105	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month active energy [TOU 2]	3	01000F080205	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month active energy [TOU 3]	3	01000F080305	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month active energy [TOU 4]	3	01000F080405	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month active energy	3	01000F080006	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month active energy [TOU 1]	3	01000F080106	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month active energy [TOU 2]	3	01000F080206	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month active energy [TOU 3]	3	01000F080306	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month active energy [TOU 4]	3	01000F080406	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month active energy	3	01000F080007	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month active energy [TOU 1]	3	01000F080107	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month active energy [TOU 2]	3	01000F080207	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month active energy [TOU 3]	3	01000F080307	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month active energy [TOU 4]	3	01000F080407	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month active energy	3	01000F080008	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month active energy [TOU 1]	3	01000F080108	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month active energy [TOU 2]	3	01000F080208	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month active energy [TOU 3]	3	01000F080308	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month active energy [TOU 4]	3	01000F080408	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month active energy	3	01000F080009	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month active energy [TOU 1]	3	01000F080109	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month active energy [TOU 2]	3	01000F080209	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month active energy [TOU 3]	3	01000F080309	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month active energy [TOU 4]	3	01000F080409	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month active energy	3	01000F08000A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month active energy [TOU 1]	3	01000F08010A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month active energy [TOU 2]	3	01000F08020A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month active energy [TOU 3]	3	01000F08030A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month active energy [TOU 4]	3	01000F08040A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month active energy	3	01000F08000B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month active energy [TOU 1]	3	01000F08010B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month active energy [TOU 2]	3	01000F08020B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month active energy [TOU 3]	3	01000F08030B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month active energy [TOU 4]	3	01000F08040B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month active energy	3	01000F08000C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month active energy [TOU 1]	3	01000F08010C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month active energy [TOU 2]	3	01000F08020C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month active energy [TOU 3]	3	01000F08030C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month active energy [TOU 4]	3	01000F08040C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Total import active energy	3	0100010800FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Import active energy [TOU 1]	3	0100010801FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Import active energy [TOU 2]	3	0100010802FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Import active energy [TOU 3]	3	0100010803FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Import active energy [TOU 4]	3	0100010804FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month total import active energy	3	010001080001	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month import active energy [TOU 1]	3	010001080101	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month import active energy [TOU 2]	3	010001080201	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month import active energy [TOU 3]	3	010001080301	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month import active energy [TOU 4]	3	010001080401	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month total import active energy	3	010001080002	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month import active energy [TOU 1]	3	010001080102	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month import active energy [TOU 2]	3	010001080202	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month import active energy [TOU 3]	3	010001080302	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month import active energy [TOU 4]	3	010001080402	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month total import active energy	3	010001080003	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month import active energy [TOU 1]	3	010001080103	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month import active energy [TOU 2]	3	010001080203	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month import active energy [TOU 3]	3	010001080303	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month import active energy [TOU 4]	3	010001080403	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month total import active energy	3	010001080004	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month import active energy [TOU 1]	3	010001080104	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month import active energy [TOU 2]	3	010001080204	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month import active energy [TOU 3]	3	010001080304	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month import active energy [TOU 4]	3	010001080404	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month total import active energy	3	010001080005	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month import active energy [TOU 1]	3	010001080105	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month import active energy [TOU 2]	3	010001080205	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month import active energy [TOU 3]	3	010001080305	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month import active energy [TOU 4]	3	010001080405	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month total import active energy	3	010001080006	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month import active energy [TOU 1]	3	010001080106	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month import active energy [TOU 2]	3	010001080206	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month import active energy [TOU 3]	3	010001080306	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month import active energy [TOU 4]	3	010001080406	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month total import active energy	3	010001080007	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month import active energy [TOU 1]	3	010001080107	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month import active energy [TOU 2]	3	010001080207	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month import active energy [TOU 3]	3	010001080307	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month import active energy [TOU 4]	3	010001080407	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month total import active energy	3	010001080008	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month import active energy [TOU 1]	3	010001080108	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month import active energy [TOU 2]	3	010001080208	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month import active energy [TOU 3]	3	010001080308	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month import active energy [TOU 4]	3	010001080408	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month total import active energy	3	010001080009	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month import active energy [TOU 1]	3	010001080109	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month import active energy [TOU 2]	3	010001080209	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month import active energy [TOU 3]	3	010001080309	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month import active energy [TOU 4]	3	010001080409	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month total import active energy	3	01000108000A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month import active energy [TOU 1]	3	01000108010A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month import active energy [TOU 2]	3	01000108020A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month import active energy [TOU 3]	3	01000108030A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month import active energy [TOU 4]	3	01000108040A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month total import active energy	3	01000108000B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month import active energy [TOU 1]	3	01000108010B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month import active energy [TOU 2]	3	01000108020B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month import active energy [TOU 3]	3	01000108030B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month import active energy [TOU 4]	3	01000108040B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month total import active energy	3	01000108000C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month import active energy [TOU 1]	3	01000108010C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month import active energy [TOU 2]	3	01000108020C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month import active energy [TOU 3]	3	01000108030C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month import active energy [TOU 4]	3	01000108040C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Total export active energy	3	0100020800FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Export active  energy [TOU 1]	3	0100020801FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Export active  energy [TOU 2]	3	0100020802FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Export active  energy [TOU 3]	3	0100020803FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Export active  energy [TOU 4]	3	0100020804FF	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month total export active energy	3	010002080001	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month export active  energy [TOU 1]	3	010002080101	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month export active  energy [TOU 2]	3	010002080201	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month export active  energy [TOU 3]	3	010002080301	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last month export active  energy [TOU 4]	3	010002080401	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month total export active energy	3	010002080002	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month export active  energy [TOU 1]	3	010002080102	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month export active  energy [TOU 2]	3	010002080202	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month export active  energy [TOU 3]	3	010002080302	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 2 month export active  energy [TOU 4]	3	010002080402	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month total export active energy	3	010002080003	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month export active  energy [TOU 1]	3	010002080103	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month export active  energy [TOU 2]	3	010002080203	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month export active  energy [TOU 3]	3	010002080303	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 3 month export active  energy [TOU 4]	3	010002080403	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month total export active energy	3	010002080004	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month export active  energy [TOU 1]	3	010002080104	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month export active  energy [TOU 2]	3	010002080204	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month export active  energy [TOU 3]	3	010002080304	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 4 month export active  energy [TOU 4]	3	010002080404	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month total export active energy	3	010002080005	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month export active  energy [TOU 1]	3	010002080105	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month export active  energy [TOU 2]	3	010002080205	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month export active  energy [TOU 3]	3	010002080305	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 5 month export active  energy [TOU 4]	3	010002080405	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month total export active energy	3	010002080006	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month export active  energy [TOU 1]	3	010002080106	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month export active  energy [TOU 2]	3	010002080206	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month export active  energy [TOU 3]	3	010002080306	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 6 month export active  energy [TOU 4]	3	010002080406	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month total export active energy	3	010002080007	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month export active  energy [TOU 1]	3	010002080107	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month export active  energy [TOU 2]	3	010002080207	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month export active  energy [TOU 3]	3	010002080307	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 7 month export active  energy [TOU 4]	3	010002080407	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month total export active energy	3	010002080008	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month export active  energy [TOU 1]	3	010002080108	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month export active  energy [TOU 2]	3	010002080208	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month export active  energy [TOU 3]	3	010002080308	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 8 month export active  energy [TOU 4]	3	010002080408	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month total export active energy	3	010002080009	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month export active  energy [TOU 1]	3	010002080109	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month export active  energy [TOU 2]	3	010002080209	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month export active  energy [TOU 3]	3	010002080309	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 9 month export active  energy [TOU 4]	3	010002080409	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month total export active energy	3	01000208000A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month export active  energy [TOU 1]	3	01000208010A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month export active  energy [TOU 2]	3	01000208020A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month export active  energy [TOU 3]	3	01000208030A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 10 month export active  energy [TOU 4]	3	01000208040A	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month total export active energy	3	01000208000B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month export active  energy [TOU 1]	3	01000208010B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month export active  energy [TOU 2]	3	01000208020B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month export active  energy [TOU 3]	3	01000208030B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 11 month export active  energy [TOU 4]	3	01000208040B	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month total export active energy	3	01000208000C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month export active  energy [TOU 1]	3	01000208010C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month export active  energy [TOU 2]	3	01000208020C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month export active  energy [TOU 3]	3	01000208030C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Last 12 month export active  energy [TOU 4]	3	01000208040C	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Total reactive energy		01005D0800FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Reactive energy [TOU 1]		01005D0801FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Reactive energy [TOU 2]		01005D0802FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Reactive energy [TOU 3]		01005D0803FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Reactive energy [TOU 4]		01005D0804FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month reactive energy		01005D080001	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month reactive energy [TOU 1]		01005D080101	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month reactive energy [TOU 2]		01005D080201	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month reactive energy [TOU 3]		01005D080301	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month reactive energy [TOU 4]		01005D080401	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month reactive energy		01005D080002	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month reactive energy [TOU 1]		01005D080102	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month reactive energy [TOU 2]		01005D080202	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month reactive energy [TOU 3]		01005D080302	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month reactive energy [TOU 4]		01005D080402	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month reactive energy		01005D080003	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month reactive energy [TOU 1]		01005D080103	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month reactive energy [TOU 2]		01005D080203	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month reactive energy [TOU 3]		01005D080303	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month reactive energy [TOU 4]		01005D080403	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month reactive energy		01005D080004	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month reactive energy [TOU 1]		01005D080104	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month reactive energy [TOU 2]		01005D080204	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month reactive energy [TOU 3]		01005D080304	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month reactive energy [TOU 4]		01005D080404	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month reactive energy		01005D080005	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month reactive energy [TOU 1]		01005D080105	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month reactive energy [TOU 2]		01005D080205	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month reactive energy [TOU 3]		01005D080305	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month reactive energy [TOU 4]		01005D080405	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month reactive energy		01005D080006	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month reactive energy [TOU 1]		01005D080106	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month reactive energy [TOU 2]		01005D080206	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month reactive energy [TOU 3]		01005D080306	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month reactive energy [TOU 4]		01005D080406	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month reactive energy		01005D080007	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month reactive energy [TOU 1]		01005D080107	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month reactive energy [TOU 2]		01005D080207	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month reactive energy [TOU 3]		01005D080307	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month reactive energy [TOU 4]		01005D080407	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month reactive energy		01005D080008	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month reactive energy [TOU 1]		01005D080108	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month reactive energy [TOU 2]		01005D080208	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month reactive energy [TOU 3]		01005D080308	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month reactive energy [TOU 4]		01005D080408	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month reactive energy		01005D080009	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month reactive energy [TOU 1]		01005D080109	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month reactive energy [TOU 2]		01005D080209	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month reactive energy [TOU 3]		01005D080309	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month reactive energy [TOU 4]		01005D080409	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month reactive energy		01005D08000A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month reactive energy [TOU 1]		01005D08010A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month reactive energy [TOU 2]		01005D08020A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month reactive energy [TOU 3]		01005D08030A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month reactive energy [TOU 4]		01005D08040A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month reactive energy		01005D08000B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month reactive energy [TOU 1]		01005D08010B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month reactive energy [TOU 2]		01005D08020B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month reactive energy [TOU 3]		01005D08030B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month reactive energy [TOU 4]		01005D08040B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month reactive energy		01005D08000C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month reactive energy [TOU 1]		01005D08010C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month reactive energy [TOU 2]		01005D08020C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month reactive energy [TOU 3]		01005D08030C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month reactive energy [TOU 4]		01005D08040C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Total import reactive energy	3	0100030800FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Import reactive energy [TOU 1]	3	0100030801FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Import reactive energy [TOU 2]	3	0100030802FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Import reactive energy [TOU 3]	3	0100030803FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Import reactive energy [TOU 4]	3	0100030804FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month total import reactive energy	3	010003080001	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month import reactive energy [TOU 1]	3	010003080101	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month import reactive energy [TOU 2]	3	010003080201	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month import reactive energy [TOU 3]	3	010003080301	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month import reactive energy [TOU 4]	3	010003080401	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month total import reactive energy	3	010003080002	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month import reactive energy [TOU 1]	3	010003080102	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month import reactive energy [TOU 2]	3	010003080202	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month import reactive energy [TOU 3]	3	010003080302	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month import reactive energy [TOU 4]	3	010003080402	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month total import reactive energy	3	010003080003	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month import reactive energy [TOU 1]	3	010003080103	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month import reactive energy [TOU 2]	3	010003080203	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month import reactive energy [TOU 3]	3	010003080303	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month import reactive energy [TOU 4]	3	010003080403	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month total import reactive energy	3	010003080004	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month import reactive energy [TOU 1]	3	010003080104	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month import reactive energy [TOU 2]	3	010003080204	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month import reactive energy [TOU 3]	3	010003080304	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month import reactive energy [TOU 4]	3	010003080404	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month total import reactive energy	3	010003080005	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month import reactive energy [TOU 1]	3	010003080105	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month import reactive energy [TOU 2]	3	010003080205	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month import reactive energy [TOU 3]	3	010003080305	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month import reactive energy [TOU 4]	3	010003080405	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month total import reactive energy	3	010003080006	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month import reactive energy [TOU 1]	3	010003080106	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month import reactive energy [TOU 2]	3	010003080206	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month import reactive energy [TOU 3]	3	010003080306	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month import reactive energy [TOU 4]	3	010003080406	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month total import reactive energy	3	010003080007	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month import reactive energy [TOU 1]	3	010003080107	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month import reactive energy [TOU 2]	3	010003080207	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month import reactive energy [TOU 3]	3	010003080307	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month import reactive energy [TOU 4]	3	010003080407	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month total import reactive energy	3	010003080008	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month import reactive energy [TOU 1]	3	010003080108	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month import reactive energy [TOU 2]	3	010003080208	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month import reactive energy [TOU 3]	3	010003080308	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month import reactive energy [TOU 4]	3	010003080408	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month total import reactive energy	3	010003080009	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month import reactive energy [TOU 1]	3	010003080109	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month import reactive energy [TOU 2]	3	010003080209	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month import reactive energy [TOU 3]	3	010003080309	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month import reactive energy [TOU 4]	3	010003080409	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month total import reactive energy	3	01000308000A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month import reactive energy [TOU 1]	3	01000308010A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month import reactive energy [TOU 2]	3	01000308020A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month import reactive energy [TOU 3]	3	01000308030A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month import reactive energy [TOU 4]	3	01000308040A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month total import reactive energy	3	01000308000B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month import reactive energy [TOU 1]	3	01000308010B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month import reactive energy [TOU 2]	3	01000308020B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month import reactive energy [TOU 3]	3	01000308030B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month import reactive energy [TOU 4]	3	01000308040B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month total import reactive energy	3	01000308000C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month import reactive energy [TOU 1]	3	01000308010C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month import reactive energy [TOU 2]	3	01000308020C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month import reactive energy [TOU 3]	3	01000308030C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month import reactive energy [TOU 4]	3	01000308040C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Total export reactive energy	3	0100040800FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Export reactive energy [TOU 1]	3	0100040801FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Export reactive energy [TOU 2]	3	0100040802FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Export reactive energy [TOU 3]	3	0100040803FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Export reactive energy [TOU 4]	3	0100040804FF	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month total export reactive energy	3	010004080001	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month export reactive energy [TOU 1]	3	010004080101	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month export reactive energy [TOU 2]	3	010004080201	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month export reactive energy [TOU 3]	3	010004080301	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last month export reactive energy [TOU 4]	3	010004080401	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month total export reactive energy	3	010004080002	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month export reactive energy [TOU 1]	3	010004080102	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month export reactive energy [TOU 2]	3	010004080202	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month export reactive energy [TOU 3]	3	010004080302	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 2 month export reactive energy [TOU 4]	3	010004080402	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month total export reactive energy	3	010004080003	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month export reactive energy [TOU 1]	3	010004080103	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month export reactive energy [TOU 2]	3	010004080203	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month export reactive energy [TOU 3]	3	010004080303	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 3 month export reactive energy [TOU 4]	3	010004080403	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month total export reactive energy	3	010004080004	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month export reactive energy [TOU 1]	3	010004080104	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month export reactive energy [TOU 2]	3	010004080204	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month export reactive energy [TOU 3]	3	010004080304	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 4 month export reactive energy [TOU 4]	3	010004080404	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month total export reactive energy	3	010004080005	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month export reactive energy [TOU 1]	3	010004080105	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month export reactive energy [TOU 2]	3	010004080205	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month export reactive energy [TOU 3]	3	010004080305	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 5 month export reactive energy [TOU 4]	3	010004080405	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month total export reactive energy	3	010004080006	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month export reactive energy [TOU 1]	3	010004080106	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month export reactive energy [TOU 2]	3	010004080206	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month export reactive energy [TOU 3]	3	010004080306	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 6 month export reactive energy [TOU 4]	3	010004080406	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month total export reactive energy	3	010004080007	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month export reactive energy [TOU 1]	3	010004080107	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month export reactive energy [TOU 2]	3	010004080207	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month export reactive energy [TOU 3]	3	010004080307	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 7 month export reactive energy [TOU 4]	3	010004080407	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month total export reactive energy	3	010004080008	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month export reactive energy [TOU 1]	3	010004080108	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month export reactive energy [TOU 2]	3	010004080208	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month export reactive energy [TOU 3]	3	010004080308	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 8 month export reactive energy [TOU 4]	3	010004080408	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month total export reactive energy	3	010004080009	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month export reactive energy [TOU 1]	3	010004080109	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month export reactive energy [TOU 2]	3	010004080209	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month export reactive energy [TOU 3]	3	010004080309	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 9 month export reactive energy [TOU 4]	3	010004080409	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month total export reactive energy	3	01000408000A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month export reactive energy [TOU 1]	3	01000408010A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month export reactive energy [TOU 2]	3	01000408020A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month export reactive energy [TOU 3]	3	01000408030A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 10 month export reactive energy [TOU 4]	3	01000408040A	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month total export reactive energy	3	01000408000B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month export reactive energy [TOU 1]	3	01000408010B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month export reactive energy [TOU 2]	3	01000408020B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month export reactive energy [TOU 3]	3	01000408030B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 11 month export reactive energy [TOU 4]	3	01000408040B	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month total export reactive energy	3	01000408000C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month export reactive energy [TOU 1]	3	01000408010C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month export reactive energy [TOU 2]	3	01000408020C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month export reactive energy [TOU 3]	3	01000408030C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Last 12 month export reactive energy [TOU 4]	3	01000408040C	2:R;3:R;		double-long-unsigned	4	1	varh	
+√	Total apparent energy	3	0100090800FF	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Apparent energy [TOU 1]	3	0100090801FF	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Apparent energy [TOU 1]	3	0100090802FF	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Apparent energy [TOU 1]	3	0100090803FF	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Apparent energy [TOU 1]	3	0100090804FF	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last month total apparent energy	3	010009080001	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last month apparent energy [TOU 1]	3	010009080101	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last month apparent energy [TOU 2]	3	010009080201	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last month apparent energy [TOU 3]	3	010009080301	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last month apparent energy [TOU 4]	3	010009080401	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 2 month total apparent energy	3	010009080002	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 2 month apparent energy [TOU 1]	3	010009080102	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 2 month apparent energy [TOU 2]	3	010009080202	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 2 month apparent energy [TOU 3]	3	010009080302	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 2 month apparent energy [TOU 4]	3	010009080402	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 3 month total apparent energy	3	010009080003	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 3 month apparent energy [TOU 1]	3	010009080103	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 3 month apparent energy [TOU 2]	3	010009080203	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 3 month apparent energy [TOU 3]	3	010009080303	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 3 month apparent energy [TOU 4]	3	010009080403	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 4 month total apparent energy	3	010009080004	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 4 month apparent energy [TOU 1]	3	010009080104	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 4 month apparent energy [TOU 2]	3	010009080204	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 4 month apparent energy [TOU 3]	3	010009080304	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 4 month apparent energy [TOU 4]	3	010009080404	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 5 month total apparent energy	3	010009080005	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 5 month apparent energy [TOU 1]	3	010009080105	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 5 month apparent energy [TOU 2]	3	010009080205	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 5 month apparent energy [TOU 3]	3	010009080305	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 5 month apparent energy [TOU 4]	3	010009080405	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 6 month total apparent energy	3	010009080006	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 6 month apparent energy [TOU 1]	3	010009080106	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 6 month apparent energy [TOU 2]	3	010009080206	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 6 month apparent energy [TOU 3]	3	010009080306	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 6 month apparent energy [TOU 4]	3	010009080406	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 7 month total apparent energy	3	010009080007	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 7 month apparent energy [TOU 1]	3	010009080107	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 7 month apparent energy [TOU 2]	3	010009080207	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 7 month apparent energy [TOU 3]	3	010009080307	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 7 month apparent energy [TOU 4]	3	010009080407	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 8 month total apparent energy	3	010009080008	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 8 month apparent energy [TOU 1]	3	010009080108	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 8 month apparent energy [TOU 2]	3	010009080208	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 8 month apparent energy [TOU 3]	3	010009080308	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 8 month apparent energy [TOU 4]	3	010009080408	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 9 month total apparent energy	3	010009080009	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 9 month apparent energy [TOU 1]	3	010009080109	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 9 month apparent energy [TOU 2]	3	010009080209	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 9 month apparent energy [TOU 3]	3	010009080309	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 9 month apparent energy [TOU 4]	3	010009080409	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 10 month total apparent energy	3	01000908000A	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 10 month apparent energy [TOU 1]	3	01000908010A	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 10 month apparent energy [TOU 2]	3	01000908020A	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 10 month apparent energy [TOU 3]	3	01000908030A	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 10 month apparent energy [TOU 4]	3	01000908040A	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 11 month total apparent energy	3	01000908000B	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 11 month apparent energy [TOU 1]	3	01000908010B	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 11 month apparent energy [TOU 2]	3	01000908020B	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 11 month apparent energy [TOU 3]	3	01000908030B	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 11 month apparent energy [TOU 4]	3	01000908040C	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 12 month total apparent energy	3	01000908000C	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 12 month apparent energy [TOU 1]	3	01000908010C	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 12 month apparent energy [TOU 2]	3	01000908020C	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 12 month apparent energy [TOU 3]	3	01000908030C	2:R;3:R;		double-long-unsigned	4	1	VAh	
+√	Last 12 month apparent energy [TOU 4]	3	01000908040C	2:R;3:R;		double-long-unsigned	4	1	VAh	
+	4 Maximum Demand									
+√	Total import active MD (kW) /(Datetime)	4	0100010600FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	T1 import active MD (kW) /(Datetime)	4	0100010601FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	T2 import active MD (kW) /(Datetime)	4	0100010602FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	T3 import active MD (kW) /(Datetime)	4	0100010603FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	T4 import active MD (kW) /(Datetime)	4	0100010604FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 1 month total import active MD (kW) /(Datetime)	4	010001060001	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 1 month T1 import active MD (kW) /(Datetime)	4	010001060101	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 1 month T2 import active MD (kW) /(Datetime)	4	010001060201	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 1 month T3 import active MD (kW) /(Datetime)	4	010001060301	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 1 month T4 import active MD (kW) /(Datetime)	4	010001060401	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 2 month total import active MD (kW) /(Datetime)	4	010001060002	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 2 month T1 import active MD (kW) /(Datetime)	4	010001060102	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 2 month T2 import active MD (kW) /(Datetime)	4	010001060202	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 2 month T3 import active MD (kW) /(Datetime)	4	010001060302	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 2 month T4 import active MD (kW) /(Datetime)	4	010001060402	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 3 month total import active MD (kW) /(Datetime)	4	010001060003	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 3 month T1 import active MD (kW) /(Datetime)	4	010001060103	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 3 month T2 import active MD (kW) /(Datetime)	4	010001060203	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 3 month T3 import active MD (kW) /(Datetime)	4	010001060303	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 3 month T4 import active MD (kW) /(Datetime)	4	010001060403	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 4 month total import active MD (kW) /(Datetime)	4	010001060004	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 4 month T1 import active MD (kW) /(Datetime)	4	010001060104	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 4 month T2 import active MD (kW) /(Datetime)	4	010001060204	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 4 month T3 import active MD (kW) /(Datetime)	4	010001060304	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 4 month T4 import active MD (kW) /(Datetime)	4	010001060404	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 5 month total import active MD (kW) /(Datetime)	4	010001060005	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 5 month T1 import active MD (kW) /(Datetime)	4	010001060105	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 5 month T2 import active MD (kW) /(Datetime)	4	010001060205	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 5 month T3 import active MD (kW) /(Datetime)	4	010001060305	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 5 month T4 import active MD (kW) /(Datetime)	4	010001060405	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 6 month total import active MD (kW) /(Datetime)	4	010001060006	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 6 month T1 import active MD (kW) /(Datetime)	4	010001060106	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 6 month T2 import active MD (kW) /(Datetime)	4	010001060206	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 6 month T3 import active MD (kW) /(Datetime)	4	010001060306	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 6 month T4 import active MD (kW) /(Datetime)	4	010001060406	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 7 month total import active MD (kW) /(Datetime)	4	010001060007	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 7 month T1 import active MD (kW) /(Datetime)	4	010001060107	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 7 month T2 import active MD (kW) /(Datetime)	4	010001060207	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 7 month T3 import active MD (kW) /(Datetime)	4	010001060307	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 7 month T4 import active MD (kW) /(Datetime)	4	010001060407	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 8 month total import active MD (kW) /(Datetime)	4	010001060008	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 8 month T1 import active MD (kW) /(Datetime)	4	010001060108	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 8 month T2 import active MD (kW) /(Datetime)	4	010001060208	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 8 month T3 import active MD (kW) /(Datetime)	4	010001060308	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 8 month T4 import active MD (kW) /(Datetime)	4	010001060408	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 9 month total import active MD (kW) /(Datetime)	4	010001060009	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 9 month T1 import active MD (kW) /(Datetime)	4	010001060109	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 9 month T2 import active MD (kW) /(Datetime)	4	010001060209	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 9 month T3 import active MD (kW) /(Datetime)	4	010001060309	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 9 month T4 import active MD (kW) /(Datetime)	4	010001060409	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 10 month total import active MD (kW) /(Datetime)	4	01000106000A	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 10 month T1 import active MD (kW) /(Datetime)	4	01000106010A	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 10 month T2 import active MD (kW) /(Datetime)	4	01000106020A	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 10 month T3 import active MD (kW) /(Datetime)	4	01000106030A	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 10 month T4 import active MD (kW) /(Datetime)	4	01000106040A	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 11 month total import active MD (kW) /(Datetime)	4	01000106000B	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 11 month T1 import active MD (kW) /(Datetime)	4	01000106010B	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 11 month T2 import active MD (kW) /(Datetime)	4	01000106020B	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 11 month T3 import active MD (kW) /(Datetime)	4	01000106030B	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 11 month T4 import active MD (kW) /(Datetime)	4	01000106040B	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 12 month total import active MD (kW) /(Datetime)	4	01000106000C	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 12 month T1 import active MD (kW) /(Datetime)	4	01000106010C	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 12 month T2 import active MD (kW) /(Datetime)	4	01000106020C	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 12 month T3 import active MD (kW) /(Datetime)	4	01000106030C	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Last 12 month T4 import active MD (kW) /(Datetime)	4	01000106040C	2:R;3:R;5:R;		double-long-unsigned	4	-1	W	
+√	Total import reactive MD (kvar) /(Datetime)	4	0100030600FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	T1 import reactive MD (kvar) /(Datetime)	4	0100030601FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	T2 import reactive MD (kvar) /(Datetime)	4	0100030602FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	T3 import reactive MD (kvar) /(Datetime)	4	0100030603FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	T4 import reactive MD (kvar) /(Datetime)	4	0100030604FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last month total import reactive MD (kvar) /(Datetime)	4	010003060001	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last month T1 import reactive MD (kvar) /(Datetime)	4	010003060101	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last month T2 import reactive MD (kvar) /(Datetime)	4	010003060201	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last month T3 import reactive MD (kvar) /(Datetime)	4	010003060301	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last month T4 import reactive MD (kvar) /(Datetime)	4	010003060401	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 2 month total import reactive MD (kvar) /(Datetime)	4	010003060002	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 2 month T1 import reactive MD (kvar) /(Datetime)	4	010003060102	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 2 month T2 import reactive MD (kvar) /(Datetime)	4	010003060202	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 2 month T3 import reactive MD (kvar) /(Datetime)	4	010003060302	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 2 month T4 import reactive MD (kvar) /(Datetime)	4	010003060402	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 3 month total import reactive MD (kvar) /(Datetime)	4	010003060003	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 3 month T1 import reactive MD (kvar) /(Datetime)	4	010003060103	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 3 month T2 import reactive MD (kvar) /(Datetime)	4	010003060203	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 3 month T3 import reactive MD (kvar) /(Datetime)	4	010003060303	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 3 month T4 import reactive MD (kvar) /(Datetime)	4	010003060403	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 4 month total import reactive MD (kvar) /(Datetime)	4	010003060004	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 4 month T1 import reactive MD (kvar) /(Datetime)	4	010003060104	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 4 month T2 import reactive MD (kvar) /(Datetime)	4	010003060204	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 4 month T3 import reactive MD (kvar) /(Datetime)	4	010003060304	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 4 month T4 import reactive MD (kvar) /(Datetime)	4	010003060404	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 5 month total import reactive MD (kvar) /(Datetime)	4	010003060005	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 5 month T1 import reactive MD (kvar) /(Datetime)	4	010003060105	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 5 month T2 import reactive MD (kvar) /(Datetime)	4	010003060205	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 5 month T3 import reactive MD (kvar) /(Datetime)	4	010003060305	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 5 month T4 import reactive MD (kvar) /(Datetime)	4	010003060405	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 6 month total import reactive MD (kvar) /(Datetime)	4	010003060006	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 6 month T1 import reactive MD (kvar) /(Datetime)	4	010003060106	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 6 month T2 import reactive MD (kvar) /(Datetime)	4	010003060206	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 6 month T3 import reactive MD (kvar) /(Datetime)	4	010003060306	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 6 month T4 import reactive MD (kvar) /(Datetime)	4	010003060406	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 7 month total import reactive MD (kvar) /(Datetime)	4	010003060007	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 7 month T1 import reactive MD (kvar) /(Datetime)	4	010003060107	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 7 month T2 import reactive MD (kvar) /(Datetime)	4	010003060207	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 7 month T3 import reactive MD (kvar) /(Datetime)	4	010003060307	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 7 month T4 import reactive MD (kvar) /(Datetime)	4	010003060407	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 8 month total import reactive MD (kvar) /(Datetime)	4	010003060008	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 8 month T1 import reactive MD (kvar) /(Datetime)	4	010003060108	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 8 month T2 import reactive MD (kvar) /(Datetime)	4	010003060208	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 8 month T3 import reactive MD (kvar) /(Datetime)	4	010003060308	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 8 month T4 import reactive MD (kvar) /(Datetime)	4	010003060408	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 9 month total import reactive MD (kvar) /(Datetime)	4	010003060009	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 9 month T1 import reactive MD (kvar) /(Datetime)	4	010003060109	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 9 month T2 import reactive MD (kvar) /(Datetime)	4	010003060209	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 9 month T3 import reactive MD (kvar) /(Datetime)	4	010003060309	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 9 month T4 import reactive MD (kvar) /(Datetime)	4	010003060409	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 10 month total import reactive MD (kvar) /(Datetime)	4	01000306000A	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 10 month T1 import reactive MD (kvar) /(Datetime)	4	01000306010A	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 10 month T2 import reactive MD (kvar) /(Datetime)	4	01000306020A	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 10 month T3 import reactive MD (kvar) /(Datetime)	4	01000306030A	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 10 month T4 import reactive MD (kvar) /(Datetime)	4	01000306040A	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 11 month total import reactive MD (kvar) /(Datetime)	4	01000306000B	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 11 month T1 import reactive MD (kvar) /(Datetime)	4	01000306010B	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 11 month T2 import reactive MD (kvar) /(Datetime)	4	01000306020B	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 11 month T3 import reactive MD (kvar) /(Datetime)	4	01000306030B	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 11 month T4 import reactive MD (kvar) /(Datetime)	4	01000306040B	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 12 month total import reactive MD (kvar) /(Datetime)	4	01000306000C	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 12 month T1 import reactive MD (kvar) /(Datetime)	4	01000306010C	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 12 month T2 import reactive MD (kvar) /(Datetime)	4	01000306020C	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 12 month T3 import reactive MD (kvar) /(Datetime)	4	01000306030C	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Last 12 month T4 import reactive MD (kvar) /(Datetime)	4	01000306040C	2:R;3:R;5:R;		double-long-unsigned	4	-1	var	
+√	Total import apparent MD (kVA) /(Datetime)	4	0100090600FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	T1 import apparent MD (kVA) /(Datetime)	4	0100090601FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	T2 import apparent MD (kVA) /(Datetime)	4	0100090602FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	T3 import apparent MD (kVA) /(Datetime)	4	0100090603FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	T4 import apparent MD (kVA) /(Datetime)	4	0100090604FF	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last month total import apparent MD (kVA) /(Datetime)	4	010009060001	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last month T1 import apparent MD (kVA) /(Datetime)	4	010009060101	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last month T2 import apparent MD (kVA) /(Datetime)	4	010009060201	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last month T3 import apparent MD (kVA) /(Datetime)	4	010009060301	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last month T4 import apparent MD (kVA) /(Datetime)	4	010009060401	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 2 month total import apparent MD (kVA) /(Datetime)	4	010009060002	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 2 month T1 import apparent MD (kVA) /(Datetime)	4	010009060102	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 2 month T2 import apparent MD (kVA) /(Datetime)	4	010009060202	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 2 month T3 import apparent MD (kVA) /(Datetime)	4	010009060302	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 2 month T4 import apparent MD (kVA) /(Datetime)	4	010009060402	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 3 month total import apparent MD (kVA) /(Datetime)	4	010009060003	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 3 month T1 import apparent MD (kVA) /(Datetime)	4	010009060103	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 3 month T2 import apparent MD (kVA) /(Datetime)	4	010009060203	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 3 month T3 import apparent MD (kVA) /(Datetime)	4	010009060303	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 3 month T4 import apparent MD (kVA) /(Datetime)	4	010009060403	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 4 month total import apparent MD (kVA) /(Datetime)	4	010009060004	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 4 month T1 import apparent MD (kVA) /(Datetime)	4	010009060104	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 4 month T2 import apparent MD (kVA) /(Datetime)	4	010009060204	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 4 month T3 import apparent MD (kVA) /(Datetime)	4	010009060304	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 4 month T4 import apparent MD (kVA) /(Datetime)	4	010009060404	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 5 month total import apparent MD (kVA) /(Datetime)	4	010009060005	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 5 month T1 import apparent MD (kVA) /(Datetime)	4	010009060105	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 5 month T2 import apparent MD (kVA) /(Datetime)	4	010009060205	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 5 month T3 import apparent MD (kVA) /(Datetime)	4	010009060305	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 5 month T4 import apparent MD (kVA) /(Datetime)	4	010009060405	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 6 month total import apparent MD (kVA) /(Datetime)	4	010009060006	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 6 month T1 import apparent MD (kVA) /(Datetime)	4	010009060106	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 6 month T2 import apparent MD (kVA) /(Datetime)	4	010009060206	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 6 month T3 import apparent MD (kVA) /(Datetime)	4	010009060306	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 6 month T4 import apparent MD (kVA) /(Datetime)	4	010009060406	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 7 month total import apparent MD (kVA) /(Datetime)	4	010009060007	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 7 month T1 import apparent MD (kVA) /(Datetime)	4	010009060107	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 7 month T2 import apparent MD (kVA) /(Datetime)	4	010009060207	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 7 month T3 import apparent MD (kVA) /(Datetime)	4	010009060307	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 7 month T4 import apparent MD (kVA) /(Datetime)	4	010009060407	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 8 month total import apparent MD (kVA) /(Datetime)	4	010009060008	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 8 month T1 import apparent MD (kVA) /(Datetime)	4	010009060108	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 8 month T2 import apparent MD (kVA) /(Datetime)	4	010009060208	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 8 month T3 import apparent MD (kVA) /(Datetime)	4	010009060308	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 8 month T4 import apparent MD (kVA) /(Datetime)	4	010009060408	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 9 month total import apparent MD (kVA) /(Datetime)	4	010009060009	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 9 month T1 import apparent MD (kVA) /(Datetime)	4	010009060109	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 9 month T2 import apparent MD (kVA) /(Datetime)	4	010009060209	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 9 month T3 import apparent MD (kVA) /(Datetime)	4	010009060309	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 9 month T4 import apparent MD (kVA) /(Datetime)	4	010009060409	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 10 month total import apparent MD (kVA) /(Datetime)	4	01000906000A	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 10 month T1 import apparent MD (kVA) /(Datetime)	4	01000906010A	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 10 month T2 import apparent MD (kVA) /(Datetime)	4	01000906020A	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 10 month T3 import apparent MD (kVA) /(Datetime)	4	01000906030A	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 10 month T4 import apparent MD (kVA) /(Datetime)	4	01000906040A	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 11 month total import apparent MD (kVA) /(Datetime)	4	01000906000B	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 11 month T1 import apparent MD (kVA) /(Datetime)	4	01000906010B	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 11 month T2 import apparent MD (kVA) /(Datetime)	4	01000906020B	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 11 month T3 import apparent MD (kVA) /(Datetime)	4	01000906030B	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 11 month T4 import apparent MD (kVA) /(Datetime)	4	01000906040B	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 12 month total import apparent MD (kVA) /(Datetime)	4	01000906000C	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 12 month T1 import apparent MD (kVA) /(Datetime)	4	01000906010C	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 12 month T2 import apparent MD (kVA) /(Datetime)	4	01000906020C	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 12 month T3 import apparent MD (kVA) /(Datetime)	4	01000906030C	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+√	Last 12 month T4 import apparent MD (kVA) /(Datetime)	4	01000906040C	2:R;3:R;5:R;		double-long-unsigned	4	-1	VA	
+	5 Instantaneous									
+√	Sum Li total power factor	3	{01000D0700FF}	2:R;3:R;		long	2	-3		
+√	Sum Li import active power (kW)	3	{0100010700FF}	2:R;3:R;		double-long	4	-1	W	
+√	Sum Li export active power (kW)	3	{0100020700FF}	2:R;3:R;		double-long	4	-1	W	
+√	Sum Li import reactive power (kvar)	3	{0100030700FF}	2:R;3:R;		double-long	4	-1	var	
+√	Sum Li import apparent power (kVA)	3	{0100090700FF}	2:R;3:R;		double-long-unsigned	4	-1	VA	
+√	Frequency (Hz)	3	{01000E0700FF}	2:R;3:R;		long-unsigned	2	-2	Hz	
+√	L1 current (A)	3	{01001F0700FF}	2:R;3:R;		double-long-unsigned	4	-3	A	
+√	L1 voltage (V)	3	{0100200700FF}	2:R;3:R;		long-unsigned	2	-1	V	
+√	L1 total power factor	3	{0100210700FF}	2:R;3:R;		long	2	-3		
+√	L1 import active power (kW)	3	{0100150700FF}	2:R;3:R;		double-long	4	-1	W	
+√	L1 import reactive power (kvar)	3	{0100170700FF}	2:R;3:R;		double-long	4	-1	var	
+√	L1 import apparent power (kVA)	3	{01001D0700FF}	2:R;3:R;		double-long-unsigned	4	-1	VA	
+√	L2 current (A)	3	{0100330700FF}	2:R;3:R;		double-long-unsigned	4	-3	A	
+√	L2 voltage (V)	3	{0100340700FF}	2:R;3:R;		long-unsigned	2	-1	V	
+√	L2 total power factor	3	{0100350700FF}	2:R;3:R;		long	2	-3		
+√	L2 import active power (kW)	3	{0100290700FF}	2:R;3:R;		double-long	4	-1	W	
+√	L2 import reactive power (kvar)	3	{01002B0700FF}	2:R;3:R;		double-long	4	-1	var	
+√	L2 import apparent power (kVA)	3	{0100310700FF}	2:R;3:R;		double-long-unsigned	4	-1	VA	
+√	L3 current (A)	3	{0100470700FF}	2:R;3:R;		double-long-unsigned	4	-3	A	
+√	L3 voltage (V)	3	{0100480700FF}	2:R;3:R;		long-unsigned	2	-1	V	
+√	L3 total power factor	3	{0100490700FF}	2:R;3:R;		long	2	-3		
+√	L3 import active power (kW)	3	{01003D0700FF}	2:R;3:R;		double-long	4	-1	W	
+√	L3 import reactive power (kvar)	3	{01003F0700FF}	2:R;3:R;		double-long	4	-1	var	
+√	L3 import apparent power (kVA)	3	{0100450700FF}	2:R;3:R;		double-long-unsigned	4	-1	VA	
+√	Neutral current (A)	3	{01005B0700FF}	2:R;3:R;		double-long-unsigned	4	-3	A	
+√	1P current (A)	3	{01000B0700FF}	2:R;3:R;		double-long-unsigned	4	-3	A	
+√	1P voltage (V)	3	{01000C0700FF}	2:R;3:R;		long-unsigned	2	-1	V	
+√	Number of Purchase of electricity	1	{0000603D00FF}	2:R		double-long-unsigned	4			
+	7 Relay									
+√	Main disconnector (including relay state, control state,Control mode,Disconnect,Connect)	70	{000060030AFF}	2:R;3:R;4:R;	1					
+	8 Billing									
+√	Monthly eob single action schedule	22	{00000F0000FF}	2:R;3:R;4:RW;						
+	11 Load Profile									
+√	Load curve interval time	3	{00005F3300FF}	2:RW;		long unsigned	2	0		
+	12 GPRS modem setup									
+√	GPRS modem setup (IP & Port &APN)	1	{0000800201FF}	2:RW;		octet-string	80			
+	13 Prepayment energy registers									Prepaid Meter
+√	Owe energy threshold	3	{00005F4800FF}	2:RW;3:R;		double-long-unsigned	4	1	Wh	
+√	Coemption energy threshold	3	{00005F4700FF}	2:RW;3:R;		double-long-unsigned	4	1	Wh	
+√	Remain energy 	3	{0100604200FF}	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	Negative energy 	3	{0100604400FF}	2:R;3:R;		double-long-unsigned	4	1	Wh	
+√	TOKEN	1	{0100818102FF}	2:W;		octet-string	10			
+√	Warning time	1	{0100812782FF}	2:RW;3:R;		long-unsigned	2	0		
+√	Rewarning time	1	{0100812783FF}	2:RW;3:R;		long-unsigned	2	0	
+
+
+
+
+
+
+
+
+
+
+
+
+"IBEDC AMI System Unified OBIS List
+""√""means the meter has this function, ""X""means the meter does not have the function or does not provide the OBIS and description!"											
+YES/NO	Function name	Description	Capture Object's name	Class Id	OBIS Code	"Attribute Id
+Right Id:R/RW"	Method Id	Data Type	Data Length	Scaler	Unit
+	Load profiles										
+√	Load Profile Channel 1	Profile channel 1		7	{0100630100FF}	2		Array			
+		Captured Objects:	Clock	8	{0000010000FF}	2		date_time			
+			voltage	3	{01000C0700FF}	2		double-long-unsigned	4	-2	V
+			current	3	{01001F0700FF}	2		double-long	4	-3	A
+			Neutral current	3	{01005B0700FF}	2		double-long	4	-3	A
+			power factor	3	{0100210700FF}	2		double-long	4	-3	
+			Neutral power factor	3	{01005D0700FF}	2		double-long	4	-3	
+			import active power	3	{0100150700FF}	2		double-long	4	-1	W
+			Neutral import active power	3	{0100510700FF}	2		double-long	4	-1	W
+			import reactive power	3	{0100170700FF}	2		double-long	4	-1	var
+			Neutral import reactive power	3	{0100530700FF}	2		double-long	4	-1	var
+			Total import active kWh	3	{0100010800FF}	2		double long unsigned	4	1	Wh
+			Total export active kWh	3	{0100020800FF}	2		double long unsigned	4	1	Wh
+			Total import reactive kvarh	3	{0100030800FF}	2		double long unsigned	4	1	varh
+			Total export reactive kvarh	3	{0100040800FF}	2		double long unsigned	4	1	varh
+	Event Logs										
+√	Under Voltage Logs	Under Voltage Logs		7	{0100636204FF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Over Voltage Logs	Over Voltage Logs		7	{0100636207FF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Over Current Logs	Over Current Logs		7	{010063622CFF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Current Reverse Logs	Current Reverse Logs		7	{0100636216FF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Over Power Logs	Over Power Logs		7	{0100636219FF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Open Meter Cover Logs	Open Meter Cover Logs		7	{010063622AFF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Open Meter Terminal Cover Logs	Open Meter Terminal Cover Logs		7	{010063622BFF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Current Imbalance Logs	Current Imbalance Logs		7	{0100636241FF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Strong DC Field Logs	Strong DC Field Logs		7	{0100636232FF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Neutral Err Logs	Neutral Err Logs		7	{0100636213FF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Power off Logs	Power off Logs		7	{0100636222FF}	2	Array				
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2	date_time				
+			Clock(End)	8	{0000010000FF}	2	date_time				
+√	Relay off Logs	Relay off Logs		7	{010063622EFF}	2	Array				
+		Captured Objects:	Clock	8	{0000010000FF}	2	date_time				
+	
+
+
+
+
+
+
+
+"IBEDC AMI System Unified OBIS List
+""√""means the meter has this function, ""X""means the meter does not have the function or does not provide the OBIS and description!"											
+YES/NO	Function name	Description	Capture Object's name	Class Id	OBIS Code	"Attribute Id
+Right Id:R/RW"	Method Id	Data Type	Data Length	Scaler	Unit
+	Load profiles										
+√	Load Profile Channel 1	Profile channel 1		7	{0100630100FF}	2		Array			
+		Captured Objects:	Clock	8	{0000010000FF}	2		date_time			
+			L1 voltage	3	{0100200700FF}	2		double-long-unsigned	4	-2	V
+			L2 voltage	3	{0100340700FF}	2		double-long-unsigned	4	-2	V
+			L3 voltage	3	{0100480700FF}	2		double-long-unsigned	4	-2	V
+			L1 current	3	{01001F0700FF}	2		double-long-unsigned	4	-3	A
+			L2 current	3	{0100330700FF}	2		double-long-unsigned	4	-3	A
+			L3 current	3	{0100470700FF}	2		double-long-unsigned	4	-3	A
+			Neutral current	3	{01005B0700FF}	2		double-long-unsigned	4	-3	A
+			Sum import active power	3	{0100010700FF}	2		double-long	4	-1	W
+			L1 import active power	3	{0100150700FF}	2		double-long	4	-1	W
+			L2 import active power	3	{0100290700FF}	2		double-long	4	-1	W
+			L3 import active power	3	{01003D0700FF}	2		double-long	4	-1	W
+			Sum import reactive power	3	{0100030700FF}	2		double-long	4	-1	var
+			L1 import reactive power	3	{0100170700FF}	2		double-long	4	-1	var
+			L2 import reactive power	3	{01002B0700FF}	2		double-long	4	-1	var
+			L3 import reactive power	3	{01003F0700FF}	2		double-long	4	-1	var
+			total power factor	3	{01000D0700FF}	2		double-long	4	-3	
+			L1 total power factor	3	{0100210700FF}	2		double-long	4	-3	
+			L2 total power factor	3	{0100350700FF}	2		double-long	4	-3	
+			L3 total power factor	3	{0100490700FF}	2		double-long	4	-3	
+			Total import active kWh	3	{0100010800FF}	2		double long unsigned	4	1	Wh
+			Total export active kWh	3	{0100020800FF}	2		double long unsigned	4	1	Wh
+			Total import reactive kvarh	3	{0100030800FF}	2		double long unsigned	4	1	varh
+			Total export reactive kvarh	3	{0100040800FF}	2		double long unsigned	4	1	varh
+			Total import apparent kWh	3	{0100090800FF}	2		double long unsigned	4	1	VAh
+				4	{0100010600FF}	2		double long unsigned	4	1	Wh
+				4	{0100010600FF}	5		date_time			
+				4	{0100090600FF}	2		double long unsigned	4	1	VAh
+				4	{0100090600FF}	5		date_time			
+			Frequency	3	{01000E0700FF}	2		double-long-unsigned	4	-2	Hz
+	Event Logs										
+√	L1 Loss Voltage Logs	L1 Loss Voltage Log		7	{0100636201FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L2 Loss Voltage Logs	L2 Loss Voltage Logs		7	{0100636202FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L3 Loss Voltage Logs	L3 Loss Voltage Logs		7	{0100636203FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L1 Under Voltage Logs	L1 Under Voltage Logs		7	{0100636204FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L2 Under Voltage Logs	L2 Under Voltage Logs		7	{0100636205FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L3 Under Voltage Logs	L3 Under Voltage Logs		7	{0100636206FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L1 Over Voltage Logs	L1 Over Voltage Logs		7	{0100636207FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L2 Over Voltage Logs	L2 Over Voltage Logs		7	{0100636208FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L3 Over Voltage Logs	L3 Over Voltage Logs		7	{0100636209FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L1 Over Current Logs	L1 Over Current Logs		7	{010063622CFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L2 Over Current Logs	L2 Over Current Logs		7	{010063622DFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L3 Over Current Logs	L3 Over Current Logs		7	{0100636228FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L1 Loss Current Logs	L1 Loss Current Logs		7	{010063621DFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L2 Loss Current Logs	L2 Loss Current Logs		7	{010063621EFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L3 Loss Current Logs	L3 Loss Current Logs		7	{010063621FFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Total Current Reverse Logs	Total Current Reverse Logs		7	{0100636215FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L1 Current Reverse Logs	L1 Current Reverse Logs		7	{0100636216FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L2 Current Reverse Logs	L2 Current Reverse Logs		7	{0100636217FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L3 Current Reverse Logs	L3 Current Reverse Logs		7	{0100636218FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Total Over Power Logs	Total Over Power Logs		7	{010063621CFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L1 Over Power Logs	L1 Over Power Logs		7	{0100636219FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L2 Over Power Logs	L2 Over Power Logs		7	{010063621AFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	L3 Over Power Logs	L3 Over Power Logs		7	{010063621BFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Open Meter Box Logs	Open Meter Box Logs		7	{0100636220FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Open Meter Cover Logs	Open Meter Cover Logs		7	{010063622AFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Open Meter Terminal Cover Logs	Open Meter Terminal Cover Logs		7	{010063622BFF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Voltage Imbalance Logs	Voltage Imbalance Logs		7	{0100636240FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Current Imbalance Logs	Current Imbalance Logs		7	{0100636241FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Strong DC Field Logs	Strong DC Field Logs		7	{0100636232FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Current Bypass Logs	Current Bypass Logs		7	{0100636225FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Current Open Logs	Current Open Logs		7	{0100636226FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Neutral Err Logs	Neutral Err Logs		7	{0100636213FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Power off Logs	Power off Logs		7	{0100636222FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Relay off Logs	Relay off Logs		7	{010063622EFF}	2		Array			
+		Captured Objects:	Clock	8	{0000010000FF}	2		date_time			
+						2		date_time			
+√	Relay on Logs	Relay on Logs		7	{010063622FFF}	2		Array			
+		Captured Objects:	Clock	8	{0000010000FF}	2		date_time			
+						2		date_time			
+√	Battery low Logs	Battery low Logs		7	{0100636265FF}	2		Array			
+		Captured Objects:	Clock(Start)	8	{0000010000FF}	2		date_time			
+			Clock(End)	8	{0000010000FF}	2		date_time			
+√	Tamper Logs	Tamper Logs		7	{010063623FFF}	2		Array			
+		Captured Objects:	Clock	8	{0000010000FF}	2		date_time			
+											
+√	Credit token time Logs	Credit token time Logs		7	{0100636246FF}	2		Array			
+		Captured Objects:	Clock	8	{0000010000FF}	2		date_time			
+											
+√	Credit token  Logs	Credit token  Logs		7	{0100636254FF}	2		Array			
+		Captured Objects:	Token	1	{0000606001FF}	2		octet-string	10		
+						2					
+√	Credit energy Logs	Credit energy  Logs		7	{0100636255FF}	2		Array			
+		Captured Objects:	Energy	3	{0000604300FF}	2		double-long-unsigned	4	1	Wh
+											
+√	Technology token  Logs	Technology token  Logs		7	{0100636256FF}	2		Array			
+		Captured Objects:	Token	1	{0000606001FF}	2		octet-string	10		
+						2					
+√	Meter mode Post Logs	Meter mode Post Logs		7	{0100636257FF}	2		Array			
+		Captured Objects:	Clock	8	{0000010000FF}	2		date_time			
+			Remain electricity	3	{0000604300FF}	2		double-long-unsigned	4	1	Wh
+			Total electricity	3	{0100010800FF}	2		double long unsigned	4	1	Wh
+√	Meter mode Prepaid Logs	Meter mode Prepaid Logs		7	{0100636258FF}	2		Array			
+		Captured Objects:	Clock	8	{0000010000FF}	2		date_time			
+			Remain electricity	3	{0000604300FF}	2		double-long-unsigned	4	1	Wh
+			Total electricity	3	{0100010800FF}	2		double long unsigned	4	1	Wh
+
+
+
+
+
+GPRS Meter Log-in and Heart-Beat Communication Management										
+										
+										
+The GPRS module adopts the client permanent connection mode. It will send the Log-in request (including meter serial number) to the system firstly, then will send the Heart-Beat request to the system periodically to make sure the meter is online.										
+										
+										
+										
+Meter request:	Heart-Beat Frame:	8E A1 11 11 11 11 11 11 SIG0 ID0 ID1 ID2 ID3 ID4 ID5 ID6 ID7 ID8 ID9 ID10 ID11 CS 17								
+System response:		8E 31 01 01 C1 17								
+Description:		"11 11 11 11 11 11(meter ID)     
+SIG0(signal strength)    
+ID0 ID1 ID2 ID3 ID4 ID5 ID6 ID7 ID8 ID9 ID10 ID11(CARD ID)
+CS(total check)"								
+										
+Meter Communication Parameters										
+										
+										
+YES/NO	Protocol	Client ID	Destination Address	Authentication	Password	Pre-Established				
+√	TCP	0x0011	0x0001	LLS	“00000000”	NO,Need AARQ				
+Recommend to use TCP protocol follow IEC 62056-47.										
+Machanism:										

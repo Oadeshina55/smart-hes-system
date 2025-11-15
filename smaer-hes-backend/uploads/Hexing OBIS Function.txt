@@ -1,0 +1,1708 @@
+"Function
+功能"	"Class ID
+类"	"Ver.
+版本"	"FID2/
+IDIS/Hexing"	"Attribute
+&
+Method
+No.
+属性
+方法"	"Object
+&
+Attribute
+Name
+对象&属性名"	"Attribute
+&
+Parameter
+Type
+属性&方法参数类型"	"OBIS Code
+&
+Default Value
+OBIS&默认值"	"Display OBIS code（6）
+显示OBIS（6 段）"	"Display OBIS code（4）
+显示OBIS（4 段）"	"Access Right
+访问权限"				"Comments
+注释"	"XML Comments
+XML 注释"	"Coding
+编码"
+										"Public
+ (16)"	"Pre.Est.
+ (102)"	"Management
+ (1)"	"Reading
+ (2)"			
+电网质量//电网质量	1	0	FID2 & IDIS		Number of Short Power Failure in Any Phases		0-0:96.7.21.255	C.7.21	C.7.21					任意相短时间掉电次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]	"0000600715FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2 & IDIS		Number of long power failures in any phase		0-0:96.7.9.255	C.7.9	C.7.9					任意相长时间掉电次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]	"0000600709FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	FID2 & IDIS		Time threshold for long power failure		0-0:96.7.20.255	C.7.20	C.7.20					长时间掉电时间门限		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0000600714FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned	180			\	W	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for short power failure		0-0:96.7.135.255	C.7.135						短时间掉电时间门限		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned	180			\	W	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of last long power failure in any phase		0-0:96.7.19.255	C.7.19	C.7.19					任意相长时间掉电持续时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0000600713FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Duration of long+short power failure in any phase		0-0:96.7.131.255	C.7.131						任意相掉电（长+短）事件持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Total duration of long power failure in all phase		0-0:96.7.136.255	C.7.136						(所有相)长掉电总累计时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0000600713FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Total duration of short power failure in all phase		0-0:96.7.137.255	C.7.137						(所有相)短掉电总累计时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0000600713FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Duration of last power failure in all phase		0-0:96.7.132.255	C.7.132						电表掉电持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Threshold for Under Voltage (sag)		1-0:12.31.0.255	12.31.0						欠压门限		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000C1F00FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned	less than 20% VREF			\	W	RW	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	 {-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	废弃	Hexing	a2	Threshold for under voltage	long_unsigned	1-0:12.130.0.255							欠压判断阀值		
+电网质量//时间相关	3	0	FID2 & IDIS		Resotre time threshold for Under Voltage (sag)		1-0:12.179.0.255	12.179.0						欠压电压恢复延迟		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned				\	W	RW	R		voltage	
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Resotre threshold for Under Voltage (sag)		1-0:12.186.0.255	12.31.0						欠压电压恢复判断阈值		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned	less than 20% VREF			\	W	RW	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	 {-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Second threshold for Under Voltage (sag)		1-1:12.31.0.255	1.12.31.0						第二欠压门限		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000C1F00FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned	less than 20% VREF			\	W	RW	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	 {-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold for SAG		1-0:12.150.0.255	12.150.0						SAG判断阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	W	RW	R		voltage	
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	 {-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for SAG		1-0:12.166.0.255	12.166.0						SAG判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	W	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Time Threshold for Under Voltage (sag)		1-0:12.43.0.255	12.43.0						欠压时间门限		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000C2B00FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned	180			\	W	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	废弃	Hexing	a2	Time threshold for under voltage	long_unsigned	1-0:12.131.0.255							欠压判断延迟		
+电网质量//电网质量	1	0	FID2 & IDIS		Number of Under Voltages (sag) in phase L1		1-0:32.32.0.255	32.32.0						A相欠压次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100202000FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of missing voltage in phase L1		1-0:32.40.0.255	32.40.0						A相失压次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	废弃	Hexing	a2	Number of missing voltage in phase L1		1-0:32.32.0.255							A相失压次数		
+电网质量//时间相关	3	0	Hexing		Duration for missing voltage  in phase L1		1-0:32.41.0.255	32.41.0						A相失压持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]	"01000C2B00FF"			\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned	180			\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	FID2 & IDIS		Number of Under Voltages (sag) in phase L2		1-0:52.32.0.255	52.32.0						B相欠压次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100342000FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of missing voltage in phase L2		1-0:52.40.0.255	52.40.0						B相失压次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	废弃	Hexing	a2	Number of Under Voltages (sag) in phase L2		1-0:52.32.0.255							B相失压次数		
+电网质量//时间相关	3	0	Hexing		Duration for missing voltage in phase L2		1-0:52.41.0.255	52.41.0						B相失压持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]	"01000C2B00FF"			\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned	180			\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	FID2 & IDIS		Number of Under Voltages (sag) in phase L3		1-0:72.32.0.255	72.32.0						C相欠压次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100482000FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of missing voltage in phase L3		1-0:72.40.0.255	72.40.0						C相失压次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	废弃	Hexing	a2	Number of missing voltage in phase L3		1-0:72.32.0.255							C相失压次数		
+电网质量//时间相关	3	0	Hexing		Duration for missing voltage in phase L3		1-0:72.41.0.255	72.41.0						C相失压持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]	"01000C2B00FF"			\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned	180			\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of Under Voltage (sag) in phase L1		1-0:32.33.0.255	32.33.0						A相欠压持续时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100202100FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of Under Voltage (sag) in phase L2		1-0:52.33.0.255	52.33.0						B相欠压持续时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100342100FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of Under Voltage (sag) in phase L3		1-0:72.33.0.255	72.33.0						C相欠压持续时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100482100FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Magnitude of Under Voltage (sag) in phase L1		1-0:32.34.0.255	32.34.0						A相欠压电压大小		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100202200FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Magnitude of Under Voltage (sag) in phase L2		1-0:52.34.0.255	52.34.0						B相欠压电压大小		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100342200FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Magnitude of Under Voltage (sag) in phase L3		1-0:72.34.0.255	72.34.0						C相欠压电压大小		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100482200FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Threshold for Over Voltage (swell)		1-0:12.35.0.255	12.35.0						过压门限		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000C2300FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned	more than 15% VREF			\	W	RW	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Restore time threshold for Over Voltage (swell)		1-0:12.178.0.255	12.178.0						过压电压恢复延迟		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Restore threshold for Over Voltage (swell)		1-0:12.185.0.255	12.35.0						过压电压恢复判断阈值		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned	more than 15% VREF			\	W	RW	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Second threshold for Over Voltage (swell)		1-1:12.35.0.255	1.12.35.0						第二过压门限		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000C2300FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned	more than 15% VREF			\	W	RW	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Second Time threshold for Over Voltage (swell)		1-1:12.44.0.255	1.12.44.0						第二过压时间门限		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned	180			\	W	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Time threshold for Over Voltage (swell)		1-0:12.44.0.255	12.44.0						过压时间门限		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000C2C00FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned	180			\	W	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	FID2 & IDIS		Number of Over Voltages(swell)  in phase L1		1-0:32.36.0.255	32.36.0						A相过压次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100202400FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2 & IDIS		Number of Over Voltages (swell) in phase L2		1-0:52.36.0.255	52.36.0						B相过压次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100342400FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2 & IDIS		Number of Over Voltages (swell) in phase L3		1-0:72.36.0.255	72.36.0						C相过压次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100482400FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of Over Voltage (swell) in phase L1		1-0:32.37.0.255	32.37.0						A相过压持续时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100202500FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of Over Voltage (swell) in phase L2		1-0:52.37.0.255	52.37.0						B相过压持续时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100342500FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of Over Voltage (swell) in phase L3		1-0:72.37.0.255	72.37.0						C相过压持续时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100482500FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Magnitude of Over Voltage (swell) in phase L1		1-0:32.38.0.255	32.38.0						A相过压电压大小		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100202600FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Magnitude of Over Voltage (swell) in phase L2		1-0:52.38.0.255	52.38.0						B相过压电压大小		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100342600FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Magnitude of Over Voltage (swell) in phase L3		1-0:72.38.0.255	72.38.0						C相过压电压大小		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"0100482600FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	FID2 & IDIS		Threshold for missing voltage (voltage cut)		1-0:12.39.0.255	12.39.0						失压门限		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000C2700FF"			\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned	"3P CT: 161
+3P CTPT: 161
+ 1P: 115
+3P DC: 115"			\	W	RW	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	废弃	Hexing	a2	Threshold for missing voltage (voltage cut)		1-0:12.31.0.255							失压判断阀值		
+电网质量//判断电压	3	0	FID2 & IDIS		Restore threshold for missing voltage (voltage cut)		1-0:12.177.0.255	12.177.0						失压电压恢复判断阀值		
+电网质量//判断电压	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		FID2 & IDIS	a2	value	long_unsigned	"3P CT: 161
+3P CTPT: 161
+ 1P: 115
+3P DC: 115"			\	W	RW	R		voltage	
+电网质量//判断电压	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold for Low Battery Voltage (voltage)		1-0:12.162.0.255	12.162.0						电池欠压阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for Low Battery Voltage		1-0:12.163.0.255	12.163.0						电池欠压延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold of battery capacity  for Low Battery Voltage		1-0:160.128.0.255	160.h.0						电池容量阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold of voltage upper limit for Battery Voltage Recover		1-0:12.164.0.255	12.164.0						电池电压上限阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold of voltage upper limit for Battery Voltage Recover		1-0:12.165.0.255	12.165.0						电池电压上限延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold for All Loss of voltage (voltage)		1-0:12.158.0.255	12.158.0						全失压电压判断阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电流	3	0	Hexing		Threshold for All Loss of voltage (current)		1-0:11.146.0.255	11.146.0						全失压电流判断阀值		
+电网质量//判断电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电流	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//判断电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断电流	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for All Loss of voltage		1-0:12.159.0.255	12.159.0						全失压电压判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	 {0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Time threshold for All Loss of voltage recover		1-0:12.171.0.255	12.171.0						全失压电压恢复判断阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1.35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Time threshold for voltage cut		1-0:12.45.0.255	12.45.0						失压时间门限		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000C2D00FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned	30			\	W	RW	R		voltage	
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	废弃	Hexing	a2	Time threshold for voltage cut		1-0:12.43.0.255							失压判断延迟		
+电网质量//电网质量	1	0	FID2		Number of power failures in all phases		0-0:96.7.0.255	C.7.0	C.7.0					所有相掉电次数		
+电网质量//电网质量	1		FID2	a1	logical_name	octet_string[6]	"0000600700FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of long power failures in all phases		0-0:96.7.133.255							所有相长掉电次数		
+电网质量//电网质量	1	废弃	Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1	废弃	Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2		Number of power failures phase L1		0-0:96.7.1.255	C.7.1	C.7.1					A相掉电次数		
+电网质量//电网质量	1		FID2	a1	logical_name	octet_string[6]	"0000600701FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2		Number of power failures phase L2		0-0:96.7.2.255	C.7.2	C.7.2					B相掉电次数		
+电网质量//电网质量	1		FID2	a1	logical_name	octet_string[6]	"0000600702FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2		Number of power failures phase L3		0-0:96.7.3.255	C.7.3	C.7.3					C相掉电次数		
+电网质量//电网质量	1		FID2	a1	logical_name	octet_string[6]	"0000600703FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2		Number of long power failures in all phases		0-0:96.7.5.255	C.7.5	C.7.5					所有相长时间掉电次数		
+电网质量//电网质量	1		FID2	a1	logical_name	octet_string[6]	"0000600705FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of short power failures in all phases		0-0:96.7.25.255	C.7.25	C.7.25					所有相短时间掉电次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]	"0000600719FF"			\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2		Number of long power failures in phase L1		0-0:96.7.6.255	C.7.6	C.7.6					A相长时间掉电次数		
+电网质量//电网质量	1		FID2	a1	logical_name	octet_string[6]	"0000600706FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2		Number of long power failures in phase L2		0-0:96.7.7.255	C.7.7	C.7.7					B相长时间掉电次数		
+电网质量//电网质量	1		FID2	a1	logical_name	octet_string[6]	"0000600707FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	FID2		Number of long power failures in phase L3		0-0:96.7.8.255	C.7.8	C.7.8					C相长时间掉电次数		
+电网质量//电网质量	1		FID2	a1	logical_name	octet_string[6]	"0000600708FF"			\	\	R	R			Hex
+电网质量//电网质量	1		FID2	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	FID2		Duration of Last Long Power Failure in All Phases		0-0:96.7.15.255	C.7.15	C.7.15					所有相长时间掉电持续时间		
+电网质量//时间相关	3		FID2	a1	logical_name	octet_string[6]	"000060070FFF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3	0	FID2		Duration of Last Long Power Failure in Phase L1 		0-0:96.7.16.255	C.7.16	C.7.16					A相长时间掉电持续时间		
+电网质量//时间相关	3		FID2	a1	logical_name	octet_string[6]	"0000600710FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3	0	FID2		Duration of Last Long Power Failure in Phase L2		0-0:96.7.17.255	C.7.17	C.7.17					B相长时间掉电持续时间		
+电网质量//时间相关	3		FID2	a1	logical_name	octet_string[6]	"0000600711FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3	0	FID2		Duration of Last Long Power Failure in Phase L3		0-0:96.7.18.255	C.7.18	C.7.18					C相长时间掉电持续时间		
+电网质量//时间相关	3		FID2	a1	logical_name	octet_string[6]	"0000600712FF"			\	\	R	R			Hex
+电网质量//时间相关	3		FID2	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//判断电压	3	0	Hexing		Threshold for SWELL		1-0:12.151.0.255	12.151.0						SWELL判断阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for SWELL		1-0:12.167.0.255	12.167.0						SWELL判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for ADSUP		1-0:12.135.0.255	12.135.0						ADSUP判断阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R	巴西使用		
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{0,35}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for PRSUP		1-0:12.136.0.255	12.136.0						PRSUP判断阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R	巴西使用		
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{0,35}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for ADINF		1-0:12.137.0.255	12.137.0						ADINF判断阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R	巴西使用		
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{0,35}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for PRINF		1-0:12.138.0.255	12.138.0						PRINF判断阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R	巴西使用		
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{0,35}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Nii		0-0:96.1.227.255	C.1.227						Nii		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	巴西使用		
+电网质量//电网质量	1	0	Hexing		Ndr		0-0:96.1.228.255	C.1.228						Ndr		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]	d			\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	巴西使用		
+电网质量//电网质量	1	0	Hexing		Number of NIMT short-term voltage variation		1-0:12.144.0.255	12.144.0						NIMT电压短期内变化净次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	巴西使用		
+电网质量//电网质量	1	0	Hexing		Number of NAMT short-term voltage variation		1-0:12.145.0.255	12.145.0						NAMT电压短期内变化净次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	巴西使用		
+电网质量//电网质量	1	0	Hexing		Number of NEMT short-term voltage variation		1-0:12.146.0.255	12.146.0						NEMT电压短期内变化净次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	巴西使用		
+电网质量//电网质量	1	0	Hexing		Number of NITT short-term voltage variation		1-0:12.147.0.255	12.147.0						NITT电压短期内变化净次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	巴西使用		
+电网质量//电网质量	1	0	Hexing		Number of NATT short-term voltage variation		1-0:12.148.0.255	12.148.0						NATT电压短期内变化净次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	巴西使用		
+电网质量//电网质量	1	0	Hexing		Number of NETT short-term voltage variation		1-0:12.149.0.255	12.149.0						NETT电压短期内变化净次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	巴西使用		
+电网质量//电网质量	1	0	Hexing		Number of missing voltage in any phase		1-0:12.40.0.255	12.40.0						任意相失压次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of over voltage in any phase		1-0:12.36.0.255	12.36.0						任意相过压次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		Time threshold for power failure button lock		0-0:96.7.129.255							掉电事件上报延时时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for power failure button allow active		0-0:96.7.130.255	C.7.130						掉电下每次按键允许激活延时时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of power failures in any phase		0-0:96.7.128.255	C.7.h	C.7.h					任一相电网掉电发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R	包括长掉电+短掉电的总次数		
+电网质量//电网质量	3	0	Hexing		Threshold for current unbalance		1-0:11.39.0.255	11.39.0						三相电流不平衡阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R	(-1)%		
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for current unbalance		1-0:11.41.0.255	11.41.0						三相电流不平衡延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电流	3	0	Hexing		Threshold for current reversal		1-0:11.128.0.255	11.h.0	11.h.0					反向电流判断阀值		
+电网质量//判断电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电流	3		Hexing	a2	value	long_unsigned				\	\	RW	R		current	
+电网质量//判断电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断电流	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for current reversal		1-0:142.128.0.255	142.h.0						电流反向判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Resotre time threshold for current reversal		1-0:143.128.0.255	143.h.0						电流反向恢复判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of any phase current reversal L1		1-0:11.170.0.255	11.170.0						任意相电流反向次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of current reversal L1		1-0:31.129.0.255	31.A.0	31.A.0					A相电流反向次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of current reversal L1		1-0:31.130.0.255	31.130.0						A相电流反向持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of current reversal L2		1-0:51.129.0.255	51.A.0	51.A.0					B相电流反向次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of current reversal L2		1-0:51.130.0.255	51.130.0						B相电流反向持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of current reversal L3		1-0:71.129.0.255	71.A.0	71.A.0					C相电流反向次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of current reversal L3		1-0:71.130.0.255	71.130.0						C相电流反向持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of energy reversal L1		1-0:31.131.0.255	31.131.0						A相电能反向次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of energy reversal L1		1-0:31.132.0.255	31.132.0						A相电能反向持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of energy reversal L2		1-0:51.131.0.255	51.131.0						B相电能反向次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of energy reversal L2		1-0:51.132.0.255	51.132.0						B相电能反向持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of energy reversal L3		1-0:71.131.0.255	71.131.0						C相电能反向次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of energy reversal L3		1-0:71.132.0.255	71.132.0						C相电能反向持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电能	3	0	Hexing		Threshold for energy reversal(active power)		1-0:11.155.0.255	11.155.0						反向电能判断阀值		
+电网质量//判断电能	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电能	3		Hexing	a2	value	long_unsigned				\	\	RW	R		energy	
+电网质量//判断电能	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R			
+电网质量//判断电能	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for energy reversal		1-0:11.150.0.255	11.150.0						反向电能判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Threshold for power Reverse		1-0:11.151.0.255	11.151.0.						潮流反向判断阀值		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	long_unsigned				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R			
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for power Reverse		1-0:11.152.0.255	11.152.0.						潮流反向判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for impedance upper limit		1-0:128.128.0.255	h.h.0	h.h.0					阻抗上限阈值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Time threshold for impedance lower limit		1-0:128.129.0.255	h.A.0	h.A.0					阻抗下限阈值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for disconnection when current reversal		1-0:11.135.0.255	11.135.0						反向时拉闸的判断阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R		current	
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for disconnection when current reversal		1-0:11.136.0.255	11.136.0						反向时拉闸的判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of overload		1-0:1.129.0.255	1.A.0	1.A.0					过载次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3	0	Hexing		Threshold for bypass		1-0:11.129.0.255	11.A.0	11.A.0					旁路判断阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R	(0)%		
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Time threshold for bypass		1-0:11.130.0.255	11.130.0						旁路判断延迟时间 		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for start bypass		1-0:11.142.0.255	11.142.0						旁路起始判断阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-2,33}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of bypass		1-0:11.156.0.255	11.156.0						旁路发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	3	0	Hexing		During of bypass		1-0:11.157.0.255	11.157.0						旁路发生持续时间		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电流	3	0	Hexing		Threshold for over current		1-0:11.35.0.255	11.35.0						过流判断阀值		
+电网质量//判断电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电流	3		Hexing	a2	value	long_unsigned	默认100%Imax（10%Imax至120%Imax）			\	\	RW	R	旧表型以及要求精度高的采用U32，即double_long_unsigned	current	
+电网质量//判断电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断电流	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for over current begin		1-0:11.44.0.255	11.44.0						过流事件发生判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned	默认60S（范围3s-65535s）			\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for over current end		1-0:11.171.0.255	11.171.0						过流事件结束判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned	默认60S（范围3s-65535s）			\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电流	3	0	Hexing		Threshold for missing current		1-0:11.134.0.255	11.134.0						失流判断阀值		
+电网质量//判断电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电流	3		Hexing	a2	value	long_unsigned				\	\	RW	R		current	
+电网质量//判断电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断电流	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电流	3	0	Hexing		 the lower threshold for missing current		1-0:11.191.0.255	11.191.0						失流电流触发下限阀值		
+电网质量//判断电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电流	3		Hexing	a2	value	long_unsigned				\	\	RW	R		current	
+电网质量//判断电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断电流	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for missing current		1-0:11.45.0.255	11.45.0						失流判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold for missing current (voltage)		1-0:12.160.0.255	12.160.0						失流事件电压触发下限		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	 {-1,35}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of missing current L1		1-0:31.40.0.255	31.40.0						A相失流次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of missing current L2		1-0:51.40.0.255	51.40.0						B相失流次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of missing current L3		1-0:71.40.0.255	71.40.0						C相失流次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		Duration for missing current L1		1-0:31.41.0.255	31.41.0						A相失流持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Duration for missing current L2		1-0:51.41.0.255	51.41.0						B相失流持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Duration for missing current L3		1-0:71.41.0.255	71.41.0						C相失流持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for power unbalance		1-0:11.132.0.255	11.132.0						功率不平衡阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R		power	Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for power unbalance		1-0:11.133.0.255	11.133.0						功率不平衡判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of power unbalance		1-0:11.158.0.255	11.158.0						功率不平衡发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of power unbalance		1-0:11.159.0.255	11.159.0						功率不平衡发生持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for special power unbalance		1-0:11.147.0.255	11.147.0						特殊功率不平衡阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R		power	
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for special power unbalance		1-0:11.148.0.255	11.148.0						特殊功率不平衡判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for meter synchronization with CIU		1-0:11.138.0.255	11.138.0						表计与CIU主动同步阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Voltage threshold for phase failure		1-0:12.128.0.255	12.h.0	12.h.0					断相电压判断阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电流	3	0	Hexing		Current threshold for phase failure		1-0:11.160.0.255	11.160.0						断相电流判断阀值		
+电网质量//判断电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电流	3		Hexing	a2	value	long_unsigned				\	\	RW	R		current	
+电网质量//判断电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断电流	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for phase failure		1-0:12.129.0.255	12.A.0	12.A.0					断相判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for voltage unbalance		1-0:12.132.0.255	12.132.0						电压不平衡阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for voltage unbalance		1-0:12.133.0.255	12.133.0						电压不平衡判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		During of voltagee unbalance		1-0:12.174.0.255	12.174.0						电压不平衡发生持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of voltage unbalance		1-0:12.172.0.255	12.172.0						电压不平衡次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		Time threshold for polarity reversal		1-0:12.134.0.255	12.134.0						反极性判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压角度	3	0	Hexing		 Angle of VoltageThreshold  for polarity reversal		1-0:12.180.0.255	12.180.0						反极性时判断电压角度阀值		
+电网质量//判断电压角度	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压角度	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断电压角度	3		Hexing	a3	scaler_unit	scal_unit_type	{0,8}			\	\	R	R			
+电网质量//判断电压角度	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for missing neutral		1-0:92.128.0.255	92.h.0	92.h.0					缺零线检测延时		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Interval for missing neutral detection		1-0:92.129.0.255	92.A.0	92.A.0					缺零线检测间隔		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold for missing neutral（V）		1-0:92.130.0.255	92.130.0						缺零线电压检测门限		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for missing neutral（%）		1-0:92.131.0.255	92.131.0						缺零线判断阈值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R	%		
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压角度	3	0	Hexing		 Angle of VoltageThreshold for missing neutral		1-0:92.134.0.255	92.134.0						缺零线时判断电压角度阀值		
+电网质量//判断电压角度	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压角度	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断电压角度	3		Hexing	a3	scaler_unit	scal_unit_type	{0,8}			\	\	R	R			
+电网质量//判断电压角度	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		During of missing neutral		1-0:92.133.0.255	92.133.0						缺零发生持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of missing neutral		1-0:92.132.0.255	92.132.0						缺零线发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	3	0	Hexing		Threshold for neutral over current		1-0:11.153.0.255	11.153.0						零线过流判断阈值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R	%		
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for neutral over current		1-0:11.154.0.255	11.154.0						零线过流判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R	%		
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率因数	3	0	Hexing		Threshold for low power factor		1-0:13.31.0.255	13.31.0						低功率因数阀值		
+电网质量//判断功率因数	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率因数	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断功率因数	3		Hexing	a3	scaler_unit	scal_unit_type	{-3,255}			\	\	R	R			
+电网质量//判断功率因数	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for low power factor		1-0:13.43.0.255	13.43.0						低功率因数延时		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of low power factor		1-0:13.131.0.255	13.131.0						低功率因数发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of low power factor		1-0:13.132.0.255	13.132.0						低功率因数发生持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for phase sequence reversal （voltage）		1-0:81.128.0.255	81.h.0	81.h.0					电压逆相序判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		During of phase sequence reversal （voltage）		1-0:12.175.0.255	12.175.0						电压逆相序发生持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of phase sequence reversal （voltage）		1-0:12.173.0.255	12.173.0						电压逆相序发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		Time threshold for phase sequence reversal （current）		1-0:11.149.0.255	11.149.0						电流逆相序判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold for under line voltage		1-0:128.130.0.255	h.130.0						线电压欠压阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold for over line voltage		1-0:128.35.0.255	h.35.0	h.35.0					线电压过压阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R		voltage	
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for over line voltage		1-0:129.35.0.255	A.35.0	A.35.0					线电压过压判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for under line voltage		1-0:129.131.0.255	A.131.0	A.131.0					线电压欠压判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for high voltage attack		1-0:12.161.0.255	12.161.0						高压攻击判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断频率	3	0	Hexing		Threshold for low frequency		1-0:14.31.0.255	14.31.0						频率过低阀值		
+电网质量//判断频率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断频率	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断频率	3		Hexing	a3	scaler_unit	scal_unit_type	{-2,44}			\	\	R	R			
+电网质量//判断频率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for low frequency		1-0:14.33.0.255	14.33.0						频率过低延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断频率	3	0	Hexing		Threshold for high frequency		1-0:14.35.0.255	14.35.0						频率过高阀值		
+电网质量//判断频率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断频率	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断频率	3		Hexing	a3	scaler_unit	scal_unit_type	{-2,44}			\	\	R	R			
+电网质量//判断频率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for high frequency		1-0:14.37.0.255	14.37.0						频率过高延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for anomaly frequency		1-0:14.130.0.255	14.130.0						频率异常延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of anomaly frequency		1-0:14.131.0.255	14.131.0						频率异常次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of low anomaly frequency		1-0:14.132.0.255	14.132.0						频率异常发生持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of any phase failure 		1-0:12.181.0.255	12.181.0						任意相断相次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of phase failure in L1		1-0:32.137.0.255	32.137.0						A相断相次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of phase failure in L2		1-0:52.137.0.255	52.137.0						B相断相次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of phase failure in L3		1-0:72.137.0.255	72.137.0						C相断相次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		Duration for phase failure in L1		1-0:32.138.0.255	32.138.0						A相断相持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Duration for phase failure in L2		1-0:52.138.0.255	52.138.0						B相断相持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Duration for phase failure in L3		1-0:72.138.0.255	72.138.0						C相断相持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for over demand		1-0:11.137.0.255	11.137.0						需量超限阀值（%）		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Over time of demand		1-0:11.143.0.255	11.143.0						需量超限时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned	默认60S（范围3s-65535s）			\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Delay time of over demand		1-0:11.169.0.255	11.169.0						需量超限延时时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of over demand		1-0:11.167.0.255	11.167.0.						需量超限次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//判断需量	3	0	Hexing		Demand of over threshold		1-0:11.144.0.255	11.144.0						有功需量超限的需量值		
+电网质量//判断需量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断需量	3		Hexing	a2	value	double_long_unsigned	默认120%Un*Imax			\	\	R	R		demand	
+电网质量//判断需量	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R			
+电网质量//判断需量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for over current THD		1-0:11.35.124.255	11.35.E						电流THD超限阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for over current THD		1-0:11.44.124.255	11.44.E						电流THD超限延迟时间阀值		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for over voltage THD		1-0:12.35.124.255	12.35.E						电压THD超限阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for over voltage THD		1-0:12.44.124.255	12.44.E						电压THD超限延迟时间阀值		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Time threshold for active power THD		1-0:15.35.124.255	15.35.E						总有功功率THD超限阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Load allocation		1-0:1.35.128.255	1.35.h	1.35.h					分时间段的功率阀值		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	Load_allocation				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R	"老表使用
+新表用1类"		
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Passive load allocation		1-1:1.35.128.255	1.1.35.h						备用分时间段的功率阀值		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	Load_allocation				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R	"老表使用
+新表用1类"		
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Threshold for period maximum power		1-0:1.35.130.255	1.35.130						区间最大功率阀值		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	period_max_power_threshold				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R			
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Threshold for low power		1-0:1.35.131.255	1.35.131						低功率阀值		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R			
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for main cover removed		0-0:96.1.166.255	C.1.166						开表盖延迟判断时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for terminal cover removed		0-0:96.1.167.255	C.1.167						开端盖延迟判断时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for module cover removed		0-0:97.148.0.255	F.148.0						开通信模块盖判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of communication module with no response		0-0:97.149.0.255	F.149.0						通信模块无响应连续次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		Time threshold for strong DC field		0-0:96.1.172.255	C.1.172						强磁场判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of strong DC field		0-0:96.1.221.255	C.1.221						强磁场发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of strong DC field		0-0:96.1.222.255	C.1.222						强磁场发生持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3	0	Hexing		Time threshold for manual disconnection		0-0:96.1.204.255	C.1.204						手动拉闸延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of main cover removed		0-0:96.1.200.255	C.1.200						开表盖次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of terminal cover removed		1-0:96.2.170.255	C.2.170						开端钮盖次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Days of open cover		1-0:96.53.2.255	C.53.2						已发生开表盖天数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	unsigned				\	\	RW	R			
+电网质量//时间相关	3	0	Hexing		During of main cover removed		0-0:96.1.220.255	C.1.220						开表盖持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3	0	Hexing		During of terminal cover removed		0-0:96.2.190.255	C.2.190						开端钮盖持续时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//判断需量	3	0	Hexing		Threshold for period demand control		1-0:11.139.0.255	11.139.0						分时间段的需量控制阀值		
+电网质量//判断需量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断需量	3		Hexing	a2	value	Load_allocation				\	\	RW	R		demand	
+电网质量//判断需量	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R			
+电网质量//判断需量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for over demand exit		1-0:11.140.0.255	11.140.0						过需量退出判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for over demand		1-0:11.141.0.255	11.141.0						过需量判断延时时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for magnetic interference		1-0:11.177.0.255	11.177.0						强磁场退出判断延时时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Power threshold for PFC		1-0:134.130.12.255							PFC值计算功率阀值		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-4,27}
+3P CTPT: {-4,27}
+ 1P: {-4,27}
+3P DC: {4,27}"			\	\	R	R			
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Power factor deduction threshold for PFC		1-0:134.130.13.255							PFC功率因数扣费阀值		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	long_unsigned				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	{-3.255}			\	\	R	R			
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Lower limit of monthly average power factor deduction for PFC		1-0:134.130.14.255							月平均功率因数扣费下限		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-1,27}
+3P CTPT: {-1,27}
+ 1P: {0,27}
+3P DC: {0,27}"			\	\	R	R			
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断功率	3	0	Hexing		Ratio of  deduction to monthly electricity consumption for PFC		1-0:134.130.15.255							PFC扣费占月消费电量的比值		
+电网质量//判断功率	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断功率	3		Hexing	a2	value	long_unsigned				\	\	RW	R		power	
+电网质量//判断功率	3		Hexing	a3	scaler_unit	scal_unit_type	{-3.255}			\	\	R	R			
+电网质量//判断功率	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Forgiveness time for manually demand reset		1-0:133.129.0.255	133.A.0						手动需量复位延迟时间		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned	{0,7}			\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Upper limit of active power (+) 		1-0:133.131.0.255							有功正向负荷上限		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	BCD[3]	{0,27}			\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Upper limit of active power (-) 		1-0:133.132.0.255							有功反向负荷上限		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	BCD[3]	{0,27}			\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Query interval for the communication status with IHD		0-0:96.1.151.255	C.1.151						IHD通信故障判断轮询时间		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned	{0,6}			\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Delay time of enter idle mode 		0-0:96.1.210.255	C.1.210						进入空载模式延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Delay time of  exit idle mode 		0-0:96.1.253.255	C.1.253						退出空载模式延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Minimum working voltage		1-0:0.3.138.255	0.3.138						最低工作电压		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R	0~200V	power	
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Date&time of last power failure		0-0:96.2.157.255	C.2.157						最近一次掉电时间		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string[12]				\	\	R	R	Date_time	Date_time	Hex
+电网质量//电网质量	1	0	Hexing		Number of magnetic influence		0-0:96.2.135.255	C.2.135						外部磁场干扰总次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of program		0-0:96.2.0.255	C.2.0	C.2.0					表计编程次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Date&time of last program		0-0:96.2.1.255	C.2.1	C.2.1					表计最近一次编程时间		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string[12]				\	\	R	R	Date_time	Date_time	Hex
+电网质量//电网质量	1	0	Hexing		ID of last program		0-0:96.2.156.255	C.2.156						最近一次编程ID		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1	0	Hexing		The number of times KWH  reset to zero after reaching  maximum indication		0-0:96.2.139.255	C.2.139						有功电量到最大值999999..复位到0次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		The number of times  KVARH reset to zero after reaching  maximum indication		0-0:96.2.140.255	C.2.140						无功电量到最大值999999..复位到0次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Total number of  tampering in Indonesia		0-0:96.2.159.255	C.2.159						印尼窃电事件次数总和		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Total number of  tampering		0-0:96.2.164.255	C.2.164						窃电事件次数总和		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Maxium records number for  power off		0-0:96.2.141.255	C.2.141						掉电事件最大记录条数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3	0	Hexing		min. limit setting of Temperatrue		0-0:0.5.11.255	0.5.11	0.5.11					高温阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R	摄氏度		
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for high temperatrue		0-0:0.5.128.255	0.5.h	0.5.h					高温延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		max. limit setting		0-0:0.5.12.255	0.5.12	0.5.12					低温阀值		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R	摄氏度		
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	FID2		Unbalance Load Detection		0-0:94.98.15.255							不平衡负载检测（伊朗专用）		
+电网质量//电网质量	1		伊朗专用	a1	logical_name	octet_string[6]	"00005E620FFF"			\	\	R	R			Hex
+电网质量//电网质量	1		伊朗专用	a2	value	unbalance_load_detection_type				\	\	RW	R	"配置如下信息：
+开启检测不平衡的最小电流
+判断不平衡的门限 (%)"		
+电网质量//时间相关	3	0	Hexing		Delay time of power failure event notification		0-0:96.7.134.255	C.7.134						掉电事件上报最大延时时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	unsigned	30			\	\	RW	R	最大60s,默认30s		
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Event code of  last fraud detection		0-0:96.2.211.255	C.2.211						最近一次窃电事件编码		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	enum				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Occurring time of  last fraud detection		0-0:96.2.212.255	C.2.212						最近一次窃电发生时间日期		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string				\	\	R	R		Date_time	Hex
+电网质量//电网质量	1	0	Hexing		Ending time of  last fraud detection		0-0:96.2.213.255	C.2.213						最近一次窃电结束时间日期		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string				\	\	R	R		Date_time	Hex
+电网质量//电网质量	1	0	Hexing		Event code of first fraud detection		0-0:96.2.214.255	C.2.214						第一次窃电事件编码		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	enum				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Occurring time of first fraud detection		0-0:96.2.215.255	C.2.215						第一次窃电发生时间日期		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string				\	\	R	R		Date_time	Hex
+电网质量//电网质量	1	0	Hexing		Ending time of first fraud detection		0-0:96.2.216.255	C.2.216						第一次窃电结束时间日期		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string				\	\	R	R		Date_time	Hex
+电网质量//电网质量	1	0	Hexing		Event reverse power flow -counter		0-0:96.51.7.255	C.51.7	C.51.7					功率反向总次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Event reverse power flow -timestamp		0-0:96.51.8.255	C.51.8	C.51.8					最近一次功率反向发生时间		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string				\	\	R	R		Date_time	Hex
+电网质量//时间相关	3	0	Hexing		Event reverse power flow -delay time		1-0:71.135.0.255	C.7.134						总功率反向判断延迟		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Event RTC set -counter		0-0:96.51.15.255	C.51.15						时钟修改总次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Event RTC set -timestamp		0-0:96.51.16.255	C.51.16						最近一次时钟修改发生时间		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet_string				\	\	R	R		Date_time	Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of overcurrent event in Phase L1 previous [y] month		0-0:96.128.0.Y	C.h.0.Y						"Occurring&Ending time of overcurrent event in Phase L1 
+previous [y] month"	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of overcurrent event in Phase L2 previous [y] month		0-0:96.128.1.Y	C.h.1.Y						"Occurring&Ending time of overcurrent event in Phase L2 
+previous [y] month"	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of overcurrent event in Phase L3 previous [y] month		0-0:96.128.2.Y	C.h.2.Y						"Occurring&Ending time of overcurrent event in Phase L3
+previous [y] month"	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of phase failure event in Phase L1 previous [y] month		0-0:96.128.3.Y	C.h.3.Y						Occurring&Ending time of phase failure event in Phase L1 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of phase failure event in Phase L2 previous [y] month		0-0:96.128.4.Y	C.h.4.Y						Occurring&Ending time of phase failure event in Phase L2 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of phase failure event in Phase L3 previous [y] month		0-0:96.128.5.Y	C.h.5.Y						Occurring&Ending time of phase failure event in Phase L3 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of Loss of voltage event in Phase L1 previous [y] month		0-0:96.128.6.Y	C.h.6.Y						Occurring&Ending time of Loss of voltage event in Phase L1 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of Loss of voltage event in Phase L2 previous [y] month		0-0:96.128.7.Y	C.h.7.Y						Occurring&Ending time of Loss of voltage event in Phase L2 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of Loss of voltage event in Phase L3 previous [y] month		0-0:96.128.8.Y	C.h.8.Y						Occurring&Ending time of Loss of voltage event in Phase L3 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of over voltage event in Phase L1 previous [y] month		0-0:96.128.9.Y	C.h.9.Y						Occurring&Ending time of over voltage event in Phase L1 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of over voltage event in Phase L2 previous [y] month		0-0:96.128.10.Y							Occurring&Ending time of over voltage event in Phase L2 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of over voltage event in Phase L3 previous [y] month		0-0:96.128.11.Y							Occurring&Ending time of over voltage event in Phase L3 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of under voltage event in Phase L1 previous [y] month		0-0:96.128.12.Y							Occurring&Ending time of under voltage event in Phase L1 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of under voltage event in Phase L2 previous [y] month		0-0:96.128.13.Y							Occurring&Ending time of under voltage event in Phase L2 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of under voltage event in Phase L3 previous [y] month		0-0:96.128.14.Y							Occurring&Ending time of under voltage event in Phase L3 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of current reverse event in Phase L1 previous [y] month		0-0:96.128.15.Y							Occurring&Ending time of current reverse event in Phase L1 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of current reverse event in Phase L2 previous [y] month		0-0:96.128.16.Y							Occurring&Ending time of current reverse event in Phase L2 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of current reverse event in Phase L3 previous [y] month		0-0:96.128.17.Y							Occurring&Ending time of current reverse event in Phase L3 previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of bypass event previous [y] month		0-0:96.128.18.Y							Occurring&Ending time of bypass event previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring&Ending time of long power failures event in all phase previous [y] month 		0-0:96.128.19.Y							Occurring&Ending time of long power failures event in all phase previous [y] month 	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	structure				\	\	R	R	"structure
+   {
+       date-time; octet-string[12] 开始时间
+       date-time;  octet-string[12] 结束时间     
+   }"		Hex
+电网质量//电网质量	1	0	Hexing		Occurring time of Meter Clear previous [y] month		0-0:96.128.20.Y							Occurring time of Meter Clear previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet-string[12]				\	\	R	R		date_time	Hex
+电网质量//电网质量	1	0	Hexing		"Occurring time of MD reset
+previous [y] month"		0-0:96.128.21.Y							Occurring time of MD reset previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet-string[12]				\	\	R	R		date_time	Hex
+电网质量//电网质量	1	0	Hexing		Occurring time of Battery Voltage Low previous [y] month		0-0:96.128.23.Y							Occurring time of Battery Voltage Low previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet-string[12]				\	\	R	R		date_time	Hex
+电网质量//电网质量	1	0	Hexing		Occurring time of modifying password previous [y] month		0-0:96.128.24.Y							Occurring time of modifying password previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet-string[12]				\	\	R	R		date_time	Hex
+电网质量//电网质量	1	0	Hexing		Occurring time of inverse phase sequence event previous [y] month		0-0:96.128.25.Y							Occurring time of inverse phase sequence event previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet-string[12]				\	\	R	R		date_time	Hex
+电网质量//电网质量	1	0	Hexing		Occurring time of unbalanced voltage event previous [y] month		0-0:96.128.26.Y							Occurring time of unbalanced voltage event previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet-string[12]				\	\	R	R		date_time	Hex
+电网质量//电网质量	1	0	Hexing		Occurring time of Programming previous [y] month		0-0:96.128.27.Y							Occurring time of Programming previous [y] month	1<=y<=12;101<=Y<=112	
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	octet-string[12]				\	\	R	R		date_time	Hex
+电网质量//电网质量	3	0	Hexing		Duration of overload records in previous month		1-0:11.165.0.255	11.165.0						上一月过载持续时间		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold for high temperature		0-0:96.9.129.255	C.9.A	C.9.A					温度过高判断阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{0,9}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of high temperature		0-0:96.9.130.255	C.9.130						温度过高判断时间延迟		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Event occurrence-counter		0-0:96.2.204.255	C.2.204						事件发生次数（专项事件配置）		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	double_long_unsigned				\	\	R	R	直接读取该OBIS不应当回复		Hex
+电网质量//时间相关	3	0	FID2 & IDIS		Event total accumulation duration		0-0:96.2.205.255	C.2.205						事件总累积持续时间（专项事件配置）		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R	直接读取该OBIS不应当回复		
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	FID2 & IDIS		Number of no-load		0-0:96.7.139.255	C.7.139						空载次数		
+电网质量//电网质量	1		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	FID2 & IDIS		Maximum time of no-load		0-0:96.7.140.255	C.7.140						空载最长时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Minimum time of no-load		0-0:96.7.141.255	C.7.141						空载最短时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of Module cover removed		0-0:96.51.27.255	C.51.27						开模块盖次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//电网质量	1	0	Hexing		Number of Limiter threshold exceeded		0-0:96.51.28.255	C.51.28						超门限事件发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	R	R			
+电网质量//时间相关	3	0	FID2 & IDIS		Time threshold of CT open circuit 		0-0:96.1.245.255	C.1.245						CT开路延时检测时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3	0	FID2 & IDIS		Time threshold of Neutral Line interference detect		0-0:96.1.246.255	C.1.246						零线干扰检测延时时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3	0	FID2 & IDIS		Time threshold of Modules plug detect		0-0:96.1.247.255	C.1.247						模块插拔检测延时时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//电网质量	3	0	Hexing		Threshold for phase voltage in neutral  		1-0:12.182.0.255	12.182.0						零线接相电压阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for phase voltage in neutral  		1-0:12.183.0.255	12.183.0						零线接相电压判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Threshold % of approved demand value		1-0:1.35.133.255	1.35.133						过载阀值百分比（用于判断视在功率1-0:134.7.0.255，尼泊尔）		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R	举例：客户需设置approved demand value为20KVA,Threshold % of approved demand value为20%，则大于20KVA(1+20%)时继电器拉闸		
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断电压	3	0	Hexing		Threshold for Low Battery Voltage of Internal Battery (voltage)		1-0:12.184.0.255	12.184.0						内部电池欠压阀值		
+电网质量//判断电压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电压	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//判断电压	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R			
+电网质量//判断电压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time Threshold for Meter box cover removed		0-0:96.1.251.255	C.1.251						开表箱盖延迟判断时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Voltage qualification rate parameter		1-0:12.187.0.255	12.187.0						电压合格率参数		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	Voltage_qualification_rate_parameter				\	\	RW	R	"structure
+{
+ 电压考核上限 long-unsigned
+ 电压考核下限 long-unsigned
+ 电压合格上限 long-unsigned
+ 电压合格下限  long-unsigned
+}"		
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	3	0	Hexing		Time threshold for opened enable		0-0:96.129.2.255	C.A.2						显示opened使能时间门限		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3	0	Hexing	3	Time threshold for Tesla coil Tamper		1-0:11.178.0.255							特斯拉线圈检测时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of Tesla coil Tamper		1-0:11.179.0.255							检测时间内，发生特斯拉线圈窃电次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量量//电量	3	0	Hexing		Energy  disconnect  threshold 		"1-0:144.135.0.255
+"							电量拉闸阀值		
+电量//电量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电量//电量	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R		energy	
+电量//电量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电量	3	0	FID2 & IDIS		Current threshold of Netrual Line interference detect		1-0:11.180.0.255							零线干扰启动判断电流门限		
+电网质量//电量	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000bb400ff"			\	\	R	R			Hex
+电网质量//电量	3		FID2 & IDIS	a2	value	long_unsigned	0.02In			\	\	RW	R		current	
+电网质量//电量	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R	单位=A, 分辨率:   0.00 A		
+电网质量//谐波	3			m1	reset	integer				\	\	\	\			
+电网质量//谐波	3	0	FID2 & IDIS		THD threshold of Netrual Line interference detect		1-0:11.181.0.255							零线干扰谐波门限		
+电网质量//谐波	3		FID2 & IDIS	a1	logical_name	octet_string[6]	"01000bb500ff"			\	\	R	R			Hex
+电网质量//谐波	3		FID2 & IDIS	a2	value	long_unsigned	15%			\	\	RW	R			
+电网质量//谐波	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	（-1,56）			\	\	R	R			
+电网质量//谐波	3			m1	reset	integer				\	\	\	\			
+电网质量//判断最大电流	3	0	Hexing		Threshold for maximum current 		1-0:11.182.0.255							最大电流判断阀值		
+电网质量//判断最大电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断最大电流	3		Hexing	a2	value	long_unsigned				\	\	RW	R		current	
+电网质量//判断最大电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断最大电流	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for maximum  current 		1-0:11.183.0.255							最大电流判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//判断空载事件	3	0	Hexing		Threshold for no-load event current 		1-0:11.184.0.255							空载事件电流判断阀值		
+电网质量//判断空载事件	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断空载事件	3		Hexing	a2	value	long_unsigned				\	\	RW	R		current	
+电网质量//判断空载事件	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断空载事件	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for no-load event		1-0:11.185.0.255							空载事件电流判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	FID2 & IDIS		Duration of  disconnection when  high temperature		0-0:96.9.131.255	C.9.131						温度过高拉闸判断时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//判断失压电流	3	0	Hexing		Threshold for  Loss of voltage (current)		1-0:11.162.0.255	11.162.0						失压电流判断阀值		
+电网质量//判断失压电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断失压电流	3		Hexing	a2	value	long_unsigned				\	\	RW	R		current	
+电网质量//判断失压电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断失压电流	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for bad-voltage event		1-0:11.186.0.255	11.186.0						坏电压事件判断延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R	过高电压或过低电压判断事件		Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Meter cover remove detection enable activation time		1-0:11.187.0.255	11.187.0						开表盖检测使能激活时间		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3	0	Hexing		Threshold for overTHD		1-0:129.35.124.255	11.35.E						THD超限阀值		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R	电压、电流THD超限阀值共用，沙特需求		Hex
+电网质量//电网质量	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type	{-1,56}			\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//时间相关	3	0	Hexing		Time threshold for over THD		1-0:129.44.124.255	11.44.E						THD超限延迟时间阀值		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R	电压、电流THD超限阀值共用，沙特需求		Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电压中断	1	0	Hexing		Voltage interrupt function parameter （Bazil）		1-0:12.197.0.255	12.197.0						电压中断功能参数（巴西）		
+电网质量//电压中断	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电压中断	1		Hexing	a2	value	interrupt_para				\	\	R	R	"
+电压阀值1位小数
+struct[4]{
+bool enable;
+long_unsigned:threshold_start;
+long_unsigned:threshold_end;
+long_unsigned:threshold_seconds;
+}"		
+电网质量//dic	3	0	Hexing		Current month dic value （Bazil）		1-0:12.198.0.255	12.198.0						当前月dic值（巴西）		
+电网质量//dic	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//dic	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R	"（电压中断累计时间）
+"		
+电网质量//dic	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//dic	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//dic	3	0	Hexing		Last month dic value （Bazil）		1-0:12.198.0.101	4A.61	4A.61					上一月dic值（巴西）		
+电网质量//dic	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//dic	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R	"（电压中断累计时间）
+"		
+电网质量//dic	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//dic	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//fic	3	0	Hexing		Current month fic value（Bazil）		1-0:12.199.0.255	12.199.0						当前月Fic值（巴西）		
+电网质量//fic	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//fic	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R	电压中断累计次数		
+电网质量//fic	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//fic	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//fic	3	0	Hexing		Last month fic value（Bazil）		1-0:12.199.0.101	4A.71	4A.71					上一月Fic值（巴西）		
+电网质量//fic	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//fic	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R	电压中断累计次数		
+电网质量//fic	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//fic	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//dmic	4	0	Hexing		current month dmic value（Bazil）		1-0:12.200.0.255	12.200.0						当月dmic值（巴西）		
+电网质量//dmic	4		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//dmic	4		Hexing	a2	value	double_long_unsigned				\	\	R	R	电压中断的最长持续时间		
+电网质量//dmic	4			a3	scaler_unit	scal_unit_type	{0,7}					R	R			
+电网质量//dmic	4			a4	status	unsigned						R	R			
+电网质量//dmic	4			a5	capture_time	octet-string						R	R	date_time		
+电网质量//dmic	4		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//dmic	4	0	Hexing		Last month dmic value（Bazil）		1-0:12.200.0.101	4A.81	4A.81					上一月dmic值（巴西）		
+电网质量//dmic	4		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//dmic	4		Hexing	a2	value	double_long_unsigned				\	\	R	R	电压中断的最长持续时间		
+电网质量//dmic	4			a3	scaler_unit	scal_unit_type	{0,7}					R	R			
+电网质量//dmic	4			a4	status	unsigned						R	R			
+电网质量//dmic	4			a5	capture_time	octet-string						R	R	date_time		
+电网质量//dmic	4		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电压中断时间	1	0	Hexing		Last voltage interrupt occur time（Bazil）		0-0:96.55.100.255							最近一次电压中断发生时间（巴西）		
+电网质量//电压中断时间	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电压中断时间	1		Hexing	a2	value	octet-string				\	\	RW	R	date_time		
+电网质量//电压中断时间	1	0	Hexing		Last voltage interrupt over time（Bazil）		0-0:96.55.101.255							最近一次电压中断结束时间（巴西）		
+电网质量//电压中断时间	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电压中断时间	1		Hexing	a2	value	octet-string				\	\	RW	R	date_time		
+电网质量//时间相关	3	0	Hexing		Time threshold for load side voltage detection 		1-0:129.36.0.255	A.36.0	A.36.0					负载侧电压检测判断延时		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//事件期间最大电压	3	0	FID2		Last Maximum value of voltage during the event		1-0:12.251.0.255	12.251.0						事件发生期间电压最大值Last Maximum		
+电网质量//事件期间最大电压	3		FID2	a1	logical_name	octet_string[6]	"010020E200FF"			\	\	R	R			Hex
+电网质量//事件期间最大电压	3		FID2	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//事件期间最大电压	3		FID2	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R	量纲=-1, 单位=V 分辨率:   0.0 V		
+电网质量//事件期间最小电压	3	0	FID2		Last Minimum value of voltage during the event		1-0:12.250.0.255	12.250.0						事件发生期间电压最小值Last Minimum		
+电网质量//事件期间最小电压	3		FID2	a1	logical_name	octet_string[6]	"010020DF00FF"			\	\	R	R			Hex
+电网质量//事件期间最小电压	3		FID2	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//事件期间最小电压	3		FID2	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R	量纲=-1, 单位=V 分辨率:   0.0 V		
+电网质量//事件期间最大电流	3	0	FID2		Last Maximum for the current during the event		1-0:11.251.0.255	11.251.0						事件发生期间电流最大值Last Maximum		
+电网质量//事件期间最大电流	3		FID2	a1	logical_name	octet_string[6]	"01001FDF00FF"			\	\	R	R			Hex
+电网质量//事件期间最大电流	3		FID2	a2	value	long_unsigned				\	\	R	R		current	
+电网质量//事件期间最大电流	3		FID2	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R	单位=A 分辨率:   0.00 A		
+电网质量//时间相关	3	0	FID2 & IDIS		Time threshold for Tamper event		1-0:11.189.0.255	11.188.0						窃电事件判断延迟时间		
+电网质量//时间相关	3		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		FID2 & IDIS	a2	value	long_unsigned				\	\	RW	R	单位：秒		
+电网质量//时间相关	3		FID2 & IDIS	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		IDIS	m1	reset	integer				\	\	\	\			
+电网质量//窃电事件阈值	1	0	FID2 & IDIS		 Threshold for Tamper event		1-0:11.190.0.255	11.189.0						窃电事件判断阈值		
+电网质量//窃电事件阈值	1		FID2 & IDIS	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//窃电事件阈值	1		FID2 & IDIS	a2	value	structure				\	\	RW	R	"structure
+{
+ 额定频率上下限值百分比，unsigned，单位：0.1%
+ 波形异步采样点允许误差点个数，unsigned, 单位：无
+ 波形有效值下限值，unsigned，单位：无
+ 波形有效值上限值，unsigned，单位：无
+ 一阶差分波形平滑度检测坏点个数，unsigned, 单位：无
+ 二阶差分波形平滑度检测坏点个数，unsigned, 单位：无
+ 二阶差分波形平滑度检测电压阈值，long_unsigned，单位：0.1V
+}"		
+电网质量//事件期间最大电压	3	0	FID2		Last Maximum value of voltage during the over voltage event for L1		1-0:32.252.0.255	32.252.0						A相过压期间电压最大值Last Maximum		
+电网质量//事件期间最大电压	3		FID2	a1	logical_name	octet_string[6]	"010020E200FF"			\	\	R	R			Hex
+电网质量//事件期间最大电压	3		FID2	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//事件期间最大电压	3		FID2	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R	量纲=-1, 单位=V 分辨率:   0.0 V		
+电网质量//事件期间最小电压	3	0	FID2		Last Minimum value of voltage during the low voltage event for L1		1-0:32.247.0.255	32.247.0						A相欠压期间电压最小值Last Minimum		
+电网质量//事件期间最小电压	3		FID2	a1	logical_name	octet_string[6]	"010020DF00FF"			\	\	R	R			Hex
+电网质量//事件期间最小电压	3		FID2	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//事件期间最小电压	3		FID2	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R	量纲=-1, 单位=V 分辨率:   0.0 V		
+电网质量//事件期间最大电压	3	0	FID2		Last Maximum value of voltage during the over voltage event for L2		1-0:52.252.0.255	32.252.0						B相过压期间电压最大值Last Maximum		
+电网质量//事件期间最大电压	3		FID2	a1	logical_name	octet_string[6]	"010020E200FF"			\	\	R	R			Hex
+电网质量//事件期间最大电压	3		FID2	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//事件期间最大电压	3		FID2	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R	量纲=-1, 单位=V 分辨率:   0.0 V		
+电网质量//事件期间最小电压	3	0	FID2		Last Minimum value of voltage during the low voltage event for L2		1-0:52.247.0.255	32.247.0						B相欠压期间电压最小值Last Minimum		
+电网质量//事件期间最小电压	3		FID2	a1	logical_name	octet_string[6]	"010020DF00FF"			\	\	R	R			Hex
+电网质量//事件期间最小电压	3		FID2	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//事件期间最小电压	3		FID2	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R	量纲=-1, 单位=V 分辨率:   0.0 V		
+电网质量//事件期间最大电压	3	0	FID2		Last Maximum value of voltage during the over voltage event  for L3		1-0:72.252.0.255	72.252.0						C相过压期间电压最大值Last Maximum		
+电网质量//事件期间最大电压	3		FID2	a1	logical_name	octet_string[6]	"010020E200FF"			\	\	R	R			Hex
+电网质量//事件期间最大电压	3		FID2	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//事件期间最大电压	3		FID2	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R	量纲=-1, 单位=V 分辨率:   0.0 V		
+电网质量//事件期间最小电压	3	0	FID2		Last Minimum value of voltage during the low voltage event for L3		1-0:72.247.0.255	72.247.0						C相欠压期间电压最小值Last Minimum		
+电网质量//事件期间最小电压	3		FID2	a1	logical_name	octet_string[6]	"010020DF00FF"			\	\	R	R			Hex
+电网质量//事件期间最小电压	3		FID2	a2	value	long_unsigned				\	\	R	R		voltage	
+电网质量//事件期间最小电压	3		FID2	a3	scaler_unit	scal_unit_type	{-1,35}			\	\	R	R	量纲=-1, 单位=V 分辨率:   0.0 V		
+电网质量//电网质量	3	0	Hexing		During of reverse polarity		1-0:11.192.0.255	11.192.0						反极性发生持续时间		
+电网质量//电网质量	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	3		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//电网质量	3		Hexing	a3	scaler_unit	scal_unit_type				\	\	R	R			
+电网质量//电网质量	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电网质量	1	0	Hexing		Number of reverse polarity		0-0:96.51.29.255	C.51.29						反极性发生次数		
+电网质量//电网质量	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电网质量	1		Hexing	a2	value	double_long_unsigned				\	\	R	R			
+电网质量//判断电流	3	0	Hexing		Threshold for bypass event（current）		1-0:11.193.0.255							旁路事件电流阈值		
+电网质量//判断电流	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断电流	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R		current	
+电网质量//判断电流	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {-3,33}
+3P CTPT: {-3,33}
+ 1P: {-2,33}
+3P DC: {-2,33}"			\	\	R	R			
+电网质量//判断时间	1	0	Hexing		Power on/down event record time threshold		1-0:11.220.0.255							停上电事件记录门限时间		
+电网质量//判断时间	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//判断时间	1		Hexing	a2	value	long_unsigned	(-3)			\	\	RW	R	ms(20)，最小精度为100ms		
+电网质量//时间相关	3	0	Hexing		Time threshold for detection of electrical event after relay		1-0:11.221.0.255							继电器后级有电事件检测延迟时间		
+电网质量//时间相关	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//时间相关	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//时间相关	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//时间相关	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//电池欠压	1	0	Hexing		Battery Power Low Test Mode/Run Mode		0-0:96.54.28.255							电池欠压测试模式/运行模式		
+电网质量//电池欠压	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电池欠压	1		Hexing	a2	value	unsigned				\	\	RW	R	"0x00:测试模式
+0x01:运行模式"		
+电网质量//电池欠压	3	0	Hexing		Active Energy threshold for  Battery Power Low Test Mode/Run Mode		1-0:12.206.0.255							电池欠压测试模式/运行模式有功电量判断阈值		
+电网质量//电池欠压	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//电池欠压	3		Hexing	a2	value	double_long_unsigned				\	\	RW	R			
+电网质量//电池欠压	3		Hexing	a3	scaler_unit	scal_unit_type	"3P CT: {0,30}
+3P CTPT: {0,30}
+ 1P: {1,30}
+3P DC: {1,30}"			\	\	R	R			
+电网质量//电池欠压	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//延时	3	0	Hexing		Module pull-out delay time 		0-0:96.54.30.255							模块拔出延时时间		
+电网质量//延时	3		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//延时	3		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//延时	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//延时	3		Hexing	m1	reset	integer				\	\	\	\			
+电网质量//延时	1	0	Hexing		threshold of communication detection overtime 		0-0:96.54.31.255							通讯检测超时时间		
+电网质量//延时	1		Hexing	a1	logical_name	octet_string[6]				\	\	R	R			Hex
+电网质量//延时	1		Hexing	a2	value	long_unsigned				\	\	RW	R			
+电网质量//延时	3		Hexing	a3	scaler_unit	scal_unit_type	{0,7}			\	\	R	R			
+电网质量//延时	3		Hexing	m1	reset	integer				\	\	\	\			

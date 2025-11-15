@@ -1,0 +1,51 @@
+import express from 'express';
+import { authenticate, authorize } from '../middleware/auth.middleware';
+import { Event } from '../models/Event.model';
+
+const router = express.Router();
+
+// List events with optional filters
+router.get('/', authenticate, async (req, res) => {
+	try {
+		const { meterId, severity, category, limit = 50, page = 1 } = req.query;
+		const filter: any = {};
+		if (meterId) filter.meter = meterId;
+		if (severity) filter.severity = severity;
+		if (category) filter.category = category;
+
+		const events = await Event.find(filter)
+			.populate('meter', 'meterNumber')
+			.sort('-timestamp')
+			.limit(Number(limit))
+			.skip((Number(page) - 1) * Number(limit));
+
+		const total = await Event.countDocuments(filter);
+
+		res.json({ success: true, data: events, pagination: { total, page: Number(page), pages: Math.ceil(total / Number(limit)) } });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to fetch events', error: error.message });
+	}
+});
+
+// Create event (meters or system can post events)
+router.post('/', async (req, res) => {
+	try {
+		const event = await Event.create(req.body);
+		res.status(201).json({ success: true, message: 'Event created', data: event });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to create event', error: error.message });
+	}
+});
+
+// Acknowledge event
+router.post('/:id/acknowledge', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+	try {
+		const event = await Event.findByIdAndUpdate(req.params.id, { acknowledged: true, acknowledgedBy: req.user._id, acknowledgedAt: new Date() }, { new: true });
+		if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
+		res.json({ success: true, message: 'Event acknowledged', data: event });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to acknowledge event', error: error.message });
+	}
+});
+
+export default router;
