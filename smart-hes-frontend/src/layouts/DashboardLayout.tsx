@@ -53,6 +53,8 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../contexts/SocketContext';
+import { useThemeMode } from '../contexts/ThemeContext';
+import { HESLogoCompact } from '../components/Logo';
 
 const drawerWidth = 280;
 
@@ -194,14 +196,14 @@ const menuItems: MenuItemType[] = [
 const DashboardLayout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
-  const [darkMode, setDarkMode] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationAnchor, setNotificationAnchor] = useState<null | HTMLElement>(null);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
   const { activeAlerts } = useSocket();
+  const { mode, toggleTheme } = useThemeMode();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -252,14 +254,25 @@ const DashboardLayout: React.FC = () => {
 
   const drawer = (
     <div>
-      <Toolbar sx={{ 
-        background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
-        color: 'white'
+      <Toolbar sx={{
+        background: mode === 'light'
+          ? 'linear-gradient(135deg, #0066CC 0%, #00A8E8 100%)'
+          : 'linear-gradient(135deg, #5BA3FF 0%, #00D4FF 100%)',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: 1.5,
       }}>
-        <ElectricBolt sx={{ mr: 2 }} />
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700 }}>
-          HES Core
-        </Typography>
+        <HESLogoCompact sx={{ fontSize: 36 }} />
+        <Box>
+          <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+            HES Core
+          </Typography>
+          <Typography variant="caption" sx={{ opacity: 0.9, fontSize: '0.65rem' }}>
+            IoT Energy Management
+          </Typography>
+        </Box>
       </Toolbar>
       <Divider />
       <List>
@@ -270,12 +283,12 @@ const DashboardLayout: React.FC = () => {
             return (
               <div key={item.title}>
                 <ListItemButton onClick={() => handleMenuClick(item.title)}>
-                  <ListItemIcon sx={{ color: '#67748e' }}>
+                  <ListItemIcon sx={{ color: 'text.secondary' }}>
                     {item.icon}
                   </ListItemIcon>
-                  <ListItemText 
-                    primary={item.title} 
-                    sx={{ color: '#67748e' }}
+                  <ListItemText
+                    primary={item.title}
+                    sx={{ color: 'text.secondary' }}
                   />
                   {openMenus[item.title] ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
@@ -286,22 +299,21 @@ const DashboardLayout: React.FC = () => {
                       return (
                         <ListItemButton
                           key={child.path}
-                          sx={{ 
+                          sx={{
                             pl: 4,
-                            background: location.pathname === child.path ? 
-                              'linear-gradient(195deg, rgba(73,163,241,0.1) 0%, rgba(26,115,232,0.1) 100%)' : 
-                              'transparent',
-                            borderLeft: location.pathname === child.path ? 
-                              '3px solid #1A73E8' : 'none',
+                            bgcolor: location.pathname === child.path ? 'action.selected' : 'transparent',
+                            borderLeft: location.pathname === child.path ?
+                              '3px solid' : 'none',
+                            borderColor: 'primary.main',
                           }}
                           onClick={() => child.path && handleNavigate(child.path)}
                         >
-                          <ListItemIcon sx={{ color: '#8392AB', minWidth: 40 }}>
+                          <ListItemIcon sx={{ color: 'text.secondary', minWidth: 40 }}>
                             {child.icon}
                           </ListItemIcon>
-                          <ListItemText 
+                          <ListItemText
                             primary={child.title}
-                            sx={{ color: '#67748e' }}
+                            sx={{ color: 'text.primary' }}
                           />
                         </ListItemButton>
                       );
@@ -315,21 +327,19 @@ const DashboardLayout: React.FC = () => {
           return (
             <ListItem key={item.title} disablePadding>
               <ListItemButton
-                sx={{ 
-                  background: location.pathname === item.path ? 
-                    'linear-gradient(195deg, rgba(73,163,241,0.1) 0%, rgba(26,115,232,0.1) 100%)' : 
-                    'transparent',
-                  borderLeft: location.pathname === item.path ? 
-                    '3px solid #1A73E8' : 'none',
+                sx={{
+                  bgcolor: location.pathname === item.path ? 'action.selected' : 'transparent',
+                  borderLeft: location.pathname === item.path ? '3px solid' : 'none',
+                  borderColor: 'primary.main',
                 }}
                 onClick={() => item.path && handleNavigate(item.path)}
               >
-                <ListItemIcon sx={{ color: '#67748e' }}>
+                <ListItemIcon sx={{ color: 'text.secondary' }}>
                   {item.icon}
                 </ListItemIcon>
-                <ListItemText 
+                <ListItemText
                   primary={item.title}
-                  sx={{ color: '#67748e' }}
+                  sx={{ color: 'text.primary' }}
                 />
               </ListItemButton>
             </ListItem>
@@ -340,15 +350,15 @@ const DashboardLayout: React.FC = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex', bgcolor: '#f8f9fa', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          bgcolor: 'white',
-          color: '#67748e',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          bgcolor: 'background.paper',
+          color: 'text.primary',
+          backgroundImage: 'none',
         }}
       >
         <Toolbar>
@@ -362,12 +372,12 @@ const DashboardLayout: React.FC = () => {
             <MenuIcon />
           </IconButton>
           
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, color: '#344767' }}>
-            Smart Meter Management System
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
+            IoT Energy Management System
           </Typography>
 
-          <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
-            {darkMode ? <Brightness7 /> : <Brightness4 />}
+          <IconButton onClick={toggleTheme} color="inherit" sx={{ mr: 1 }}>
+            {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
 
           <IconButton color="inherit" onClick={handleNotificationMenu}>
@@ -442,12 +452,12 @@ const DashboardLayout: React.FC = () => {
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
-              bgcolor: 'white',
-              borderRight: 'none',
-              boxShadow: '0 10px 30px -12px rgba(0, 0, 0, 0.42)',
+              bgcolor: 'background.paper',
+              borderRight: '1px solid',
+              borderColor: 'divider',
             },
           }}
         >
@@ -457,12 +467,12 @@ const DashboardLayout: React.FC = () => {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
-              bgcolor: 'white',
-              borderRight: 'none',
-              boxShadow: '0 10px 30px -12px rgba(0, 0, 0, 0.42)',
+              bgcolor: 'background.paper',
+              borderRight: '1px solid',
+              borderColor: 'divider',
             },
           }}
           open

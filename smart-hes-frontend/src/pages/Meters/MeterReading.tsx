@@ -1,267 +1,418 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Paper, TextField, Typography, Switch, FormControlLabel, Grid, Table, TableHead, TableRow, TableCell, TableBody, Checkbox } from '@mui/material';
-// Expand icon removed - not needed after UI update
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Checkbox,
+  TextField,
+  Paper,
+  Chip,
+  IconButton,
+  Tabs,
+  Tab,
+  Divider,
+} from '@mui/material';
+import {
+  Search,
+  Refresh,
+  Download,
+  AccessTime,
+  BatteryChargingFull,
+  Speed,
+  Info,
+  Event,
+  ToggleOn,
+  AttachMoney,
+  FlashOn,
+  Payment,
+} from '@mui/icons-material';
 import axios from 'axios';
 import { useSocket } from '../../contexts/SocketContext';
 import toast from 'react-hot-toast';
 
+interface MeterInfo {
+  msno: string;
+  lastVending?: string;
+  meterType: string;
+  sgc?: string;
+  ti?: string;
+  userName?: string;
+  supplierName?: string;
+  identity?: string;
+}
+
+const readingCategories = [
+  { label: 'Information', icon: <Info />, value: 'information' },
+  { label: 'Clock', icon: <AccessTime />, value: 'clock' },
+  { label: 'Energy', icon: <BatteryChargingFull />, value: 'energy' },
+  { label: 'Demand', icon: <Speed />, value: 'demand' },
+  { label: 'Status', icon: <Info />, value: 'status' },
+  { label: 'Event Counter', icon: <Event />, value: 'eventCounter' },
+  { label: 'Relay', icon: <ToggleOn />, value: 'relay' },
+  { label: 'Tariff Data', icon: <AttachMoney />, value: 'tariffData' },
+  { label: 'Instantaneous', icon: <FlashOn />, value: 'instantaneous' },
+  { label: 'Prepayment', icon: <Payment />, value: 'prepayment' },
+];
+
 export default function MeterReading() {
-	const [meterIdOrNumber, setMeterIdOrNumber] = useState('');
-	const [loading, setLoading] = useState(false);
-	const [settingsJson, setSettingsJson] = useState('');
-	const [currentReading, setCurrentReading] = useState<any>(null);
-	const [writeToMeter, setWriteToMeter] = useState(false);
-	const { socket, recentEvents } = useSocket();
-	const [obisGroups, setObisGroups] = useState<any[]>([]);
-	const [selectedGroupIdx, setSelectedGroupIdx] = useState<number>(0);
-	const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({});
+  const [searchValue, setSearchValue] = useState('');
+  const [meterInfo, setMeterInfo] = useState<MeterInfo | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState('information');
+  const [readings, setReadings] = useState<any[]>([]);
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(false);
+  const { socket } = useSocket();
 
-	useEffect(() => {
-		if (!socket) return;
+  useEffect(() => {
+    if (!socket) return;
 
-		const handler = (data: any) => {
-			// If the update is for our selected meter, show it
-			if (!meterIdOrNumber) return;
-			const idMatch = String(data.meterId) === String(meterIdOrNumber);
-			const numberMatch = String(data.meterNumber)?.toUpperCase() === String(meterIdOrNumber).toUpperCase();
-			if (idMatch || numberMatch) {
-				setCurrentReading(data.reading);
-				toast.success('Meter reading received');
-			}
-		};
+    const handler = (data: any) => {
+      if (meterInfo && (data.meterNumber === meterInfo.msno || data.meterId === searchValue)) {
+        toast.success('Meter reading updated');
+        fetchMeterData(searchValue);
+      }
+    };
 
-		socket.on('meter-reading-update', handler);
-		return () => {
-			socket.off('meter-reading-update', handler);
-		};
-	}, [socket, meterIdOrNumber]);
+    socket.on('meter-reading-update', handler);
+    return () => {
+      socket.off('meter-reading-update', handler);
+    };
+  }, [socket, meterInfo, searchValue]);
 
-	useEffect(() => {
-		// when obisGroups updated, default select first group and all items
-		if (obisGroups && obisGroups.length) {
-			setSelectedGroupIdx(0);
-			const initial: Record<string, boolean> = {};
-			obisGroups[0].items?.forEach((it: any) => {
-				initial[it.code || it.name] = true;
-			});
-			setSelectedItems(initial);
-		}
-	}, [obisGroups]);
+  const fetchMeterData = async (meterQuery: string) => {
+    if (!meterQuery) return;
 
-	const handleGroupSelect = (idx: number) => {
-		setSelectedGroupIdx(idx);
-		const initial: Record<string, boolean> = {};
-		(obisGroups[idx]?.items || []).forEach((it: any) => {
-			initial[it.code || it.name] = true;
-		});
-		setSelectedItems(initial);
-	};
+    setLoading(true);
+    try {
+      // Fetch meter details
+      const meterResp = await axios.get(`/api/meters?search=${encodeURIComponent(meterQuery)}`);
+      const meter = meterResp.data.data?.[0];
 
-	const toggleItem = (code: string) => {
-		setSelectedItems(prev => ({ ...prev, [code]: !prev[code] }));
-	};
+      if (!meter) {
+        toast.error('Meter not found');
+        return;
+      }
 
-	const isAllSelected = () => {
-		const items = obisGroups[selectedGroupIdx]?.items || [];
-		if (!items.length) return false;
-		return items.every((it: any) => selectedItems[it.code || it.name]);
-	};
+      // Set meter info
+      setMeterInfo({
+        msno: meter.meterNumber || '',
+        lastVending: meter.lastVending || 'N/A',
+        meterType: meter.meterType || 'Unknown',
+        sgc: meter.concentratorId || 'N/A',
+        ti: meter.tariffIndex || '1',
+        userName: meter.customer?.customerName || 'N/A',
+        supplierName: meter.supplierName || 'LONGi',
+        identity: meter.customer?.accountNumber || 'N/A',
+      });
 
-	const toggleSelectAll = () => {
-		const items = obisGroups[selectedGroupIdx]?.items || [];
-		const all = isAllSelected();
-		const updated: Record<string, boolean> = { ...selectedItems };
-		items.forEach((it: any) => {
-			updated[it.code || it.name] = !all;
-		});
-		setSelectedItems(updated);
-	};
+      // Fetch OBIS configuration
+      const settingsResp = await axios.get(`/api/meters/${meter._id}/settings`);
+      const config = settingsResp.data.data?.obisConfiguration || [];
 
-	const requestRead = async () => {
-		if (!meterIdOrNumber) return toast.error('Enter meter id or number');
-		setLoading(true);
-		try {
-			const resp = await axios.post(`/meters/${encodeURIComponent(meterIdOrNumber)}/read`);
-			toast.success(resp.data?.message || 'Read requested');
-		} catch (err: any) {
-			toast.error(err.response?.data?.message || 'Failed to request read');
-		} finally {
-			setLoading(false);
-		}
-	};
+      // Find the selected category group
+      const categoryGroup = config.find((g: any) =>
+        g.name?.toLowerCase().includes(selectedCategory.toLowerCase())
+      );
 
-	const fetchSettings = async () => {
-		if (!meterIdOrNumber) return toast.error('Enter meter id or number');
-		setLoading(true);
-		try {
-			const resp = await axios.get(`/meters/${encodeURIComponent(meterIdOrNumber)}/settings`);
-			const { obisConfiguration, metadata } = resp.data.data;
-			setSettingsJson(JSON.stringify({ obisConfiguration, metadata }, null, 2));
-			setObisGroups(obisConfiguration || []);
-			toast.success('Settings fetched');
-		} catch (err: any) {
-			toast.error(err.response?.data?.message || 'Failed to fetch settings');
-		} finally {
-			setLoading(false);
-		}
-	};
+      if (categoryGroup?.items) {
+        setReadings(categoryGroup.items);
+      } else {
+        setReadings([]);
+      }
 
-	const saveSettings = async () => {
-		if (!meterIdOrNumber) return toast.error('Enter meter id or number');
-		let parsed: any = {};
-		try {
-			parsed = JSON.parse(settingsJson || '{}');
-		} catch (e) {
-			return toast.error('Settings JSON is invalid');
-		}
+      toast.success('Meter data loaded');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to fetch meter data');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-		setLoading(true);
-		try {
-			const resp = await axios.post(`/meters/${encodeURIComponent(meterIdOrNumber)}/settings`, {
-				settings: parsed.obisConfiguration || parsed.settings || parsed,
-				metadata: parsed.metadata || {},
-				writeToMeter: writeToMeter,
-			});
+  const handleSearch = () => {
+    fetchMeterData(searchValue);
+  };
 
-			toast.success(resp.data?.message || 'Settings saved');
-			// update local view
-			setSettingsJson(JSON.stringify(resp.data.data, null, 2));
-		} catch (err: any) {
-			toast.error(err.response?.data?.message || 'Failed to save settings');
-		} finally {
-			setLoading(false);
-		}
-	};
+  const handleCategoryChange = (event: React.SyntheticEvent, newValue: string) => {
+    setSelectedCategory(newValue);
+    if (meterInfo) {
+      fetchMeterData(searchValue);
+    }
+  };
 
-	return (
-		<Box sx={{ p: 2 }}>
-			<Typography variant="h5" gutterBottom>Meter Reading & Settings</Typography>
+  const toggleSelectAll = () => {
+    if (selectedItems.size === readings.length) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(new Set(readings.map((r, i) => `${i}`)));
+    }
+  };
 
-			<Paper sx={{ p: 2, mb: 2 }}>
-				<TextField
-					label="Meter ID or Meter Number"
-					value={meterIdOrNumber}
-					onChange={(e) => setMeterIdOrNumber(e.target.value)}
-					fullWidth
-					sx={{ mb: 2 }}
-				/>
+  const toggleItem = (index: string) => {
+    const newSelected = new Set(selectedItems);
+    if (newSelected.has(index)) {
+      newSelected.delete(index);
+    } else {
+      newSelected.add(index);
+    }
+    setSelectedItems(newSelected);
+  };
 
-				<Box sx={{ display: 'flex', gap: 1 }}>
-					<Button variant="contained" onClick={requestRead} disabled={loading}>Request Read</Button>
-					<Button variant="outlined" onClick={fetchSettings} disabled={loading}>Fetch Settings</Button>
-					<Button color="success" variant="contained" onClick={saveSettings} disabled={loading}>Save Settings</Button>
-					<FormControlLabel control={<Switch checked={writeToMeter} onChange={(e) => setWriteToMeter(e.target.checked)} />} label="Write to meter" />
-				</Box>
-			</Paper>
+  const requestReading = async () => {
+    if (!searchValue) {
+      toast.error('Please enter a meter number');
+      return;
+    }
 
-			<Grid container spacing={2}>
-				<Grid item xs={12} md={6}>
-					<Paper sx={{ p: 2 }}>
-						<Typography variant="h6">Current Reading</Typography>
-						{currentReading ? (
-							<div style={{ maxHeight: 400, overflow: 'auto' }}>
-								<pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>{JSON.stringify(currentReading, null, 2)}</pre>
-							</div>
-						) : (
-							<Typography color="textSecondary">No reading yet for selected meter.</Typography>
-						)}
-					</Paper>
-				</Grid>
+    setLoading(true);
+    try {
+      await axios.post(`/api/meters/${encodeURIComponent(searchValue)}/read`);
+      toast.success('Reading request sent');
+      // Wait a moment then refresh
+      setTimeout(() => fetchMeterData(searchValue), 2000);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to request reading');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-				<Grid item xs={12} md={6}>
-					<Paper sx={{ p: 2 }}>
-						<Typography variant="h6">On Demand Reading</Typography>
-						{obisGroups && obisGroups.length ? (
-							<Box>
-								{/* Group tiles */}
-								<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-									{obisGroups.map((group: any, idx: number) => (
-										<Button
-											key={idx}
-											variant={selectedGroupIdx === idx ? 'contained' : 'outlined'}
-											sx={{
-												textTransform: 'none',
-												backgroundColor: selectedGroupIdx === idx ? 'primary.main' : '#eee',
-												color: selectedGroupIdx === idx ? 'white' : 'text.primary',
-												px: 2,
-												py: 1.2,
-											}}
-											onClick={() => handleGroupSelect(idx)}
-										>
-											{group.name}
-										</Button>
-									))}
-								</Box>
+  return (
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, mb: 3 }}>
+        On Demand Reading
+      </Typography>
 
-								{/* Items table for selected group */}
-								<Box>
-									<Table size="small">
-										<TableHead>
-											<TableRow sx={{ backgroundColor: 'primary.main', '& th': { color: 'white', fontWeight: 600 } }}>
-												<TableCell>
-													<Checkbox checked={isAllSelected()} onChange={toggleSelectAll} sx={{ color: 'white' }} />
-													Select All Item
-												</TableCell>
-												<TableCell>Value</TableCell>
-											</TableRow>
-										</TableHead>
-										<TableBody>
-											{(obisGroups[selectedGroupIdx]?.items || []).map((it: any, i: number) => {
-												const code = it.code || it.name || String(i);
-												const checked = !!selectedItems[code];
-												const value = currentReading && currentReading[it.code] !== undefined ? String(currentReading[it.code]) : '-';
-												return (
-													<TableRow key={code} sx={checked ? { backgroundColor: 'rgba(2,119,189,0.08)' } : {}}>
-														<TableCell>
-															<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-															<Checkbox checked={checked} onChange={() => toggleItem(code)} />
-															<Box>
-																<Typography variant="body2" sx={{ fontWeight: 600 }}>{it.name || code}</Typography>
-																<Typography variant="caption" color="textSecondary">Code: {it.code}</Typography>
-															</Box>
-															</Box>
-														</TableCell>
-														<TableCell>{value}</TableCell>
-													</TableRow>
-												);
-											})}
-										</TableBody>
-									</Table>
-								</Box>
-							</Box>
-						) : (
-							<Typography color="textSecondary">No OBIS configuration loaded. Fetch settings to load meter OBIS parameters.</Typography>
-						)}
-					</Paper>
-				</Grid>
-			</Grid>
+      <Grid container spacing={3}>
+        {/* Left Side - Customer Information */}
+        <Grid item xs={12} md={4}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
+                Customer Information
+              </Typography>
 
-			<Paper sx={{ p: 2, mt: 2 }}>
-				<Typography variant="h6">Raw Settings (JSON)</Typography>
-				<TextField
-					value={settingsJson}
-					onChange={(e) => setSettingsJson(e.target.value)}
-					multiline
-					rows={8}
-					fullWidth
-					placeholder='{"obisConfiguration": {...}, "metadata": {...}}'
-				/>
-			</Paper>
+              <Box sx={{ mb: 3 }}>
+                <TextField
+                  fullWidth
+                  placeholder="Enter Meter Number"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton onClick={handleSearch} edge="end" color="primary">
+                        <Search />
+                      </IconButton>
+                    ),
+                  }}
+                  sx={{ mb: 2 }}
+                />
+                <Button
+                  fullWidth
+                  variant="contained"
+                  startIcon={<Refresh />}
+                  onClick={requestReading}
+                  disabled={loading || !searchValue}
+                  sx={{ mb: 2 }}
+                >
+                  Reading
+                </Button>
+              </Box>
 
-			<Paper sx={{ p: 2, mt: 2 }}>
-				<Typography variant="h6">Recent Events</Typography>
-				{recentEvents && recentEvents.length ? (
-					<ul>
-						{recentEvents.slice(0, 10).map((ev: any) => (
-							<li key={ev._id || ev.id || JSON.stringify(ev)}>
-								{new Date(ev.timestamp || ev.createdAt || Date.now()).toLocaleString()} - {ev.description || ev.eventType}
-							</li>
-						))}
-					</ul>
-				) : (
-					<Typography color="textSecondary">No recent events</Typography>
-				)}
-			</Paper>
-		</Box>
-	);
+              {meterInfo && (
+                <Box sx={{ '& > div': { mb: 2 } }}>
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      MSNO:
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                      {meterInfo.msno}
+                      <Chip
+                        label="✓"
+                        size="small"
+                        color="success"
+                        sx={{ ml: 1, height: 20 }}
+                      />
+                    </Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      Last Vending:
+                    </Typography>
+                    <Typography variant="body2">{meterInfo.lastVending}</Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      Meter Type:
+                    </Typography>
+                    <Typography variant="body2">{meterInfo.meterType}</Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      SGC:
+                    </Typography>
+                    <Typography variant="body2">{meterInfo.sgc}</Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      TI:
+                    </Typography>
+                    <Typography variant="body2">{meterInfo.ti}</Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      User Name:
+                    </Typography>
+                    <Typography variant="body2">{meterInfo.userName}</Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      Supplier Name:
+                    </Typography>
+                    <Typography variant="body2">{meterInfo.supplierName}</Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      Identity:
+                    </Typography>
+                    <Typography variant="body2">{meterInfo.identity}</Typography>
+                  </Box>
+                </Box>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Right Side - On Demand Reading */}
+        <Grid item xs={12} md={8}>
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  On Demand Reading
+                </Typography>
+                <Button
+                  variant="contained"
+                  startIcon={<Download />}
+                  size="small"
+                  disabled={selectedItems.size === 0}
+                >
+                  Export Selected
+                </Button>
+              </Box>
+
+              {/* Category Tabs */}
+              <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                  {readingCategories.map((cat) => (
+                    <Button
+                      key={cat.value}
+                      variant={selectedCategory === cat.value ? 'contained' : 'outlined'}
+                      startIcon={cat.icon}
+                      onClick={(e) => handleCategoryChange(e, cat.value)}
+                      sx={{
+                        textTransform: 'none',
+                        fontSize: '0.875rem',
+                      }}
+                    >
+                      {cat.label}
+                    </Button>
+                  ))}
+                </Box>
+              </Box>
+
+              {/* Readings Table */}
+              <Paper variant="outlined" sx={{ maxHeight: 500, overflow: 'auto' }}>
+                <Table stickyHeader size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 700 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Checkbox
+                            checked={selectedItems.size === readings.length && readings.length > 0}
+                            indeterminate={selectedItems.size > 0 && selectedItems.size < readings.length}
+                            onChange={toggleSelectAll}
+                            sx={{ color: 'white', '&.Mui-checked': { color: 'white' } }}
+                          />
+                          Select All Item
+                        </Box>
+                      </TableCell>
+                      <TableCell sx={{ bgcolor: 'primary.main', color: 'white', fontWeight: 700 }}>
+                        Value
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {readings.length > 0 ? (
+                      readings.map((reading, index) => {
+                        const key = `${index}`;
+                        const isSelected = selectedItems.has(key);
+                        return (
+                          <TableRow
+                            key={key}
+                            sx={{
+                              bgcolor: isSelected ? 'action.selected' : 'inherit',
+                              '&:hover': { bgcolor: 'action.hover' },
+                            }}
+                          >
+                            <TableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Checkbox
+                                  checked={isSelected}
+                                  onChange={() => toggleItem(key)}
+                                />
+                                <Box>
+                                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                    {reading.name || 'Unknown'}
+                                  </Typography>
+                                  <Typography variant="caption" color="text.secondary">
+                                    {reading.code || 'N/A'}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="body2">
+                                {reading.value !== undefined ? reading.value : '-'}
+                                {reading.unit && ` ${reading.unit}`}
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={2} align="center" sx={{ py: 4 }}>
+                          <Typography variant="body2" color="text.secondary">
+                            {meterInfo
+                              ? 'No readings available for this category'
+                              : 'Search for a meter to view readings'}
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </Paper>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
+  );
 }

@@ -1,0 +1,4 @@
+customerName,accountNumber,address,phoneNumber,email,area,meterAssigned,customerType,tariffPlan,connectionDate
+John Doe,ACC001,123 Main St,+1234567890,john.doe@email.com,,METER001,residential,standard,2024-01-15
+Jane Smith,ACC002,456 Oak Ave,+1234567891,jane.smith@email.com,,METER002,residential,standard,2024-01-16
+ACME Corp,ACC003,789 Business Blvd,+1234567892,billing@acme.com,,METER003,commercial,industrial,2024-01-17

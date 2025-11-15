@@ -1,10 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
-import theme from './theme/theme';
+import { ThemeContextProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
 import PrivateRoute from './components/PrivateRoute';
@@ -44,29 +43,31 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
+      <ThemeContextProvider>
         <CssBaseline />
         <Router>
           <AuthProvider>
             <SocketProvider>
-              <Toaster 
+              <Toaster
                 position="top-right"
                 toastOptions={{
                   duration: 4000,
                   style: {
-                    background: '#363636',
-                    color: '#fff',
+                    borderRadius: '12px',
+                    fontSize: '14px',
                   },
                   success: {
                     duration: 3000,
-                    style: {
-                      background: '#4caf50',
+                    iconTheme: {
+                      primary: '#00C853',
+                      secondary: '#FFFFFF',
                     },
                   },
                   error: {
                     duration: 4000,
-                    style: {
-                      background: '#f44336',
+                    iconTheme: {
+                      primary: '#D32F2F',
+                      secondary: '#FFFFFF',
                     },
                   },
                 }}
@@ -127,7 +128,7 @@ function App() {
             </SocketProvider>
           </AuthProvider>
         </Router>
-      </ThemeProvider>
+      </ThemeContextProvider>
     </QueryClientProvider>
   );
 }

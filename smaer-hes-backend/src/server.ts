@@ -19,6 +19,7 @@ import simRoutes from './routes/sim.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import remoteRoutes from './routes/remote.routes';
 import obisRoutes from './routes/obis.routes';
+import templateRoutes from './routes/template.routes';
 
 // Import services
 import { MeterStatusService } from './services/meterStatus.service';
@@ -78,6 +79,7 @@ app.use('/api/sims', simRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/remote', remoteRoutes);
 app.use('/api/obis', obisRoutes);
+app.use('/api/templates', templateRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
