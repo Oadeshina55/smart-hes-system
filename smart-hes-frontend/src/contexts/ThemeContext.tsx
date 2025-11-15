@@ -213,24 +213,30 @@ export const ThemeContextProvider: React.FC<Props> = ({ children }) => {
         },
         shadows: [
           'none',
-          mode === 'light'
-            ? '0px 2px 4px rgba(0, 0, 0, 0.05)'
-            : '0px 2px 4px rgba(0, 0, 0, 0.3)',
-          mode === 'light'
-            ? '0px 4px 8px rgba(0, 0, 0, 0.08)'
-            : '0px 4px 8px rgba(0, 0, 0, 0.4)',
-          mode === 'light'
-            ? '0px 8px 16px rgba(0, 0, 0, 0.1)'
-            : '0px 8px 16px rgba(0, 0, 0, 0.5)',
-          mode === 'light'
-            ? '0px 12px 24px rgba(0, 0, 0, 0.12)'
-            : '0px 12px 24px rgba(0, 0, 0, 0.6)',
-          mode === 'light'
-            ? '0px 16px 32px rgba(0, 0, 0, 0.14)'
-            : '0px 16px 32px rgba(0, 0, 0, 0.7)',
-          ...Array(19).fill(mode === 'light'
-            ? '0px 20px 40px rgba(0, 0, 0, 0.16)'
-            : '0px 20px 40px rgba(0, 0, 0, 0.8)'),
+          mode === 'light' ? '0px 2px 4px rgba(0, 0, 0, 0.05)' : '0px 2px 4px rgba(0, 0, 0, 0.3)',
+          mode === 'light' ? '0px 4px 8px rgba(0, 0, 0, 0.08)' : '0px 4px 8px rgba(0, 0, 0, 0.4)',
+          mode === 'light' ? '0px 8px 16px rgba(0, 0, 0, 0.1)' : '0px 8px 16px rgba(0, 0, 0, 0.5)',
+          mode === 'light' ? '0px 12px 24px rgba(0, 0, 0, 0.12)' : '0px 12px 24px rgba(0, 0, 0, 0.6)',
+          mode === 'light' ? '0px 16px 32px rgba(0, 0, 0, 0.14)' : '0px 16px 32px rgba(0, 0, 0, 0.7)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
+          mode === 'light' ? '0px 20px 40px rgba(0, 0, 0, 0.16)' : '0px 20px 40px rgba(0, 0, 0, 0.8)',
         ],
         components: {
           MuiButton: {
