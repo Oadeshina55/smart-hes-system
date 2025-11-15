@@ -25,6 +25,7 @@ export interface HexcellReadingData {
   activeEnergyTOU4?: number;
   importActiveEnergy?: number;
   exportActiveEnergy?: number;
+  totalReactiveEnergy?: number;
 
   // Instantaneous values
   voltage?: number;

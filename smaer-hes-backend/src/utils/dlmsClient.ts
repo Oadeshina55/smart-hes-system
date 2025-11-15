@@ -466,10 +466,13 @@ export class DLMSClient extends EventEmitter {
 
     // Resolve pending request
     if (this.pendingRequests.size > 0) {
-      const [requestId, request] = this.pendingRequests.entries().next().value;
-      clearTimeout(request.timeout);
-      this.pendingRequests.delete(requestId);
-      request.resolve(apdu);
+      const entry = this.pendingRequests.entries().next();
+      if (entry.value) {
+        const [requestId, request] = entry.value;
+        clearTimeout(request.timeout);
+        this.pendingRequests.delete(requestId);
+        request.resolve(apdu);
+      }
     }
   }
 
