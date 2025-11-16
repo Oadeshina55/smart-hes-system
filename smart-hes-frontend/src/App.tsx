@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import { ThemeContextProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import PrivateRoute from './components/PrivateRoute';
 import DashboardLayout from './layouts/DashboardLayout';
 import Login from './pages/Auth/Login';
@@ -42,13 +43,14 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeContextProvider>
-        <CssBaseline />
-        <Router>
-          <AuthProvider>
-            <SocketProvider>
-              <Toaster
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeContextProvider>
+          <CssBaseline />
+          <Router>
+            <AuthProvider>
+              <SocketProvider>
+                <Toaster
                 position="top-right"
                 toastOptions={{
                   duration: 4000,
@@ -130,6 +132,7 @@ function App() {
         </Router>
       </ThemeContextProvider>
     </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
