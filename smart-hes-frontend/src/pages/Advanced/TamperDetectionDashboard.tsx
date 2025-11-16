@@ -481,7 +481,7 @@ const TamperDetectionDashboard: React.FC = () => {
                       primary={
                         <Box display="flex" alignItems="center" gap={1}>
                           <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                            {event.meter.meterNumber}
+                            {event.meter?.meterNumber || 'N/A'}
                           </Typography>
                           <Chip label={event.eventType} size="small" color="error" />
                           {!event.acknowledged && (
