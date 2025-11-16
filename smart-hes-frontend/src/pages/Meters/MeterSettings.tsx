@@ -239,7 +239,10 @@ export default function MeterSettingsNew() {
       toast.success(response.data?.message || 'Settings saved successfully');
 
       if (writeToMeter) {
-        toast.info('Settings are being written to the meter device');
+        toast('Settings are being written to the meter device', {
+          icon: 'ℹ️',
+          duration: 4000,
+        });
       }
     } catch (error: any) {
       console.error('Failed to save settings:', error);
