@@ -82,31 +82,19 @@ const menuItems: MenuItemType[] = [
     icon: <Dashboard />,
   },
   {
-    title: 'System',
-    icon: <Settings />,
-    children: [
-      {
-        title: 'Area Management',
-        path: '/system/areas',
-        icon: <LocationOn />,
-        roles: ['admin', 'operator'],
-      },
-    ],
+    title: 'Area Management',
+    path: '/system/areas',
+    icon: <LocationOn />,
+    roles: ['admin', 'operator'],
   },
   {
-    title: 'Meter Management',
+    title: 'Meters',
     icon: <ElectricBolt />,
     children: [
       {
         title: 'All Meters',
         path: '/meters',
         icon: <ElectricBolt />,
-      },
-      {
-        title: 'Add Meter',
-        path: '/meters/add',
-        icon: <ElectricBolt />,
-        roles: ['admin', 'operator'],
       },
       {
         title: 'SIM Management',
@@ -128,7 +116,7 @@ const menuItems: MenuItemType[] = [
     ],
   },
   {
-    title: 'Customer Management',
+    title: 'Customers',
     icon: <People />,
     children: [
       {
@@ -145,90 +133,61 @@ const menuItems: MenuItemType[] = [
     ],
   },
   {
-    title: 'Task Query',
+    title: 'Load Profile',
+    path: '/advanced/load-profile',
+    icon: <Timeline />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Power Quality',
+    path: '/advanced/power-quality',
     icon: <QueryStats />,
-    children: [
-      {
-        title: 'Real-Time Monitoring',
-        path: '/task-query/monitoring',
-        icon: <MonitorHeart />,
-      },
-      {
-        title: 'Event Analysis',
-        path: '/task-query/events',
-        icon: <EventNote />,
-      },
-      {
-        title: 'Online Rate',
-        path: '/task-query/online-rate',
-        icon: <SignalWifi4Bar />,
-      },
-    ],
+    roles: ['admin', 'operator'],
   },
   {
-    title: 'Consumption Report',
-    icon: <Assessment />,
-    children: [
-      {
-        title: 'Energy Consumption',
-        path: '/reports/consumption',
-        icon: <BatteryChargingFull />,
-      },
-    ],
+    title: 'Event Logs',
+    path: '/advanced/events',
+    icon: <EventNote />,
+    roles: ['admin', 'operator'],
   },
   {
-    title: 'Advanced HES',
-    icon: <AutoGraph />,
-    children: [
-      {
-        title: 'Load Profile',
-        path: '/advanced/load-profile',
-        icon: <Timeline />,
-        roles: ['admin', 'operator'],
-      },
-      {
-        title: 'Power Quality',
-        path: '/advanced/power-quality',
-        icon: <QueryStats />,
-        roles: ['admin', 'operator'],
-      },
-      {
-        title: 'Event Logs',
-        path: '/advanced/events',
-        icon: <EventNote />,
-        roles: ['admin', 'operator'],
-      },
-      {
-        title: 'Tamper Detection',
-        path: '/advanced/tamper',
-        icon: <Shield />,
-        roles: ['admin', 'operator'],
-      },
-      {
-        title: 'Billing Management',
-        path: '/advanced/billing',
-        icon: <Receipt />,
-        roles: ['admin', 'operator'],
-      },
-      {
-        title: 'Firmware Upgrade',
-        path: '/advanced/firmware',
-        icon: <CloudUpload />,
-        roles: ['admin', 'operator'],
-      },
-      {
-        title: 'Security Audit',
-        path: '/advanced/security',
-        icon: <Security />,
-        roles: ['admin', 'operator'],
-      },
-      {
-        title: 'Access Control',
-        path: '/advanced/access-control',
-        icon: <AdminPanelSettings />,
-        roles: ['admin'],
-      },
-    ],
+    title: 'Tamper Detection',
+    path: '/advanced/tamper',
+    icon: <Shield />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Billing Management',
+    path: '/advanced/billing',
+    icon: <Receipt />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Firmware Upgrade',
+    path: '/advanced/firmware',
+    icon: <CloudUpload />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Security Audit',
+    path: '/advanced/security',
+    icon: <Security />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Real-Time Monitoring',
+    path: '/task-query/monitoring',
+    icon: <MonitorHeart />,
+  },
+  {
+    title: 'Online Rate',
+    path: '/task-query/online-rate',
+    icon: <SignalWifi4Bar />,
+  },
+  {
+    title: 'Energy Consumption',
+    path: '/reports/consumption',
+    icon: <BatteryChargingFull />,
   },
   {
     title: 'Remote',
@@ -252,6 +211,12 @@ const menuItems: MenuItemType[] = [
     title: 'User Management',
     path: '/users',
     icon: <Group />,
+    roles: ['admin'],
+  },
+  {
+    title: 'Access Control',
+    path: '/advanced/access-control',
+    icon: <AdminPanelSettings />,
     roles: ['admin'],
   },
 ];
@@ -346,19 +311,9 @@ const DashboardLayout: React.FC = () => {
         minHeight: '64px !important',
       }}>
         {collapsed ? (
-          <NHLogoCompact sx={{ fontSize: 36 }} />
+          <NHLogoCompact sx={{ height: 36 }} />
         ) : (
-          <>
-            <NHLogoCompact sx={{ fontSize: 32 }} />
-            <Box>
-              <Typography variant="subtitle1" noWrap component="div" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-                New Hampshire
-              </Typography>
-              <Typography variant="caption" sx={{ opacity: 0.9, fontSize: '0.6rem' }}>
-                Energy Management
-              </Typography>
-            </Box>
-          </>
+          <NHLogo sx={{ height: 45, width: 'auto' }} />
         )}
       </Toolbar>
       <Divider />
@@ -559,7 +514,7 @@ const DashboardLayout: React.FC = () => {
               <MenuItem>No active alerts</MenuItem>
             ) : (
               activeAlerts.map((alert, index) => (
-                <MenuItem key={index} onClick={() => navigate('/task-query/events')}>
+                <MenuItem key={index} onClick={() => navigate('/advanced/events')}>
                   <ListItemIcon>
                     <Warning fontSize="small" color="error" />
                   </ListItemIcon>
