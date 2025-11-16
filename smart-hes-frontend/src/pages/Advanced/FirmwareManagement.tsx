@@ -37,6 +37,7 @@ import {
   Paper,
 } from '@mui/material';
 import {
+  CloudUpload,
   CloudUpload as UploadIcon,
   Refresh as RefreshIcon,
   PlayArrow as StartIcon,
