@@ -40,10 +40,13 @@ import {
   QueryStats as StatsIcon,
   Clear as ClearIcon,
   Delete as DeleteIcon,
+  Download as DownloadIcon,
+  Print as PrintIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import { exportToCSV, exportToPDF } from '../../utils/exportUtils';
 import {
   PieChart,
   Pie,
@@ -218,6 +221,51 @@ const TamperDetectionDashboard: React.FC = () => {
     return 'error';
   };
 
+  const handleExportCSV = () => {
+    const data = tamperMeters.map(meter => ({
+      'Meter Number': meter.meterNumber,
+      'Brand': meter.brand,
+      'Model': meter.model,
+      'Area': meter.area?.name || 'N/A',
+      'Customer': meter.customer?.customerName || 'Unassigned',
+      'Account Number': meter.customer?.accountNumber || 'N/A',
+      'Tamper Types': getTamperTypes(meter).join(', '),
+      'Issue Count': getTamperCount(meter),
+      'Last Seen': format(new Date(meter.lastSeen), 'yyyy-MM-dd HH:mm:ss'),
+      'Status': meter.status,
+    }));
+
+    exportToCSV(data, `tamper_meters_${format(new Date(), 'yyyy-MM-dd_HHmmss')}`);
+  };
+
+  const handleExportPDF = async () => {
+    const columns = [
+      { header: 'Meter Number', dataKey: 'meterNumber' },
+      { header: 'Area', dataKey: 'area' },
+      { header: 'Customer', dataKey: 'customer' },
+      { header: 'Tamper Types', dataKey: 'tamperTypes' },
+      { header: 'Count', dataKey: 'count' },
+      { header: 'Last Seen', dataKey: 'lastSeen' },
+    ];
+
+    const data = tamperMeters.map(meter => ({
+      meterNumber: meter.meterNumber,
+      area: meter.area?.name || 'N/A',
+      customer: meter.customer?.customerName || 'Unassigned',
+      tamperTypes: getTamperTypes(meter).join(', '),
+      count: getTamperCount(meter).toString(),
+      lastSeen: format(new Date(meter.lastSeen), 'yyyy-MM-dd HH:mm'),
+    }));
+
+    await exportToPDF(
+      'Tamper Detection Report',
+      data,
+      columns,
+      `tamper_report_${format(new Date(), 'yyyy-MM-dd_HHmmss')}`,
+      'landscape'
+    );
+  };
+
   const pieChartData = [
     { name: 'Clean Meters', value: stats.clean },
     { name: 'Cover Open', value: stats.coverOpen },
@@ -248,6 +296,22 @@ const TamperDetectionDashboard: React.FC = () => {
           </Box>
         </Box>
         <Stack direction="row" spacing={2}>
+          <Button
+            variant="outlined"
+            startIcon={<DownloadIcon />}
+            onClick={handleExportCSV}
+            disabled={tamperMeters.length === 0}
+          >
+            Export CSV
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<PrintIcon />}
+            onClick={handleExportPDF}
+            disabled={tamperMeters.length === 0}
+          >
+            Export PDF
+          </Button>
           <Button
             variant="outlined"
             startIcon={<RefreshIcon />}
