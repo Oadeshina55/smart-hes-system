@@ -42,6 +42,8 @@ import {
   Error as ErrorIcon,
   CheckCircle as CheckCircleIcon,
   ExpandMore as ExpandMoreIcon,
+  Task as TaskIcon,
+  Cancel as CancelIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -66,6 +68,12 @@ interface Event {
     username: string;
   };
   acknowledgedAt?: string;
+  resolved?: boolean;
+  resolvedBy?: {
+    username: string;
+  };
+  resolvedAt?: string;
+  resolutionNotes?: string;
   metadata?: any;
   createdAt: string;
 }
@@ -88,6 +96,11 @@ const EventLogViewer: React.FC = () => {
   // Detail dialog
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+
+  // Resolve dialog
+  const [resolveDialogOpen, setResolveDialogOpen] = useState(false);
+  const [eventToResolve, setEventToResolve] = useState<Event | null>(null);
+  const [resolutionNotes, setResolutionNotes] = useState('');
 
   const fetchEvents = async () => {
     setLoading(true);
@@ -133,9 +146,40 @@ const EventLogViewer: React.FC = () => {
     }
   };
 
+  const openResolveDialog = (event: Event) => {
+    setEventToResolve(event);
+    setResolutionNotes('');
+    setResolveDialogOpen(true);
+  };
+
+  const handleResolve = async () => {
+    if (!eventToResolve) return;
+
+    if (!resolutionNotes.trim()) {
+      toast.error('Please enter resolution notes');
+      return;
+    }
+
+    try {
+      await axios.patch(`/events/${eventToResolve._id}/resolve`, {
+        resolutionNotes: resolutionNotes.trim(),
+      });
+      toast.success('Event resolved successfully');
+      setResolveDialogOpen(false);
+      setEventToResolve(null);
+      setResolutionNotes('');
+      fetchEvents();
+      if (selectedEvent?._id === eventToResolve._id) {
+        setDetailOpen(false);
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to resolve event');
+    }
+  };
+
   const handleExportCSV = () => {
     const csv = [
-      ['Timestamp', 'Meter', 'Event Type', 'Severity', 'Category', 'Description', 'Acknowledged'].join(','),
+      ['Timestamp', 'Meter', 'Event Type', 'Severity', 'Category', 'Description', 'Acknowledged', 'Resolved'].join(','),
       ...events.map(event =>
         [
           format(new Date(event.timestamp), 'yyyy-MM-dd HH:mm:ss'),
@@ -145,6 +189,7 @@ const EventLogViewer: React.FC = () => {
           event.category,
           `"${event.description}"`,
           event.acknowledged ? 'Yes' : 'No',
+          event.resolved ? 'Yes' : 'No',
         ].join(',')
       ),
     ].join('\n');
@@ -328,7 +373,7 @@ const EventLogViewer: React.FC = () => {
 
       {/* Statistics */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={2.4}>
           <Card sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
             <CardContent>
               <Typography variant="h6" sx={{ color: 'white', mb: 1 }}>
@@ -340,7 +385,7 @@ const EventLogViewer: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={2.4}>
           <Card sx={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
             <CardContent>
               <Typography variant="h6" sx={{ color: 'white', mb: 1 }}>
@@ -352,7 +397,7 @@ const EventLogViewer: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={2.4}>
           <Card sx={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
             <CardContent>
               <Typography variant="h6" sx={{ color: 'white', mb: 1 }}>
@@ -364,7 +409,19 @@ const EventLogViewer: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={2.4}>
+          <Card sx={{ background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ color: 'white', mb: 1 }}>
+                Resolved
+              </Typography>
+              <Typography variant="h3" sx={{ color: 'white', fontWeight: 700 }}>
+                {events.filter(e => e.resolved).length}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={2.4}>
           <Card sx={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
             <CardContent>
               <Typography variant="h6" sx={{ color: 'white', mb: 1 }}>
@@ -466,11 +523,18 @@ const EventLogViewer: React.FC = () => {
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      {event.acknowledged ? (
+                      {event.resolved ? (
+                        <Chip
+                          icon={<TaskIcon />}
+                          label="Resolved"
+                          color="success"
+                          size="small"
+                        />
+                      ) : event.acknowledged ? (
                         <Chip
                           icon={<CheckCircleIcon />}
                           label="Acknowledged"
-                          color="success"
+                          color="info"
                           size="small"
                         />
                       ) : (
@@ -478,18 +542,33 @@ const EventLogViewer: React.FC = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      {!event.acknowledged && (
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAcknowledge(event._id);
-                          }}
-                        >
-                          Acknowledge
-                        </Button>
-                      )}
+                      <Stack direction="row" spacing={1}>
+                        {!event.acknowledged && (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAcknowledge(event._id);
+                            }}
+                          >
+                            Acknowledge
+                          </Button>
+                        )}
+                        {event.acknowledged && !event.resolved && (
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openResolveDialog(event);
+                            }}
+                          >
+                            Resolve
+                          </Button>
+                        )}
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 ))
@@ -592,6 +671,37 @@ const EventLogViewer: React.FC = () => {
                     </Grid>
                   </>
                 )}
+                {selectedEvent.resolved && (
+                  <>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Resolved By
+                      </Typography>
+                      <Typography variant="body1">
+                        {selectedEvent.resolvedBy?.username || 'Unknown'}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Resolved At
+                      </Typography>
+                      <Typography variant="body1">
+                        {selectedEvent.resolvedAt &&
+                          format(new Date(selectedEvent.resolvedAt), 'PPpp')}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Resolution Notes
+                      </Typography>
+                      <Paper variant="outlined" sx={{ p: 2, mt: 1, bgcolor: 'success.lighter' }}>
+                        <Typography variant="body2">
+                          {selectedEvent.resolutionNotes || 'No notes provided'}
+                        </Typography>
+                      </Paper>
+                    </Grid>
+                  </>
+                )}
                 {selectedEvent.metadata && Object.keys(selectedEvent.metadata).length > 0 && (
                   <Grid item xs={12}>
                     <Typography variant="subtitle2" color="text.secondary">
@@ -614,14 +724,94 @@ const EventLogViewer: React.FC = () => {
                     setDetailOpen(false);
                   }}
                   variant="contained"
+                  color="primary"
                 >
                   Acknowledge Event
+                </Button>
+              )}
+              {selectedEvent.acknowledged && !selectedEvent.resolved && (
+                <Button
+                  onClick={() => {
+                    openResolveDialog(selectedEvent);
+                    setDetailOpen(false);
+                  }}
+                  variant="contained"
+                  color="success"
+                  startIcon={<TaskIcon />}
+                >
+                  Resolve Event
                 </Button>
               )}
               <Button onClick={() => setDetailOpen(false)}>Close</Button>
             </DialogActions>
           </>
         )}
+      </Dialog>
+
+      {/* Resolve Event Dialog */}
+      <Dialog
+        open={resolveDialogOpen}
+        onClose={() => setResolveDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <TaskIcon color="success" />
+          <Typography variant="h6">Resolve Event</Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          {eventToResolve && (
+            <Stack spacing={2}>
+              <Alert severity="info" icon={<InfoIcon />}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  {eventToResolve.eventType}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Meter: {eventToResolve.meter?.meterNumber || 'N/A'}
+                </Typography>
+              </Alert>
+
+              <Box>
+                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                  Description:
+                </Typography>
+                <Typography variant="body2">{eventToResolve.description}</Typography>
+              </Box>
+
+              <TextField
+                fullWidth
+                multiline
+                rows={4}
+                label="Resolution Notes *"
+                placeholder="Enter detailed notes about how this event was resolved..."
+                value={resolutionNotes}
+                onChange={(e) => setResolutionNotes(e.target.value)}
+                helperText="Required: Explain what actions were taken to resolve this event"
+                required
+              />
+
+              <Alert severity="warning" icon={<WarningIcon />}>
+                <Typography variant="caption">
+                  Resolving an event marks it as closed. This action cannot be undone.
+                </Typography>
+              </Alert>
+            </Stack>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setResolveDialogOpen(false)} startIcon={<CancelIcon />}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleResolve}
+            variant="contained"
+            color="success"
+            startIcon={<TaskIcon />}
+            disabled={!resolutionNotes.trim()}
+          >
+            Confirm Resolve
+          </Button>
+        </DialogActions>
       </Dialog>
     </Box>
   );
