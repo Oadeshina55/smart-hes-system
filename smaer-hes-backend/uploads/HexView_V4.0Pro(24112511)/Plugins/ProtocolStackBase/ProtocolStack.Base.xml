@@ -1,0 +1,875 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ProtocolStack.Base</name>
+    </assembly>
+    <members>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.ChannelService">
+            <summary>
+            设备驱动通道服务
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.ID">
+            <summary>
+            设备驱动ID，必须全局唯一
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.Name">
+            <summary>
+            设备驱动名称
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.IsDataReceivedEnabled">
+            <summary>
+            设备驱动数据接收使能
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.LastActiveTime">
+            <summary>
+            获取设备驱动最近活跃时间
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.ChannelType">
+            <summary>
+            设备驱动通道类型
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.ChannelAddress">
+            <summary>
+            设备驱动通道地址
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.#ctor(System.String,Hex.HexView.ProtocolStack.PhysicalLayer.ChannelType,Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.IsChannelOpened">
+            <summary>
+            获取设备驱动通道是否已连接
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.OpenChannel">
+            <summary>
+            建立设备驱动通道连接
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.CloseChannel">
+            <summary>
+            关闭设备驱动通道连接
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.SendToChannel(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            向设备驱动通道发送数据
+            </summary>
+            <param name="data"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.GetSerialPortParameter(System.Int32@,System.Int32@,System.IO.Ports.StopBits@,System.IO.Ports.Parity@)">
+            <summary>
+            获取设备驱动通道参数（仅支持串口类通道）
+            </summary>
+            <param name="baudrate"></param>
+            <param name="databits"></param>
+            <param name="stopBits"></param>
+            <param name="parity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.SetSerialPortParameter(System.Int32,System.Int32,System.IO.Ports.StopBits,System.IO.Ports.Parity)">
+            <summary>
+            设置设备驱动通道参数（仅支持串口类通道）
+            </summary>
+            <param name="baudrate"></param>
+            <param name="databits"></param>
+            <param name="stopBits"></param>
+            <param name="parity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.ReceiveDataHandler(Hex.HexView.ProtocolStack.PhysicalLayer.ChannelReceivedEventArgs)">
+            <summary>
+            设备驱动接收数据
+            只有IsActive=true时，此方法才有可能被调用
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.Setup(Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerChannelService)">
+            <summary>
+            安装设备驱动
+            </summary>
+            <param name="channelService"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.DeviceDriverBase.ChannelCloseHander(System.Object,Hex.HexView.ProtocolStack.PhysicalLayer.ChannelCloseEventArgs)">
+            <summary>
+            设备驱动通道关闭处理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.ID">
+            <summary>
+            设备驱动ID，必须全局唯一
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.Name">
+            <summary>
+            设备驱动名称
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.IsDataReceivedEnabled">
+            <summary>
+            设备驱动数据接收使能
+            用于控制设备驱动是否允许接收物理层的数据
+            多个设备驱动共享一个物理通道时，只有IsDataReceivedEnabled为true的设备驱动能接收数据
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.LastActiveTime">
+            <summary>
+            获取设备驱动最近活跃时间
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.ChannelType">
+            <summary>
+            设备驱动通道类型
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.ChannelAddress">
+            <summary>
+            设备驱动通道地址
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.IsChannelOpened">
+            <summary>
+            获取设备驱动通道是否已连接
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.OpenChannel">
+            <summary>
+            建立设备驱动通道连接
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.CloseChannel">
+            <summary>
+            关闭设备驱动通道连接
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.SendToChannel(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            向设备驱动通道发送数据
+            </summary>
+            <param name="data"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.GetSerialPortParameter(System.Int32@,System.Int32@,System.IO.Ports.StopBits@,System.IO.Ports.Parity@)">
+            <summary>
+            获取设备驱动通道参数（仅支持串口类通道）
+            </summary>
+            <param name="baudrate"></param>
+            <param name="databits"></param>
+            <param name="stopBits"></param>
+            <param name="parity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.SetSerialPortParameter(System.Int32,System.Int32,System.IO.Ports.StopBits,System.IO.Ports.Parity)">
+            <summary>
+            设置设备驱动通道参数（仅支持串口类通道）
+            </summary>
+            <param name="baudrate"></param>
+            <param name="databits"></param>
+            <param name="stopBits"></param>
+            <param name="parity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.ReceiveDataHandler(Hex.HexView.ProtocolStack.PhysicalLayer.ChannelReceivedEventArgs)">
+            <summary>
+            设备驱动接收数据
+            只有IsActive=true时，此方法才有可能被调用
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriver.IDeviceDriver.Setup(Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerChannelService)">
+            <summary>
+            安装设备驱动
+            </summary>
+            <param name="channelService"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.Dispose">
+            <summary>
+            供外部显示调用的Dispose方法
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.Dispose(System.Boolean)">
+            <summary>
+            受保护的Dispose方法，保证不会被外部调用
+            传入bool值的disposing以确定是否释放托管资源
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.Finalize">
+            <summary>
+            供GC调用的析构函数
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.Exists(System.String)">
+            <summary>
+            获取是否存在设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.Get(System.String)">
+            <summary>
+            获取设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.Get(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            获取物理地址为addess的设备驱动列表
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.Get(Hex.HexView.ProtocolStack.PhysicalLayer.ChannelType)">
+            <summary>
+            获取物理通讯方式为channelType的设备驱动列表
+            </summary>
+            <param name="channelType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.GetAll">
+            <summary>
+            获取所有设备驱动列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.Register(`0)">
+            <summary>
+            注册一个设备驱动
+            如果该设备驱动已经存在，则会移除已存在的设备驱动
+            </summary>
+            <param name="deviceDriver"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.UnRegister(System.String)">
+            <summary>
+            反注册设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.UnRegister(`0)">
+            <summary>
+            反注册一个设备驱动
+            </summary>
+            <param name="deviceDriver"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.IsChannelOpened(System.String)">
+            <summary>
+            获取指定设备的物理通道连接状态
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.OpenChannel(System.String)">
+            <summary>
+            打开指定设备的物理通道
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.CloseChannel(System.String)">
+            <summary>
+            关闭指定设备的物理通道
+            </summary>
+            <param name="deviceDriverID"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.SendToChannel(System.String,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            发送数据给指定的设备
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="data"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.GetSerialPortParameter(System.String,System.Int32@,System.Int32@,System.IO.Ports.StopBits@,System.IO.Ports.Parity@)">
+            <summary>
+            修改串口类通道的参数（仅支持实现了IChangeSerialPortParameter接口的通道）
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="baudrate"></param>
+            <param name="databits"></param>
+            <param name="stopBits"></param>
+            <param name="parity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.SetSerialPortParameter(System.String,System.Int32,System.Int32,System.IO.Ports.StopBits,System.IO.Ports.Parity)">
+            <summary>
+            设置串口类通道的参数（仅支持实现了IChangeSerialPortParameter接口的通道）
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="baudrate"></param>
+            <param name="databits"></param>
+            <param name="stopBits"></param>
+            <param name="parity"></param>
+            <returns></returns>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.OnChannelClosed">
+            <summary>
+            通道关闭事件
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.SetupDeviceDriver(`0)">
+            <summary>
+            安装设备驱动
+            订阅子类自定义的设备事件等
+            </summary>
+            <param name="deviceDriver"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.UnSetupDeviceDriver(`0)">
+            <summary>
+            卸载设备驱动
+            </summary>
+            <param name="deviceDriver"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase`1.MatchDeviceDerivers(Hex.HexView.ProtocolStack.PhysicalLayer.ChannelType,Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            数据分发过程的设备驱动匹配
+            分发原则：通道地址优先匹配，其次按通道类型匹配
+            特殊情况：以下2种情况需要特殊处理
+            1.多个设备驱动共享一个物理通道的情况（只分发给IsDataReceivedEnabled为true的设备驱动）
+            2.Tcp server通道的设备驱动未登录时的情况（只分发给Tcp server类型且ChannelAddress=null的设备驱动，由设备驱动根据业务规则判断是否是自己的数据）
+            </summary>
+            <param name="channelType"></param>
+            <param name="channleAddress"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1">
+            <summary>
+            设备驱动层服务
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1.Exists(System.String)">
+            <summary>
+            获取是否存在设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1.Get(System.String)">
+            <summary>
+            获取设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1.Get(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            获取物理地址为addess的设备驱动列表
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1.Get(Hex.HexView.ProtocolStack.PhysicalLayer.ChannelType)">
+            <summary>
+            获取物理通讯方式为channelType的设备驱动列表
+            </summary>
+            <param name="channelType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1.GetAll">
+            <summary>
+            获取所有设备驱动列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1.Register(`0)">
+            <summary>
+            注册一个设备驱动
+            如果该设备驱动已经存在，则会移除已存在的设备驱动
+            </summary>
+            <param name="deviceDriver"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1.UnRegister(System.String)">
+            <summary>
+            反注册设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DeviceDriverLayer.IDeviceDriverLayerService`1.UnRegister(`0)">
+            <summary>
+            反注册一个设备驱动
+            </summary>
+            <param name="deviceDriver"></param>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.ErrorCode.Success">
+            <summary>
+            成功
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.ErrorCode.DLM_DEVICEDRIVER_IS_NOT_EXISTS">
+            <summary>
+            设备驱动不存在
+            </summary>
+        </member>
+        <member name="T:Hex.HexView.ProtocolStack.ProtocolStackBase`1">
+            <summary>
+            协议栈基类
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.ProtocolStackBase`1.DeviceLayerService">
+            <summary>
+            设备驱动层服务
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.#ctor(Hex.HexView.ProtocolStack.DeviceDriverLayer.DeviceDriverLayerServiceBase{`0})">
+            <summary>
+            构造函数
+            </summary>
+            <param name="deviceLayerService">需要注入的设备驱动层服务</param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.IsChannelExists(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            获取是否存在地址为address的通道
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.IsChannelOpened(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            获取通道是否处于已连接状态，如果通道不存在，则返回false.
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.RegisterChannel(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            注册一个地址为address的通道，如果通道已存在，则直接返回
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.UnregisterChannle(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            反注册一个地址为address的通道，如果通道不存在，则直接返回
+            </summary>
+            <param name="address"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.OpenChannel(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress,System.Boolean)">
+            <summary>
+            打开地址为address的通道
+            </summary>
+            <param name="address"></param>
+            <param name="isAutoRegister">通道不存在时，是否自动注册该通道</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.CloseChannel(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress,System.Boolean)">
+            <summary>
+             关闭地址为address的通道，如果通道不存在，则直接返回
+            </summary>
+            <param name="address"></param>
+            <param name="isAutoUnregister">通道关闭后，是否自动反注册该通道</param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.CloseAllChannel(System.Boolean)">
+            <summary>
+            关闭全部通道
+            </summary>
+            <param name="isAutoUnregister">通道关闭后，是否自动反注册该通道</param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.SendToChannel(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            向地址为address的通道发送data，如果通道不存在，则直接返回
+            </summary>
+            <param name="address"></param>
+            <param name="data"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.GetAllTcpServers">
+            <summary>
+            获取当前所有TcpSever
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.ExistsTcpSever(System.Net.IPAddress,System.UInt16)">
+            <summary>
+            获取是否存在指定IP和Port的TcpSever
+            </summary>
+            <param name="ip"></param>
+            <param name="port"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.StartTcpServerListen(System.Net.IPAddress,System.UInt16)">
+            <summary>
+            启动一个TCP本地监听，如果该地址监听已存在，则直接返回
+            </summary>
+            <param name="ip"></param>
+            <param name="port"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.StopTcpServerListen(System.Net.IPAddress,System.UInt16)">
+            <summary>
+            关闭一个TCP本地监听（关联的通道同时关闭），如果该监听不存在，则直接返回
+            </summary>
+            <param name="ip"></param>
+            <param name="port"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.StopAllTcpServerListen">
+            <summary>
+            关闭所有的TCP本地监听（关联的通道同时关闭）
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.GetSerialPortParameter(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress,System.Int32@,System.Int32@,System.IO.Ports.StopBits@,System.IO.Ports.Parity@)">
+            <summary>
+            获取串口类通道的参数（仅支持实现了IChangeSerialPortParameter接口的通道）
+            </summary>
+            <param name="address"></param>
+            <param name="baudrate"></param>
+            <param name="databits"></param>
+            <param name="stopBits"></param>
+            <param name="parity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.SetSerialPortParameter(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress,System.Int32,System.Int32,System.IO.Ports.StopBits,System.IO.Ports.Parity)">
+            <summary>
+            设置串口类通道的参数（仅支持实现了IChangeSerialPortParameter接口的通道）
+            </summary>
+            <param name="address"></param>
+            <param name="baudrate"></param>
+            <param name="databits"></param>
+            <param name="stopBits"></param>
+            <param name="parity"></param>
+            <returns></returns>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.ProtocolStackBase`1.OnChannelSent">
+            <summary>
+            通道数据发送事件
+            通道发送数据后，触发此事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.ProtocolStackBase`1.OnChannelReceived">
+            <summary>
+            通道数据接收事件
+            通道接收到数据后，触发此事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.ProtocolStackBase`1.OnChannelOpened">
+            <summary>
+            通道连接事件
+            通道建立连接后，触发此事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.ProtocolStackBase`1.OnChannelClosed">
+            <summary>
+            通道关闭事件
+            通道关闭连接后，触发此事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.ProtocolStackBase`1.OnSerialPortParameterChanged">
+            <summary>
+            串口类连接参数改变事件
+            串口类连接成功修改参数后，触发此事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.ProtocolStackBase`1.OnTcpServerListenStarted">
+            <summary>
+            Tcp server监听启动事件
+            Tcp server启动监听后，触发此事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.ProtocolStackBase`1.OnTcpServerListenStop">
+            <summary>
+            Tcp server监听关闭事件
+            Tcp server关闭监听后，触发此事件
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.IsDeviceDriverExists(System.String)">
+            <summary>
+            获取是否存在设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.GetDeviceDriver(System.String)">
+            <summary>
+            获取设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.GetDeviceDriver(Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress)">
+            <summary>
+            获取物理地址为addess的设备驱动列表
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.GetDeviceDriver(Hex.HexView.ProtocolStack.PhysicalLayer.ChannelType)">
+            <summary>
+            获取物理通讯方式为channelType的设备驱动列表
+            </summary>
+            <param name="channelType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.GetDeviceDrivers">
+            <summary>
+            获取所有设备驱动列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.RegisterDeviceDriver(`0)">
+            <summary>
+            注册一个设备驱动
+            如果该设备驱动已经存在，则会移除已存在的设备驱动
+            </summary>
+            <param name="deviceDriver"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.UnRegisterDeviceDriver(System.String)">
+            <summary>
+            反注册设备ID为deviceDriverID的设备驱动
+            </summary>
+            <param name="deviceDriverID"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.ProtocolStackBase`1.UnRegisterDeviceDriver(`0)">
+            <summary>
+            反注册一个设备驱动
+            </summary>
+            <param name="deviceDriver"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Short2Byte(System.Int16,System.Byte[]@)">
+            <summary>
+            把short类型的数据转存到2个字节的byte数组中
+            </summary>
+            <param name="value">short类型的数据</param>
+            <param name="arry">2个字节大小的byte数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Byte2Short(System.Byte[],System.Int16@)">
+            <summary>
+            把2个字节的byte数组转成short类型的数据
+            </summary>
+            <param name="array">2个字节大小的byte数组</param>
+            <param name="value">short类型的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Ushort2Byte(System.UInt16,System.Byte[]@)">
+            <summary>
+            把ushort类型的数据转存到2个字节的byte数组中
+            </summary>
+            <param name="value">ushort类型的数据</param>
+            <param name="arry">2个字节大小的byte数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Byte2Ushort(System.Byte[],System.UInt16@)">
+            <summary>
+            把2个字节的byte数组转成ushort类型的数据
+            </summary>
+            <param name="array">2个字节大小的byte数组</param>
+            <param name="value">ushort类型的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Int2Byte(System.Int32,System.Byte[]@)">
+            <summary>
+            把int类型的数据转存到4个字节的byte数组中
+            </summary>
+            <param name="value">int类型的数据</param>
+            <param name="arry">4个字节大小的byte数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Byte2Int(System.Byte[],System.Int32@)">
+            <summary>
+            把4个字节的byte数组转成int类型的数据
+            </summary>
+            <param name="array">4个字节大小的byte数组</param>
+            <param name="value">int类型的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.UInt2Byte(System.UInt32,System.Byte[]@)">
+            <summary>
+            把uint类型的数据转存到4个字节的byte数组中
+            </summary>
+            <param name="value">uint类型的数据</param>
+            <param name="arry">4个字节大小的byte数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Byte2UInt(System.Byte[],System.UInt32@)">
+            <summary>
+            把4个字节的byte数组转成uint类型的数据
+            </summary>
+            <param name="array">4个字节大小的byte数组</param>
+            <param name="value">uint类型的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Long2Byte(System.Int64,System.Byte[]@)">
+            <summary>
+            把long类型的数据转存到4个字节的byte数组中
+            </summary>
+            <param name="value">long类型的数据</param>
+            <param name="arry">8个字节大小的byte数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Byte2Long(System.Byte[],System.Int64@)">
+            <summary>
+            把8个字节的byte数组转成long类型的数据
+            </summary>
+            <param name="array">8个字节大小的byte数组</param>
+            <param name="value">long类型的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Ulong2Byte(System.UInt64,System.Byte[]@)">
+            <summary>
+            把ulong类型的数据转存到8个字节的byte数组中
+            </summary>
+            <param name="value">ulong类型的数据</param>
+            <param name="arry">8个字节大小的byte数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Byte2Ulong(System.Byte[],System.UInt64@)">
+            <summary>
+            把8个字节的byte数组转成ulong类型的数据
+            </summary>
+            <param name="array">8个字节大小的byte数组</param>
+            <param name="value">ulong类型的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Float2Byte(System.Single,System.Byte[]@)">
+            <summary>
+            把float类型的数据转存到4个字节的byte数组中
+            </summary>
+            <param name="value">float类型的数据</param>
+            <param name="arry">4个字节大小的byte数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Byte2Float(System.Byte[],System.Single@)">
+            <summary>
+            把4个字节的byte数组转成float类型的数据
+            </summary>
+            <param name="array">4个字节大小的byte数组</param>
+            <param name="value">float类型的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Double2Byte(System.Double,System.Byte[]@)">
+            <summary>
+            把double类型的数据转存到8个字节的byte数组中
+            </summary>
+            <param name="value">double类型的数据</param>
+            <param name="arry">8个字节大小的byte数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Byte2Double(System.Byte[],System.Double@)">
+            <summary>
+            把8个字节的byte数组转成double类型的数据
+            </summary>
+            <param name="array">8个字节大小的byte数组</param>
+            <param name="value">double类型的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Hex2Bin(System.String)">
+            <summary>
+            16进制字符串转2进制字符串
+            </summary>
+            <param name="hexString">16进制字符串，如“FF80”</param>
+            <returns>2进制字符串，如“1111111110000000”</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.Bin2Hex(System.String)">
+            <summary>
+            2进制字符串转16进制字符串
+            </summary>
+            <param name="binString">2进制字符串，如“1111111110000000”</param>
+            <returns>16进制字符串，如“FF80”</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.ByteToBCD(System.Byte)">
+            <summary>
+            单个byte转BCD码
+            </summary>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.BCDToByte(System.Byte)">
+            <summary>
+            BCD码转单个byte
+            </summary>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.BCDToString(System.Byte[])">
+            <summary>
+            BCD码转字符串
+            </summary>
+            <param name="bcd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.BCDToString(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            BCD码转16进制字符串
+            </summary>
+            <param name="bcd"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.ConvertHelper.StringToBCD(System.String)">
+            <summary>
+            16进制字符串转BCD码
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Hex.HexView.ProtocolStack.Utilities.RingBuffer">
+            <summary>
+            可自动扩展容量的非线程安全的环形缓存
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.RingBuffer.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            写入指定的数据至缓存
+            </summary>
+            <param name="buffer">存放待写入数据的字节数组</param>
+            <param name="offset">要写入的数据的起始位置</param>
+            <param name="length">要写入的数据长度</param>
+            <returns>实际写入数据长度</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.RingBuffer.Read(System.Byte[]@)">
+            <summary>
+            读取缓存全部数据至指定的字节数组
+            </summary>
+            <param name="buffer">存放读取数据的字节数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.RingBuffer.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            读取缓存指定长度的数据至指定的字节数组的指定起始位置
+            </summary>
+            <param name="buffer">存放读取数据的字节数组</param>
+            <param name="offset">字节数组的指定起始位置</param>
+            <param name="length">要读取的长度</param>
+            <returns>实际读取的长度</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.RingBuffer.Clear">
+            <summary>
+            清空缓存全部数据
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.Utilities.RingBuffer.Erasure(System.Int32)">
+            <summary>
+            从缓存偏移位置起,移除指定长度的数据
+            </summary>
+            <param name="length">指定清空数据的长度</param>
+        </member>
+    </members>
+</doc>

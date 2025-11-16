@@ -1,0 +1,1577 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ProtocolStack.DLMS</name>
+    </assembly>
+    <members>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.Context">
+            <summary>
+            应用层上下文对象
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.LastActiveTime">
+            <summary>
+            获取设备驱动最近活跃时间
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.IsLogon">
+            <summary>
+            获取设备是否已登录，对于网络设备，作为客户端登录后IsLogon为true，其他情况IsLogon均为false
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.#ctor(System.String,Hex.HexView.ProtocolStack.PhysicalLayer.ChannelType,Hex.HexView.ProtocolStack.PhysicalLayer.IChannelAddress,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMS)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="id"></param>
+            <param name="channelType"></param>
+            <param name="channelAddress"></param>
+            <param name="dlms"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.Open(System.Byte)">
+            <summary>
+            建立设备驱动连接（包括物理层、链路/传输层、应用层）
+            </summary>
+            <param name="client"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.OpenSupportLayer(System.Byte)">
+            <summary>
+            建立设备区驱动链路/传输层连接
+            </summary>
+            <param name="client"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.OpenApplicationLayer">
+            <summary>
+            建立设备驱动应用层连接
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.Close">
+            <summary>
+            断开设备驱动连接（包括物理层、链路/传输层、应用层）
+            如果设备驱动使用Tcp server类型通道，物理层不会被断开
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.CloseSupportLayer">
+            <summary>
+            断开设备驱动链路层/传输层连接
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.CloseApplicationLayer">
+            <summary>
+            断开设备驱动应用层连接
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.Get(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result}@)">
+            <summary>
+            发起Get服务请求
+            </summary>
+            <param name="attributes"></param>
+            <param name="getDataResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.GetRequestNormal(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result@)">
+            <summary>
+            发起Get-request-normal请求
+            </summary>
+            <param name="attribute"></param>
+            <param name="getDataResult"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.GetRequestWithList(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result}@)">
+            <summary>
+            发起Get-request-with-list请求
+            </summary>
+            <param name="attributes"></param>
+            <param name="getDataResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.Set(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result}@)">
+            <summary>
+            发起Set请求
+            </summary>
+            <param name="attributes"></param>
+            <param name="values"></param>
+            <param name="dataAccessResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.SetRequestNormal(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection,System.Byte[],Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result@)">
+            <summary>
+            发起Set-request-normal请求
+            </summary>
+            <param name="attribute"></param>
+            <param name="value"></param>
+            <param name="dataAccessResult"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.SetRequestWithList(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result}@)">
+            <summary>
+            发起Set-request-with-list请求
+            </summary>
+            <param name="attributes"></param>
+            <param name="values"></param>
+            <param name="dataAccessResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.Action(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data}@)">
+            <summary>
+            发起Action请求
+            </summary>
+            <param name="methods"></param>
+            <param name="parameters"></param>
+            <param name="actionResponses"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.ActionRequestNormal(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor,System.Byte[],Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data@,System.Boolean)">
+            <summary>
+            发起Action-request-normal请求
+            </summary>
+            <param name="method"></param>
+            <param name="parameter"></param>
+            <param name="actionResponse"></param>
+            <param name="isFraming"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.ActionRequestWithList(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data}@)">
+            <summary>
+            发起Action-request-with-list请求
+            </summary>
+            <param name="methods"></param>
+            <param name="parameters"></param>
+            <param name="actionResponses"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.Access(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AccessRequestBody,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AccessResponseBody@)">
+            <summary>
+            发起Access请求
+            </summary>
+            <param name="requestBody"></param>
+            <param name="responseBody"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.StopRequest">
+            <summary>
+            终止请求
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.ReceiveDataHandler(Hex.HexView.ProtocolStack.PhysicalLayer.ChannelReceivedEventArgs)">
+            <summary>
+            设备驱动接收数据
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.ChannelCloseHander(System.Object,Hex.HexView.ProtocolStack.PhysicalLayer.ChannelCloseEventArgs)">
+            <summary>
+            设备驱动通道关闭处理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.OnSupportLayerSent">
+            <summary>
+            链路/传输层数据发送事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.OnSupportLayerReceived">
+            <summary>
+            链路/传输层数据接收事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.OnDLMSSent">
+            <summary>
+            应用层数据发送事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.OnDLMSReceived">
+            <summary>
+            应用层数据接收事件
+            </summary>        
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.OnDeviceLogon">
+            <summary>
+            设备登录事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.DLMSDeviceDriver.OnDeviceLogout">
+            <summary>
+            设备退出登录事件（仅Tcp server通道类型的设备驱动会触发此事件）
+            </summary>
+        </member>
+        <member name="T:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver">
+            <summary>
+            DLMS设备驱动接口
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.Context">
+            <summary>
+            应用层上下文对象
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.IsLogon">
+            <summary>
+            获取设备是否已登录，对于网络设备，作为客户端登录后IsLogon为true，其他情况IsLogon均为false
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.Open(System.Byte)">
+            <summary>
+            建立设备驱动连接（包括物理层、链路/传输层、应用层）
+            </summary>
+            <param name="client"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.OpenSupportLayer(System.Byte)">
+            <summary>
+            建立设备区驱动链路/传输层连接
+            </summary>
+            <param name="client"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.OpenApplicationLayer">
+            <summary>
+            建立设备驱动应用层连接
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.Close">
+            <summary>
+            断开设备驱动连接（包括物理层、链路/传输层、应用层）
+            如果设备驱动使用Tcp server类型通道，物理层不会被断开
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.CloseSupportLayer">
+            <summary>
+            断开设备驱动链路层/传输层连接
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.CloseApplicationLayer">
+            <summary>
+            断开设备驱动应用层连接
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.Get(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result}@)">
+            <summary>
+            发起Get服务请求
+            </summary>
+            <param name="attributes"></param>
+            <param name="getDataResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.GetRequestNormal(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result@)">
+            <summary>
+            发起Get-request-normal请求
+            </summary>
+            <param name="attribute"></param>
+            <param name="getDataResult"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.GetRequestWithList(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result}@)">
+            <summary>
+            发起Get-request-with-list请求
+            </summary>
+            <param name="attributes"></param>
+            <param name="getDataResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.Set(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result}@)">
+            <summary>
+            发起Set请求
+            </summary>
+            <param name="attributes"></param>
+            <param name="values"></param>
+            <param name="dataAccessResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.SetRequestNormal(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection,System.Byte[],Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result@)">
+            <summary>
+            发起Set-request-normal请求
+            </summary>
+            <param name="attribute"></param>
+            <param name="value"></param>
+            <param name="dataAccessResult"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.SetRequestWithList(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result}@)">
+            <summary>
+            发起Set-request-with-list请求
+            </summary>
+            <param name="attributes"></param>
+            <param name="values"></param>
+            <param name="dataAccessResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.Action(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data}@)">
+            <summary>
+            发起Action请求
+            </summary>
+            <param name="methods"></param>
+            <param name="parameters"></param>
+            <param name="actionResponses"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.ActionRequestNormal(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor,System.Byte[],Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data@,System.Boolean)">
+            <summary>
+            发起Action-request-normal请求
+            </summary>
+            <param name="method"></param>
+            <param name="parameter"></param>
+            <param name="actionResponse"></param>
+            <param name="isFraming"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.ActionRequestWithList(System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data}@)">
+            <summary>
+            发起Action-request-with-list请求
+            </summary>
+            <param name="methods"></param>
+            <param name="parameters"></param>
+            <param name="actionResponses"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.Access(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AccessRequestBody,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AccessResponseBody@)">
+            <summary>
+            发起Access请求
+            </summary>
+            <param name="requestBody"></param>
+            <param name="responseBody"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.StopRequest">
+            <summary>
+            终止请求
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.OnSupportLayerSent">
+            <summary>
+            链路/传输层数据发送事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.OnSupportLayerReceived">
+            <summary>
+            链路/传输层数据接收事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.OnDLMSSent">
+            <summary>
+            应用层数据发送事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.OnDLMSReceived">
+            <summary>
+            应用层数据接收事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.OnDeviceLogon">
+            <summary>
+            设备登录事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.IDLMSDeviceDriver.OnDeviceLogout">
+            <summary>
+            设备退出登录事件（仅Tcp server通道类型的设备驱动会触发此事件）
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.A_XDR.DecodeLength(System.Byte[],System.Int32,System.Int32@)">
+            <summary>
+            解析L
+            </summary>
+            <param name="TLV">待解析的TLV字节数组</param>
+            <param name="offset">L起始字节在TLV中的偏移位置</param>
+            <param name="lengthOfLength">L所占用的字节数（0x82,0x12,0x34=3  0x81,0x80=2  0x7F=1）</param>
+            <returns>L</returns>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MechanismName.NONE">
+            <summary>
+            60 85 74 05 08 02 00—NONE，最低安全级别访问控制
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MechanismName.LLS">
+            <summary>
+            60 85 74 05 08 02 01—LLS，低安全级别访问控制
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MechanismName.HLS_AES_ECB_128">
+            <summary>
+            60 85 74 05 08 02 02—HLS，高安全级别访问控制，dlms中未定义这个级别的算法，海兴采用AES-ECB-128
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MechanismName.HLS_MD5">
+            <summary>
+            60 85 74 05 08 02 03—HLS，高安全级别访问控制，采用MD5算法
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MechanismName.HLS_SHA_1">
+            <summary>
+            60 85 74 05 08 02 04—HLS，高安全级别访问控制，采用SHA-1算法
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MechanismName.HLS_AES_GCM_128">
+            <summary>
+            60 85 74 05 08 02 05—HLS，高安全级别访问控制，采用AES-GCM-128算法
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MechanismName.HLS_SHA_256">
+            <summary>
+            60 85 74 05 08 02 06—HLS，高安全级别访问控制，采用SHA-256算法
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MechanismName.HLS_ECDSA">
+            <summary>
+            60 85 74 05 08 02 07—HLS，高安全级别访问控制，采用ECDSA算法
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor.COSEM_Object_Instance_Id">
+            <summary>
+             16进制形式的逻辑名，如0100010800FF
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.KeyAgreementMode.OnePassDiffieHellmanC">
+            <summary>
+            (1e,1s,ECC CDH)
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.KeyAgreementMode.StaticUnifiedModelC">
+            <summary>
+            (0e,2s,ECC,CDH)
+            </summary>
+        </member>
+        <member name="T:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMS">
+            <summary>
+            DLMS应用层
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.DeviceSerialNumber">
+            <summary>
+            设备序列号
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Protocol_version">
+            <summary>
+            采用的OSI面向连接协议的版本号，COSEM应用层使用其默认的版本号1 
+            默认值：0x07 0x08
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Application_context_name">
+            <summary>
+            COSEM应用环境名（海兴表计只采用逻辑名引用）。
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Calling_AP_title">
+            <summary>
+            客户端的System title，8字节
+            默认值：0x48 0x45 0x43 0x00 0x05 0x00 0x00 0x01
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Sender_acse_requirements">
+            <summary>
+            是否采用身份验证机制，缺省表示无身份验证机制
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Mechanism_name">
+            <summary>
+            身份验证机制名（Sender-acse-requirements不缺省时有效）
+            默认值：LLS
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.LLS_Password">
+            <summary>
+            LLS时的密码
+            默认值：0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Calling_authentication_value">
+            <summary>
+            LLS时密码值，HLS时随机数的值
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.HLS_Secret">
+            <summary>
+            HLS_Secret
+            默认值： 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30 
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.IsFixed_dedicated_key">
+            <summary>
+            是否使用固定的临时会话秘钥
+            默认值：false
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.dedicated_key">
+            <summary>
+            临时会话密钥(当IsFixed_dedicated_key=true时此项为必填项，默认值为16字节0)
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.response_allowed">
+            <summary>
+            是否允许响应，缺省时默认为允许（true）
+            默认值：true
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.proposed_quality_of_service">
+            <summary>
+            此项在COSEM的面向连接的3层环境中不使用
+            默认值：0x00
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.proposed_dlms_version_number">
+            <summary>
+            DLMS版本号，目前为6
+            默认值：0x06
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.proposed_conformance">
+            <summary>
+            表计提供的服务
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.client_max_receive_pdu_size">
+            <summary>
+            客户端应用层数据单元最大接收字节
+            默认值：65535
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.AK">
+            <summary>
+            认证密钥AK
+            默认值：16字节0x00
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.GUEK">
+            <summary>
+            Global unicast key
+            默认值：16字节0x00
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.GBEK">
+            <summary>
+            Global broadcast key
+            默认值：16字节0x00
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.MK">
+            <summary>
+            Mater key
+            默认值：16字节0x00
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Responding_AP_title">
+            <summary>
+            服务端的System title，8字节
+            默认值：0x48,0x58,0x45,0x03,0x00,0x00,0x00,0x01
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Responding_Authentication_Value">
+            <summary>
+            HLS时随机数的值（服务端返回值）
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.negotiated_quality_of_service">
+            <summary>
+            此项在COSEM的面向连接的3层环境中不使用
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.negotiated_dlms_version_number">
+            <summary>
+            协商后的DLMS版本号，目前为6
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.negotiated_conformance">
+            <summary>
+            协商后的表计提供的服务
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.server_max_receive_pdu_size">
+            <summary>
+            服务端应用层数据单元最大接收字节
+            默认值：65535
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.vaa_name">
+            <summary>
+            本次应用层链接采用的引用机制，逻辑名引用机制：0x0007；短名引用机制：0xFA00
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.CipheringService">
+            <summary>
+            加密服务类型
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.CipheringService_During_AA_Establish">
+            <summary>
+            加密服务类型(AA建立过程期间)
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.SecurityControl">
+            <summary>
+            信息域安全控制字
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.SecurityControl_During_AA_Establish">
+            <summary>
+            信息域安全控制字(AA建立过程期间)
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Priority">
+            <summary>
+            Invoke_id_and priority中的Priority
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.ServiceClass">
+            <summary>
+            Invoke_id_and priority中的ServiceClass
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.InvokeID">
+            <summary>
+            Invoke_id_and priority中的Invoke Id
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.DefaultFrameCounterType">
+            <summary>
+            Frame counter是否默认计算类型
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.FrameCounterSource">
+            <summary>
+            Frame counter起始值方式
+            ManualSetting方式时，在FrameCounter中设定起始值
+            ReadFromDevice方式时，在FrameCounterObject中设定OBIS对象
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.FrameCounter">
+            <summary>
+            Frame counter
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.FrameCounterObject">
+            <summary>
+            FrameCounter的OBIS对象（FrameCounterSource = ReadFromDevice时，此项必填）
+            
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.FrameCounterClient">
+            <summary>
+             FrameCounter的客户端（FrameCounterSource = ReadFromDevice时，此项必填）
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Response_time_out">
+            <summary>
+            响应超时时间（单位：毫秒）
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.IsAAReleaseEnabled">
+            <summary>
+            应用层断开使能（部分老固件不支持应用层断开）
+            默认值：true
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.LastBlockFlag">
+            <summary>
+            分包时最后一包的标志位（部分老固件应用层分包的标志位时0xFF,可选0x01或0xFF）
+            默认值：0x01
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.PreEst">
+            <summary>
+            预连接客户端使能
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.ConfirmedAAs">
+            <summary>
+            面向确认的连接使能
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Is_During_AA_Establish">
+            <summary>
+            AA建立过程中
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.Is_During_AA_Establish_Authentication">
+            <summary>
+            身份认证过程中
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.DLMSContext.GBTWindow">
+            <summary>
+            GBT Window大小
+            默认值：1
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_128.AESGCMEncrypt(System.Byte[],System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            AES-GCM-128加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <param name="K">Key</param>
+            <param name="IV">Nonce</param>
+            <param name="A">AssociatedText</param>
+            <returns>CipherText+16字节Tag（MAC）</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_128.AESGCMDecrypt(System.Byte[],System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            AES-GCM-128解密
+            </summary>
+            <param name="CT">CipherText密文+12字节Tag（MAC）</param>
+            <param name="K">Key</param>
+            <param name="IV">Nonce</param>
+            <param name="A">AssociatedText</param>
+            <returns>PlaintText</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_128.AESGCMEncrypt(System.Byte[],System.Byte[],System.Byte[],System.Byte[],System.Byte[]@)">
+            <summary>
+            AES-GCM-128加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <param name="K">Key</param>
+            <param name="IV">Nonce</param>
+            <param name="A">AssociatedText</param>
+            <param name="T">Tag,MAC</param>
+            <returns>CipherText</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_128.AESGCMDecrypt(System.Byte[],System.Byte[],System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            AES-GCM-128解密
+            </summary>
+            <param name="C">CipherText</param>
+            <param name="K">Key</param>
+            <param name="IV">Nonce</param>
+            <param name="A">AssociatedText</param>
+            <param name="T">12字节Tag,MAC</param>
+            <returns>Plaintext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_128.AESGCMEncrypt(System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            AES-GCM-128加密,密文不带Tag，无认证用AssociatedText
+            </summary>
+            <param name="P">明文</param>
+            <param name="K">Key</param>
+            <param name="IV">Nonce</param>
+            <returns>PlaintText</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_128.AESGCMDecrypt(System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            AES-GCM-128解密,密文不带Tag，无认证用AssociatedText
+            </summary>
+            <param name="C">CipherText密文</param>
+            <param name="K">Key</param>
+            <param name="IV">Nonce</param>
+            <returns>PlaintText</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_128.AESECBEncrypt(System.Byte[],System.Byte[])">
+            <summary>
+            AES-ECB-128加密
+            </summary>
+            <param name="P">PlaintText</param>
+            <param name="K">Key</param>
+            <returns>CipherText密文</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_128.AESECBDecrypt(System.Byte[],System.Byte[])">
+            <summary>
+            AES-ECB-128解密
+            </summary>
+            <param name="C">CipherText密文</param>
+            <param name="K">Key</param>
+            <returns>PlaintText</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.NativeMethods.EncryptE(System.Byte[],System.Byte[],System.Byte[],System.UInt32,System.Byte[]@)">
+            <summary>
+            加密（只加密）
+            </summary>
+            <param name="FC"></param>
+            <param name="SysT"></param>
+            <param name="P"></param>
+            <param name="EK"></param>
+            <param name="C"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.NativeMethods.EncryptAE(System.Byte[],System.Byte[],System.Byte[],System.Byte[],System.UInt32,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SecurityControlByte,System.Byte[],System.Byte[]@,System.Byte[]@)">
+            <summary>
+            AES_GCM_128加密（加密+认证）
+            </summary>
+            <param name="P"></param>
+            <param name="SysT"></param>
+            <param name="AK"></param>
+            <param name="EK"></param>
+            <param name="FC"></param>
+            <param name="C"></param>
+            <param name="tag"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.NativeMethods.DecryptAE(System.Byte[],System.Byte[],System.Byte[],System.Byte[],System.UInt32,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SecurityControlByte,System.Byte[],System.Byte[]@)">
+            <summary>
+            解密（解密+验证）
+            </summary>
+            <param name="FC"></param>
+            <param name="SysT"></param>
+            <param name="AK"></param>
+            <param name="C"></param>
+            <param name="EK"></param>
+            <param name="P"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.NativeMethods.AESGCM256_EncryptA(System.Byte[],System.Byte[],System.Byte[],System.Byte[],System.UInt32,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SecurityControlByte,System.Byte[],System.Byte[]@)">
+            <summary>
+            AES-GCM-256仅认证加密
+            </summary>
+            <param name="P">明文</param>
+            <param name="SysT"></param>
+            <param name="AK">32字节认证密钥</param>
+            <param name="EK">32字节加密密钥</param>
+            <param name="FC"></param>
+            <param name="SC"></param>
+            <param name="additional"></param>
+            <param name="tag"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.NativeMethods.AESGCM256_EncryptE(System.Byte[],System.Byte[],System.Byte[],System.UInt32,System.Byte[]@)">
+            <summary>
+            AES-GCM-256加密（只加密）
+            </summary>
+            <param name="FC"></param>
+            <param name="SysT"></param>
+            <param name="P"></param>
+            <param name="EK">32字节加密密钥</param>
+            <param name="C"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.NativeMethods.AESGCM256_EncryptAE(System.Byte[],System.Byte[],System.Byte[],System.Byte[],System.UInt32,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SecurityControlByte,System.Byte[],System.Byte[]@,System.Byte[]@)">
+            <summary>
+            AES-GCM-256加密（加密+认证）
+            </summary>
+            <param name="P"></param>
+            <param name="SysT"></param>
+            <param name="AK">32字节认证密钥</param>
+            <param name="EK">32字节加密密钥</param>
+            <param name="FC"></param>
+            <param name="C"></param>
+            <param name="tag"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.NativeMethods.AESGCM256_DecryptE(System.Byte[],System.Byte[],System.Byte[],System.UInt32,System.Byte[]@)">
+            <summary>
+            AES-GCM-256解密（只解密）
+            </summary>
+            <param name="C"></param>
+            <param name="SysT"></param>
+            <param name="EK">32字节加密密钥</param>
+            <param name="FC"></param>
+            <param name="P"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.NativeMethods.AESGCM256_DecryptAE(System.Byte[],System.Byte[],System.Byte[],System.Byte[],System.UInt32,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SecurityControlByte,System.Byte[],System.Byte[]@)">
+            <summary>
+            AES-GCM-256解密（解密+验证）
+            </summary>
+            <param name="FC"></param>
+            <param name="SysT"></param>
+            <param name="AK">32字节认证密钥</param>
+            <param name="C"></param>
+            <param name="EK">32字节加密密钥</param>
+            <param name="P"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_GCM_128_Helper.Encrypt(System.Byte[],Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SecurityControlByte,System.Byte[],System.UInt32,System.Byte[],System.Byte[],System.Byte[],System.Byte[]@)">
+            <summary>
+            GCM128加密                                       
+            A:   C0 01 C1 00 03 01 00 01 08 00 FF 02 00  =>  1E 10 00 00 00 03 C0 01 C1 00 03 01 00 01 08 00 FF 02 00 13 0F AA 2E 11 9E 29 8F 19 35 AE 27 
+            E:   C0 01 C1 00 03 01 00 01 08 00 FF 02 00  =>  1E 20 00 00 00 03 C9 52 F6 66 F0 B0 2F B3 B1 62 99 74 1F
+            A+E：C0 01 C1 00 03 01 00 01 08 00 FF 02 00  =>  1E 30 00 00 00 03 C9 52 F6 66 F0 B0 2F B3 B1 62 99 74 1F 13 0F AA 2E 11 9E 29 8F 19 35 AE 27 
+            </summary>
+            <param name="P"></param>
+            <param name="SC"></param>
+            <param name="SysT"></param>
+            <param name="FC"></param>
+            <param name="AK"></param>
+            <param name="EK"></param>
+            <param name="C"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AES_GCM_128_Helper.Decrypt(System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[],System.Byte[],System.Byte[],Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SecurityControlByte@,System.UInt32@,System.Byte[]@)">
+            <summary>
+              GCM128解密
+            A:   1E 10 00 00 00 03 C0 01 C1 00 03 01 00 01 08 00 FF 02 00 13 0F AA 2E 11 9E 29 8F 19 35 AE 27  =>  C0 01 C1 00 03 01 00 01 08 00 FF 02 00  + FC
+            E:   1E 20 00 00 00 03 C9 52 F6 66 F0 B0 2F B3 B1 62 99 74 1F                                      =>  C0 01 C1 00 03 01 00 01 08 00 FF 02 00  + FC
+            A+E：1E 30 00 00 00 03 C9 52 F6 66 F0 B0 2F B3 B1 62 99 74 1F 13 0F AA 2E 11 9E 29 8F 19 35 AE 27  =>  C0 01 C1 00 03 01 00 01 08 00 FF 02 00  + FC
+            </summary>
+            <param name="cipherText"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+            <param name="SC"></param>
+            <param name="SysT"></param>
+            <param name="AK"></param>
+            <param name="EK"></param>
+            <param name="FC"></param>
+            <param name="plainText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.CipheringHelper.Agreed_Key_Encrypt_1e1s(System.String,System.String,System.String,System.String,System.String@,System.String@,System.Byte[]@)">
+            <summary>
+            密钥协商加密(1e,1s)
+            </summary>
+            <param name="privateKeyCECDSA"></param>
+            <param name="publicKeySECDH"></param>
+            <param name="systemTitleC"></param>
+            <param name="systemTitleS"></param>
+            <param name="EK"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.CipheringHelper.Agreed_Key_Encrypt_0e2s(System.String,System.String,System.String,System.String,System.Byte[]@)">
+            <summary>
+            密钥协商加密(0e,2s)
+            </summary>
+            <param name="privateKeyCECDH"></param>
+            <param name="publicKeySECDH"></param>
+            <param name="systemTitleC"></param>
+            <param name="systemTitleS"></param>
+            <param name="EK"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ECDSA.ECDSAP256Sha256(System.String,System.String,System.String)">
+            <summary>
+            临时公钥生成的数字签名
+            </summary>
+            <param name="privateKey">私钥</param>
+            <param name="secureRandom">32字节随机数</param>
+            <param name="Sha256Hash">临时公钥Hash值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ECDSA.VerifySignatureP256(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            校验数字签名
+            </summary>
+            <param name="pPublicKeyX">公钥X值</param>
+            <param name="pPublicKeyY">公钥Y值</param>
+            <param name="pMessageHash">临时公钥hash值</param>
+            <param name="pSignatureX">签名X值</param>
+            <param name="pSignatureY">签名Y值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ECDSA.GBCSECDHP256(System.String,System.String)">
+            <summary>
+            临时私钥与密钥协商的静态公钥，协商出共享密钥z
+            </summary>
+            <param name="EphemeralAgreementPriKey">临时私钥</param>
+            <param name="StaticAgreementPubKey">密钥协商的静态公钥</param>
+            <returns>共享密钥</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ECDSA.GenEphemeralKeyPairP256(System.String@,System.String@,System.String@)">
+            <summary>
+            生成临时密钥对
+            </summary>
+            <param name="pPrivateKey">私钥</param>
+            <param name="pPublicKeyX">公钥X值</param>
+            <param name="pPublicKeyY">公钥Y值</param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ECDSA.ECDSAP384Sha384(System.String,System.String,System.String)">
+            <summary>
+            临时公钥生成的数字签名
+            </summary>
+            <param name="privateKey">私钥</param>
+            <param name="secureRandom">48字节随机数</param>
+            <param name="Sha384Hash">临时公钥Hash值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ECDSA.VerifySignatureP384(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            校验数字签名
+            </summary>
+            <param name="pPublicKeyX">公钥X值</param>
+            <param name="pPublicKeyY">公钥Y值</param>
+            <param name="pMessageHash">临时公钥hash值</param>
+            <param name="pSignatureX">签名X值</param>
+            <param name="pSignatureY">签名Y值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ECDSA.GBCSECDHP384(System.String,System.String)">
+            <summary>
+            临时私钥与密钥协商的静态公钥，协商出共享密钥z
+            </summary>
+            <param name="EphemeralAgreementPriKey">临时私钥</param>
+            <param name="StaticAgreementPubKey">密钥协商的静态公钥</param>
+            <returns>共享密钥</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ECDSA.GenEphemeralKeyPairP384(System.String@,System.String@,System.String@)">
+            <summary>
+            生成临时密钥对
+            </summary>
+            <param name="pPrivateKey">私钥</param>
+            <param name="pPublicKeyX">公钥X值</param>
+            <param name="pPublicKeyY">公钥Y值</param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MD5.MD5Encrypt(System.Byte[],System.Byte[])">
+            <summary>
+            MD5加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <param name="K">Key</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.MD5.MD5Encrypt(System.Byte[])">
+            <summary>
+            MD5加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SecureRandomHelper.GenSecureRandom(System.Int32)">
+            <summary>
+            获取指定字节数长度的字符串安全随机数
+            </summary>
+            <param name="length">字节数</param>
+            <returns>由数字和A-F组成</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA1Encrypt(System.Byte[],System.Byte[])">
+            <summary>
+            SHA-1加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <param name="K">Key</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA1Encrypt(System.Byte[])">
+            <summary>
+            SHA-1加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA1Encrypt(System.String)">
+            <summary>
+            SHA-1加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA224Encrypt(System.Byte[],System.Byte[])">
+            <summary>
+            SHA-224加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <param name="K">Key</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA224Encrypt(System.Byte[])">
+            <summary>
+            SHA-224加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA224Encrypt(System.String)">
+            <summary>
+            SHA-224加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA256Encrypt(System.Byte[],System.Byte[])">
+            <summary>
+            SHA-256加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <param name="K">Key</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA256Encrypt(System.Byte[])">
+            <summary>
+            SHA-256加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA256Encrypt(System.String)">
+            <summary>
+            SHA-256加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA384Encrypt(System.Byte[],System.Byte[])">
+            <summary>
+            SHA-384加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <param name="K">Key</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA384Encrypt(System.Byte[])">
+            <summary>
+            SHA-384加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA384Encrypt(System.String)">
+            <summary>
+            SHA-384加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA512Encrypt(System.Byte[],System.Byte[])">
+            <summary>
+            SHA-512加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <param name="K">Key</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA512Encrypt(System.Byte[])">
+            <summary>
+            SHA-512加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.SHA.SHA512Encrypt(System.String)">
+            <summary>
+            SHA-512加密
+            </summary>
+            <param name="P">Plaintext</param>
+            <returns>Ciphertext</returns>
+        </member>
+        <member name="T:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificGloCipheringParameters">
+            <summary>
+            加密参数
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificGloCipheringParameters.SC">
+            <summary>
+            Security control byte
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificGloCipheringParameters.SystemTitle">
+            <summary>
+            System Title 
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificGloCipheringParameters.AK">
+            <summary>
+            Authenticated key(16 bytes)
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificGloCipheringParameters.EK">
+            <summary>
+            Global unicast key 
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificGloCipheringParameters.FC">
+            <summary>
+            Frame counter
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificDedCipheringParameters.SC">
+            <summary>
+            Security control byte
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificDedCipheringParameters.SystemTitle">
+            <summary>
+            System Title 
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificDedCipheringParameters.AK">
+            <summary>
+            Authenticated key(16 bytes)
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificDedCipheringParameters.DK">
+            <summary>
+            Dedicated key 
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.ServiceSpecificDedCipheringParameters.FC">
+            <summary>
+            Frame counter
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.SC">
+            <summary>
+            Security control byte
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.SystemTitleC">
+            <summary>
+            System Title for client
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.SystemTitleS">
+            <summary>
+            System Title for server
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.AK">
+            <summary>
+            Authenticated key(16 bytes)
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.EK">
+            <summary>
+            Global unicast key 
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.DK">
+            <summary>
+            Dedicated key(16 bytes)
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.MK">
+            <summary>
+            Master key
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.FC">
+            <summary>
+            Frame counter(4 bytes)
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.PublicKeySECDSA">
+            <summary>
+            表计签名公钥
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.PublicKeySECDH">
+            <summary>
+            表计密钥协商公钥
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.PublicKeyCECDSA">
+            <summary>
+            客户端签名公钥
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.PrivateKeyCECDSA">
+            <summary>
+            客户端签名私钥
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.PublicKeyCECDH">
+            <summary>
+            客户端密钥协商公钥
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.GeneralCipheringParameters.PrivateKeyCECDH">
+            <summary>
+            客户端密钥协商私钥
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.HDLC.SendAndTryReceive(System.Byte[],System.Byte[]@,System.Boolean,System.Boolean)">
+            <summary>
+            发送（HDLC完整过程）
+            </summary>
+            <param name="channel"></param>
+            <param name="requestMPDUs"></param>
+            <param name="responseMPDUs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.HDLC.SendAndTryReceive(Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame@)">
+            <summary>
+            发送（支持重发控制）
+            </summary>
+            <param name="channel"></param>
+            <param name="sendFrame"></param>
+            <param name="receiveFrame"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.HDLCFrameType">
+            <summary>
+            帧类型
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.OpeningFlag">
+            <summary>
+            起始标志位
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.FormatField">
+            <summary>
+            帧格式
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.DestAddress">
+            <summary>
+            目标地址
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.SrcAddress">
+            <summary>
+            源地址
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.ControlField">
+            <summary>
+            控制域
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.HCS">
+            <summary>
+            帧头校验码
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.Information">
+            <summary>
+            信息域
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.FCS">
+            <summary>
+            帧尾校验码
+            </summary>
+        </member>
+        <member name="P:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.HDLC.IHDLCFrame.ClosingFlag">
+            <summary>
+            帧结束标志位
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.Success">
+            <summary>
+            成功
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.Cancel">
+            <summary>
+            操作取消
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.UnknowError">
+            <summary>
+            未知错误
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DataLink_Response_TimeOut">
+            <summary>
+            链路层接收超时
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DataLink_Maximum_number_of_retries">
+            <summary>
+            链路层发送失败次数超限
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DataLink_Response_UnexpectedFrameType">
+            <summary>
+            链路层接收到非预期报文类型
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DataLink_Response_FrameFormat_Error">
+            <summary>
+            链路层接收报文格式错误
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DataLink_NOT_Available">
+            <summary>
+            链路层接收报文格式错误
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DLMS_Response_TimeOut">
+            <summary>
+            DLMS应用层返回超时
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DLMS_Response_UnexpectedAPDU">
+            <summary>
+            DLMS应用层接收到非预期报文类型
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DLMS_APDU_Length_Error">
+            <summary>
+            DLMS应用层APDU长度大于协商长度
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DLMS_NOTSupport_CipheringService">
+            <summary>
+            DLMS应用层其他错误
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DLMS_AES_GCM_DECRYPT_FAILED">
+            <summary>
+            GCM解密失败
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DLMS_rejected_permanent">
+            <summary>
+            DLMS应用层握手失败
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DLMS_rejected_transient">
+            <summary>
+            DLMS应用层握手失败
+            </summary>
+        </member>
+        <member name="F:Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.Utilities.ErrorCode.DLMS_Authentication_Failed">
+            <summary>
+            DLMS应用层身份认证失败
+            </summary>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.Open(System.String,System.Byte)">
+            <summary>
+            建立与指定的设备的连接
+            包含建立物理层连接、链路层/传输层连接，应用层连接
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="client"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.OpenSupportLayer(System.String,System.Byte)">
+            <summary>
+            建立指定设备的链路层/传输层连接
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="client"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.OpenApplicationLayer(System.String)">
+            <summary>
+            建立指定设备的应用层连接
+            </summary>
+            <param name="deviceDriverID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.Close(System.String)">
+            <summary>
+            断开指定设备的连接
+            </summary>
+            <param name="deviceDriverID"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.CloseSupportLayer(System.String)">
+            <summary>
+            断开指定设备的链路层/传输层连接
+            </summary>
+            <param name="deviceDriverID"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.CloseApplicationLayer(System.String)">
+            <summary>
+            断开指定设备的应用层连接
+            </summary>
+            <param name="deviceDriverID"></param>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.Get(System.String,System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result}@)">
+            <summary>
+            发起Get服务，由协商结果决定使用具体的Get服务类型
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="attributes"></param>
+            <param name="getDataResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.GetRequestNormal(System.String,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result@)">
+            <summary>
+            发起GetRequestNormal服务
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="attribute"></param>
+            <param name="getDataResult"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.GetRequestWithList(System.String,System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Get_Data_Result}@)">
+            <summary>
+            发起GetRequestWithList服务
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="attributes"></param>
+            <param name="getDataResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.Set(System.String,System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result}@)">
+            <summary>
+            发起Set服务，由协商结果决定使用具体的Set服务类型
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="attributes"></param>
+            <param name="values"></param>
+            <param name="dataAccessResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.SetRequestNormal(System.String,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection,System.Byte[],Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result@)">
+            <summary>
+            发起SetRequestNormal服务
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="attribute"></param>
+            <param name="value"></param>
+            <param name="dataAccessResult"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.SetRequestWithList(System.String,System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Cosem_Attribute_Descriptor_With_Selection},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Data_Access_Result}@)">
+            <summary>
+            发起SetRequestWithList服务
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="attributes"></param>
+            <param name="values"></param>
+            <param name="dataAccessResults"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.Action(System.String,System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data}@)">
+            <summary>
+            发起Action服务，由协商结果决定使用具体的Action服务类型
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="methods"></param>
+            <param name="parameters"></param>
+            <param name="actionResponses"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.ActionRequestNormal(System.String,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor,System.Byte[],Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data@,System.Boolean)">
+            <summary>
+            发起ActionRequestNormal服务
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="method"></param>
+            <param name="parameter"></param>
+            <param name="actionResponse"></param>
+            <param name="isFraming"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.ActionRequestWithList(System.String,System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Method_Descriptor},System.Collections.Generic.List{System.Byte[]},System.Collections.Generic.List{Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.Action_Response_With_Optional_Data}@)">
+            <summary>
+            发起ActionRequestWithList服务
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="methods"></param>
+            <param name="parameters"></param>
+            <param name="actionResponses"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.Access(System.String,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AccessRequestBody,Hex.HexView.ProtocolStack.DLMS.DeviceDriver.Protocol.COSEM.AccessResponseBody@)">
+            <summary>
+            发起Access服务
+            </summary>
+            <param name="deviceDriverID"></param>
+            <param name="requestBody"></param>
+            <param name="responseBody"></param>
+            <returns></returns>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.OnSupportLayerSent">
+            <summary>
+            链路层/传输层报文发送事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.OnSupportLayerReceived">
+            <summary>
+            链路层/传输层报文接收事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.OnDLMSSent">
+            <summary>
+            应用层报文发送事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.OnDLMSReceived">
+            <summary>
+            应用层报文接收事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.OnDeviceLogon">
+            <summary>
+            设备登录事件
+            </summary>
+        </member>
+        <member name="E:Hex.HexView.ProtocolStack.DLMS.ProtocolStack.DLMSProtocolStack.OnDeviceLogout">
+            <summary>
+            设备退出登录事件
+            </summary>
+        </member>
+    </members>
+</doc>

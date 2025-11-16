@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+<ArrayOfWeek_profile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <week_profile>
+    <Pdu_Str />
+    <Pdu_Data_Type>null_data</Pdu_Data_Type>
+    <Att_Class>
+      <Selected>false</Selected>
+      <Att_Descriptor_List />
+      <Meth_Descriptor_List />
+      <Att_Value />
+      <InstanceID />
+      <Class_id>0</Class_id>
+      <EleCount>8</EleCount>
+      <IsStructure>true</IsStructure>
+      <DataType>null_data</DataType>
+      <Universal>None</Universal>
+    </Att_Class>
+    <week_profile_name>
+      <Pdu_Str>1</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>31</Pdu_value>
+    </week_profile_name>
+    <sunday>
+      <Pdu_Str>1</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>01</Pdu_value>
+    </sunday>
+    <monday>
+      <Pdu_Str>2</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>02</Pdu_value>
+    </monday>
+    <tuesday>
+      <Pdu_Str>3</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>03</Pdu_value>
+    </tuesday>
+    <wednesday>
+      <Pdu_Str>4</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>04</Pdu_value>
+    </wednesday>
+    <thursday>
+      <Pdu_Str>5</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>05</Pdu_value>
+    </thursday>
+    <friday>
+      <Pdu_Str>6</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>06</Pdu_value>
+    </friday>
+    <saturday>
+      <Pdu_Str>7</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>07</Pdu_value>
+    </saturday>
+  </week_profile>
+  <week_profile>
+    <Pdu_Str />
+    <Pdu_Data_Type>null_data</Pdu_Data_Type>
+    <Att_Class>
+      <Selected>false</Selected>
+      <Att_Descriptor_List />
+      <Meth_Descriptor_List />
+      <Att_Value />
+      <InstanceID />
+      <Class_id>0</Class_id>
+      <EleCount>8</EleCount>
+      <IsStructure>true</IsStructure>
+      <DataType>null_data</DataType>
+      <Universal>None</Universal>
+    </Att_Class>
+    <week_profile_name>
+      <Pdu_Str>2</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>32</Pdu_value>
+    </week_profile_name>
+    <sunday>
+      <Pdu_Str>2</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>02</Pdu_value>
+    </sunday>
+    <monday>
+      <Pdu_Str>3</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>03</Pdu_value>
+    </monday>
+    <tuesday>
+      <Pdu_Str>4</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>04</Pdu_value>
+    </tuesday>
+    <wednesday>
+      <Pdu_Str>5</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>05</Pdu_value>
+    </wednesday>
+    <thursday>
+      <Pdu_Str>6</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>06</Pdu_value>
+    </thursday>
+    <friday>
+      <Pdu_Str>7</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>07</Pdu_value>
+    </friday>
+    <saturday>
+      <Pdu_Str>8</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>08</Pdu_value>
+    </saturday>
+  </week_profile>
+  <week_profile>
+    <Pdu_Str />
+    <Pdu_Data_Type>null_data</Pdu_Data_Type>
+    <Att_Class>
+      <Selected>false</Selected>
+      <Att_Descriptor_List />
+      <Meth_Descriptor_List />
+      <Att_Value />
+      <InstanceID />
+      <Class_id>0</Class_id>
+      <EleCount>8</EleCount>
+      <IsStructure>true</IsStructure>
+      <DataType>null_data</DataType>
+      <Universal>None</Universal>
+    </Att_Class>
+    <week_profile_name>
+      <Pdu_Str>3</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>33</Pdu_value>
+    </week_profile_name>
+    <sunday>
+      <Pdu_Str>3</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>03</Pdu_value>
+    </sunday>
+    <monday>
+      <Pdu_Str>4</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>04</Pdu_value>
+    </monday>
+    <tuesday>
+      <Pdu_Str>5</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>05</Pdu_value>
+    </tuesday>
+    <wednesday>
+      <Pdu_Str>6</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>06</Pdu_value>
+    </wednesday>
+    <thursday>
+      <Pdu_Str>7</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>07</Pdu_value>
+    </thursday>
+    <friday>
+      <Pdu_Str>8</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>08</Pdu_value>
+    </friday>
+    <saturday>
+      <Pdu_Str>1</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>01</Pdu_value>
+    </saturday>
+  </week_profile>
+  <week_profile>
+    <Pdu_Str />
+    <Pdu_Data_Type>null_data</Pdu_Data_Type>
+    <Att_Class>
+      <Selected>false</Selected>
+      <Att_Descriptor_List />
+      <Meth_Descriptor_List />
+      <Att_Value />
+      <InstanceID />
+      <Class_id>0</Class_id>
+      <EleCount>8</EleCount>
+      <IsStructure>true</IsStructure>
+      <DataType>null_data</DataType>
+      <Universal>None</Universal>
+    </Att_Class>
+    <week_profile_name>
+      <Pdu_Str>4</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>34</Pdu_value>
+    </week_profile_name>
+    <sunday>
+      <Pdu_Str>4</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>04</Pdu_value>
+    </sunday>
+    <monday>
+      <Pdu_Str>5</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>05</Pdu_value>
+    </monday>
+    <tuesday>
+      <Pdu_Str>6</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>06</Pdu_value>
+    </tuesday>
+    <wednesday>
+      <Pdu_Str>7</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>07</Pdu_value>
+    </wednesday>
+    <thursday>
+      <Pdu_Str>8</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>08</Pdu_value>
+    </thursday>
+    <friday>
+      <Pdu_Str>1</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>01</Pdu_value>
+    </friday>
+    <saturday>
+      <Pdu_Str>2</Pdu_Str>
+      <Pdu_Data_Type>null_data</Pdu_Data_Type>
+      <Pdu_value>02</Pdu_value>
+    </saturday>
+  </week_profile>
+</ArrayOfWeek_profile>

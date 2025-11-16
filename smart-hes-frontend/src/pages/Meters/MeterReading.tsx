@@ -191,6 +191,8 @@ export default function MeterReadingNew() {
 
     // Initialize reading values with pending status
     const newReadingValues = new Map<string, ReadingValue>();
+    const obisCodesWithMeta: Array<{ code: string; classId?: number; attributeId?: number; func: any }> = [];
+
     selectedParams.forEach(code => {
       const func = findFunctionByCode(code);
       if (func) {
@@ -201,68 +203,98 @@ export default function MeterReadingNew() {
           unit: func.unit,
           status: 'pending',
         });
+        obisCodesWithMeta.push({
+          code,
+          classId: func.classId,
+          attributeId: func.attributeId || 2,
+          func,
+        });
       }
     });
     setReadingValues(newReadingValues);
 
-    // Read parameters one by one (could be optimized with read-multiple)
-    const obisCodes = Array.from(selectedParams);
+    // Update all to reading status
+    setReadingValues(prev => {
+      const updated = new Map(prev);
+      prev.forEach((value, code) => {
+        updated.set(code, { ...value, status: 'reading' });
+      });
+      return updated;
+    });
 
-    for (const code of obisCodes) {
-      const func = findFunctionByCode(code);
-      if (!func) continue;
+    try {
+      // Use batch reading for better performance
+      const result = await dlmsService.readMultipleObis({
+        meterNumber: meterInfo.meterNumber,
+        obisCodes: obisCodesWithMeta.map(item => ({
+          code: item.code,
+          classId: item.classId,
+          attributeId: item.attributeId,
+        })),
+      });
 
-      // Update status to reading
+      // Update with successful values
       setReadingValues(prev => {
         const updated = new Map(prev);
-        const current = updated.get(code);
-        if (current) {
-          updated.set(code, { ...current, status: 'reading' });
+
+        // Process results (assuming result.data is an array or object of readings)
+        const readings = result.data?.readings || result.data || [];
+
+        if (Array.isArray(readings)) {
+          readings.forEach((reading: any, index: number) => {
+            const meta = obisCodesWithMeta[index];
+            if (meta) {
+              const current = updated.get(meta.code);
+              if (current) {
+                updated.set(meta.code, {
+                  ...current,
+                  value: reading?.value ?? reading,
+                  status: reading?.success !== false ? 'success' : 'error',
+                  timestamp: new Date(),
+                  error: reading?.error,
+                });
+              }
+            }
+          });
+        } else {
+          // If result is an object with OBIS codes as keys
+          Object.entries(readings).forEach(([code, value]: [string, any]) => {
+            const current = updated.get(code);
+            if (current) {
+              updated.set(code, {
+                ...current,
+                value: value?.value ?? value,
+                status: value?.success !== false ? 'success' : 'error',
+                timestamp: new Date(),
+                error: value?.error,
+              });
+            }
+          });
         }
+
         return updated;
       });
 
-      try {
-        const result = await dlmsService.readObis({
-          meterNumber: meterInfo.meterNumber,
-          obisCode: code,
-          classId: func.classId,
-          attributeId: func.attributeId || 2,
-        });
-
-        // Update with successful value
-        setReadingValues(prev => {
-          const updated = new Map(prev);
-          const current = updated.get(code);
-          if (current) {
+      toast.success('Batch reading complete');
+    } catch (error: any) {
+      // On batch error, mark all as error
+      setReadingValues(prev => {
+        const updated = new Map(prev);
+        prev.forEach((value, code) => {
+          if (value.status === 'reading') {
             updated.set(code, {
-              ...current,
-              value: result.data?.value ?? result.data,
-              status: 'success',
-              timestamp: new Date(),
-            });
-          }
-          return updated;
-        });
-      } catch (error: any) {
-        // Update with error
-        setReadingValues(prev => {
-          const updated = new Map(prev);
-          const current = updated.get(code);
-          if (current) {
-            updated.set(code, {
-              ...current,
+              ...value,
               status: 'error',
-              error: error.message || 'Failed to read',
+              error: error.message || 'Batch read failed',
             });
           }
-          return updated;
         });
-      }
+        return updated;
+      });
+      toast.error('Batch reading failed: ' + error.message);
+    } finally {
+      setReadingInProgress(false);
     }
-
-    setReadingInProgress(false);
-    toast.success('Reading complete');
   };
 
   const findFunctionByCode = (code: string): ObisFunction | null => {

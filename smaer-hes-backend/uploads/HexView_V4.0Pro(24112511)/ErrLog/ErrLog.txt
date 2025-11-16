@@ -1,0 +1,22 @@
+An exception has occurred that the application did not handle:9/1/2025 4:02:05 PM
+Exception type:ConfigurationErrorsException
+Exception message:An error occurred creating the configuration section handler for system.data: Column 'InvariantName' is constrained to be unique.  Value 'System.Data.SQLite' is already present. (D:\HexView_V4.0Pro(24112511)\Framework.exe.Config line 9)
+Exception information:   at System.Configuration.BaseConfigurationRecord.EvaluateOne(String[] keys, SectionInput input, Boolean isTrusted, FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult)
+   at System.Configuration.BaseConfigurationRecord.Evaluate(FactoryRecord factoryRecord, SectionRecord sectionRecord, Object parentResult, Boolean getLkg, Boolean getRuntimeObject, Object& result, Object& resultRuntimeObject)
+   at System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+   at System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+   at System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object& result, Object& resultRuntimeObject)
+   at System.Configuration.BaseConfigurationRecord.GetSection(String configKey)
+   at System.Configuration.ClientConfigurationSystem.System.Configuration.Internal.IInternalConfigSystem.GetSection(String sectionName)
+   at System.Configuration.ConfigurationManager.GetSection(String sectionName)
+   at System.Configuration.PrivilegedConfigurationManager.GetSection(String sectionName)
+   at System.Data.Common.DbProviderFactories.Initialize()
+   at System.Data.Common.DbProviderFactories.GetFactory(String providerInvariantName)
+   at Hex.HexView.DBUtility.DbHelper.CreateConnection()
+   at Hex.Framework.DAL.SystemParameterDAO..ctor()
+   at Hex.Framework.BLL.SystemParameterBLL..ctor()
+   at Hex.Framework.UI.MainForm.IniSystemParameter()
+   at Hex.Framework.UI.MainForm..ctor()
+   at Hex.Framework.Program.Main()
+
+---------------------------------------------------------
