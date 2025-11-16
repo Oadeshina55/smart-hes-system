@@ -334,10 +334,10 @@ const FirmwareManagement: React.FC = () => {
                     <Grid container spacing={2}>
                       <Grid item xs={12} md={6}>
                         <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                          {upgrade.meter.meterNumber}
+                          {upgrade.meter?.meterNumber || 'N/A'}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
-                          {upgrade.meter.brand} {upgrade.meter.model}
+                          {upgrade.meter?.brand || 'N/A'} {upgrade.meter?.model || ''}
                         </Typography>
                         <Typography variant="body2" sx={{ mt: 1 }}>
                           {upgrade.firmware.currentVersion} → {upgrade.firmware.targetVersion}
@@ -404,10 +404,10 @@ const FirmwareManagement: React.FC = () => {
                     <TableRow key={upgrade._id} hover>
                       <TableCell>
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {upgrade.meter.meterNumber}
+                          {upgrade.meter?.meterNumber || 'N/A'}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
-                          {upgrade.meter.brand} {upgrade.meter.model}
+                          {upgrade.meter?.brand || 'N/A'} {upgrade.meter?.model || ''}
                         </Typography>
                       </TableCell>
                       <TableCell>
@@ -561,7 +561,7 @@ const FirmwareManagement: React.FC = () => {
         {selectedUpgrade && (
           <>
             <DialogTitle>
-              Firmware Upgrade Details - {selectedUpgrade.meter.meterNumber}
+              Firmware Upgrade Details - {selectedUpgrade.meter?.meterNumber || 'N/A'}
             </DialogTitle>
             <DialogContent dividers>
               <Grid container spacing={2}>

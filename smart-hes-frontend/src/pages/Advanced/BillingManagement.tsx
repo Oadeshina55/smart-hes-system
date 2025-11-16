@@ -231,7 +231,7 @@ const BillingManagement: React.FC = () => {
             <div class="invoice-details">
               <p><strong>Customer:</strong> ${billing.customer.customerName}</p>
               <p><strong>Account Number:</strong> ${billing.customer.accountNumber}</p>
-              <p><strong>Meter Number:</strong> ${billing.meter.meterNumber}</p>
+              <p><strong>Meter Number:</strong> ${billing.meter?.meterNumber || 'N/A'}</p>
               <p><strong>Billing Period:</strong> ${format(new Date(billing.billingPeriod.startDate), 'PPP')} - ${format(new Date(billing.billingPeriod.endDate), 'PPP')}</p>
               <p><strong>Invoice Date:</strong> ${billing.billedDate ? format(new Date(billing.billedDate), 'PPP') : 'N/A'}</p>
               <p><strong>Due Date:</strong> ${billing.dueDate ? format(new Date(billing.dueDate), 'PPP') : 'N/A'}</p>
@@ -546,7 +546,7 @@ const BillingManagement: React.FC = () => {
                         {billing.customer.accountNumber}
                       </Typography>
                     </TableCell>
-                    <TableCell>{billing.meter.meterNumber}</TableCell>
+                    <TableCell>{billing.meter?.meterNumber || 'N/A'}</TableCell>
                     <TableCell>
                       {billing.energyConsumption.netConsumption.toFixed(2)} kWh
                     </TableCell>
