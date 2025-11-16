@@ -1,638 +1,509 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Typography,
   Grid,
   TextField,
-  Paper,
-  Chip,
-  IconButton,
-  CircularProgress,
-  Alert,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  Button,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
   Checkbox,
+  Paper,
+  IconButton,
+  Chip,
+  Stack,
+  Alert,
+  CircularProgress,
+  Tooltip,
   Divider,
-  Tabs,
-  Tab,
 } from '@mui/material';
 import {
-  Search,
-  Refresh,
-  Download,
-  ExpandMore,
-  FlashOn,
-  BatteryChargingFull,
-  Speed,
-  Info,
-  PowerSettingsNew,
-  CloudUpload,
+  Search as SearchIcon,
+  Refresh as RefreshIcon,
+  Download as DownloadIcon,
+  Print as PrintIcon,
+  Info as InfoIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { CSVLink } from 'react-csv';
-import { obisService, ObisFunction, ParameterCategory } from '../../services/obis.service';
-import { dlmsService } from '../../services/dlms.service';
+import { format } from 'date-fns';
+import { getOBISByCategory, getOBISDescription, getOBISUnit, type OBISCategory } from '../../utils/obis-codes';
+import { exportToCSV, printElement } from '../../utils/exportUtils';
 
-interface MeterInfo {
+interface Meter {
   _id: string;
   meterNumber: string;
-  brand: 'hexing' | 'hexcell';
+  brand: string;
   model: string;
-  meterType: string;
-  area?: any;
-  customer?: any;
-  ipAddress?: string;
-  port?: number;
-  communicationStatus?: string;
-  status?: string;
+  area: {
+    name: string;
+    code: string;
+  };
+  customer?: {
+    customerName: string;
+    accountNumber: string;
+  };
+  status: string;
+  lastSeen?: string;
 }
 
-interface ReadingValue {
+interface ReadingResult {
   obisCode: string;
   name: string;
   value: any;
   unit?: string;
-  timestamp?: Date;
-  status: 'pending' | 'reading' | 'success' | 'error';
-  error?: string;
+  timestamp: Date;
+  selected: boolean;
 }
 
-export default function MeterReadingNew() {
-  const [searchValue, setSearchValue] = useState('');
-  const [meterInfo, setMeterInfo] = useState<MeterInfo | null>(null);
-  const [categories, setCategories] = useState<ParameterCategory[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [readingValues, setReadingValues] = useState<Map<string, ReadingValue>>(new Map());
-  const [selectedParams, setSelectedParams] = useState<Set<string>>(new Set());
+const MeterReading: React.FC = () => {
+  const [meterNumber, setMeterNumber] = useState('');
+  const [meter, setMeter] = useState<Meter | null>(null);
   const [loading, setLoading] = useState(false);
-  const [readingInProgress, setReadingInProgress] = useState(false);
+  const [readingResults, setReadingResults] = useState<ReadingResult[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [reading, setReading] = useState(false);
 
-  // Load OBIS categories when meter is selected
-  useEffect(() => {
-    if (meterInfo) {
-      loadOBISCategories();
-    }
-  }, [meterInfo]);
+  const categories: OBISCategory[] = [
+    'Information',
+    'Clock',
+    'Energy',
+    'Demand',
+    'Instantaneous',
+    'Status',
+    'Event Counter',
+    'Prepayment',
+    'Relay',
+    'Tariff Data',
+  ];
 
-  const loadOBISCategories = async () => {
-    if (!meterInfo) return;
-
-    setLoading(true);
-    try {
-      const cats = await obisService.getCategorizedParameters(meterInfo.brand);
-      setCategories(cats);
-
-      // Select first category by default
-      if (cats.length > 0) {
-        setSelectedCategory(cats[0].category);
-      }
-    } catch (error) {
-      console.error('Failed to load OBIS categories:', error);
-      toast.error('Failed to load parameter categories');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchMeterData = async (meterQuery: string) => {
-    if (!meterQuery) {
+  const searchMeter = async () => {
+    if (!meterNumber.trim()) {
       toast.error('Please enter a meter number');
       return;
     }
 
     setLoading(true);
     try {
-      // Fetch meter details
-      const meterResp = await axios.get(`/api/meters?search=${encodeURIComponent(meterQuery)}`);
-      const meter = meterResp.data.data?.[0];
-
-      if (!meter) {
-        toast.error('Meter not found');
-        setLoading(false);
-        return;
-      }
-
-      // Set meter info
-      setMeterInfo({
-        _id: meter._id,
-        meterNumber: meter.meterNumber || '',
-        brand: meter.brand || 'hexing',
-        model: meter.model || 'Unknown',
-        meterType: meter.meterType || 'Unknown',
-        area: meter.area,
-        customer: meter.customer,
-        ipAddress: meter.ipAddress,
-        port: meter.port,
-        communicationStatus: meter.communicationStatus,
-        status: meter.status,
+      const response = await axios.get(`/meters`, {
+        params: { search: meterNumber }
       });
 
-      toast.success('Meter data loaded');
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to fetch meter data');
+      const meters = response.data.data;
+      if (meters && meters.length > 0) {
+        const foundMeter = meters.find((m: Meter) =>
+          m.meterNumber.toUpperCase() === meterNumber.toUpperCase()
+        ) || meters[0];
+
+        setMeter(foundMeter);
+        toast.success('Meter found');
+      } else {
+        toast.error('Meter not found');
+        setMeter(null);
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to search meter');
+      setMeter(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSearch = () => {
-    fetchMeterData(searchValue);
-  };
-
-  const toggleParameter = (obisCode: string) => {
-    const newSelected = new Set(selectedParams);
-    if (newSelected.has(obisCode)) {
-      newSelected.delete(obisCode);
-    } else {
-      newSelected.add(obisCode);
-    }
-    setSelectedParams(newSelected);
-  };
-
-  const toggleAllInCategory = (category: ParameterCategory) => {
-    const allCodes = category.subcategories.flatMap(sub =>
-      sub.parameters.map(p => p.code)
-    );
-
-    const allSelected = allCodes.every(code => selectedParams.has(code));
-    const newSelected = new Set(selectedParams);
-
-    if (allSelected) {
-      allCodes.forEach(code => newSelected.delete(code));
-    } else {
-      allCodes.forEach(code => newSelected.add(code));
-    }
-
-    setSelectedParams(newSelected);
-  };
-
-  const readSelectedParameters = async () => {
-    if (!meterInfo) {
-      toast.error('Please select a meter first');
+  const readCategory = async (category: OBISCategory) => {
+    if (!meter) {
+      toast.error('Please search for a meter first');
       return;
     }
 
-    if (selectedParams.size === 0) {
-      toast.error('Please select at least one parameter to read');
-      return;
-    }
-
-    setReadingInProgress(true);
-
-    // Initialize reading values with pending status
-    const newReadingValues = new Map<string, ReadingValue>();
-    const obisCodesWithMeta: Array<{ code: string; classId?: number; attributeId?: number; func: any }> = [];
-
-    selectedParams.forEach(code => {
-      const func = findFunctionByCode(code);
-      if (func) {
-        newReadingValues.set(code, {
-          obisCode: code,
-          name: extractParameterName(func.description),
-          value: null,
-          unit: func.unit,
-          status: 'pending',
-        });
-        obisCodesWithMeta.push({
-          code,
-          classId: func.classId,
-          attributeId: func.attributeId || 2,
-          func,
-        });
-      }
-    });
-    setReadingValues(newReadingValues);
-
-    // Update all to reading status
-    setReadingValues(prev => {
-      const updated = new Map(prev);
-      prev.forEach((value, code) => {
-        updated.set(code, { ...value, status: 'reading' });
-      });
-      return updated;
-    });
+    setSelectedCategory(category);
+    setReading(true);
 
     try {
-      // Use batch reading for better performance
-      const result = await dlmsService.readMultipleObis({
-        meterNumber: meterInfo.meterNumber,
-        obisCodes: obisCodesWithMeta.map(item => ({
-          code: item.code,
-          classId: item.classId,
-          attributeId: item.attributeId,
-        })),
-      });
+      const obisCodes = getOBISByCategory(category);
+      const results: ReadingResult[] = [];
 
-      // Update with successful values
-      setReadingValues(prev => {
-        const updated = new Map(prev);
-
-        // Process results (assuming result.data is an array or object of readings)
-        const readings = result.data?.readings || result.data || [];
-
-        if (Array.isArray(readings)) {
-          readings.forEach((reading: any, index: number) => {
-            const meta = obisCodesWithMeta[index];
-            if (meta) {
-              const current = updated.get(meta.code);
-              if (current) {
-                updated.set(meta.code, {
-                  ...current,
-                  value: reading?.value ?? reading,
-                  status: reading?.success !== false ? 'success' : 'error',
-                  timestamp: new Date(),
-                  error: reading?.error,
-                });
-              }
-            }
+      // Read all OBIS codes in this category
+      for (const obis of obisCodes) {
+        try {
+          const response = await axios.post('/dlms/read', {
+            meterId: meter._id,
+            obisCode: obis.code,
           });
-        } else {
-          // If result is an object with OBIS codes as keys
-          Object.entries(readings).forEach(([code, value]: [string, any]) => {
-            const current = updated.get(code);
-            if (current) {
-              updated.set(code, {
-                ...current,
-                value: value?.value ?? value,
-                status: value?.success !== false ? 'success' : 'error',
-                timestamp: new Date(),
-                error: value?.error,
-              });
-            }
-          });
-        }
 
-        return updated;
-      });
-
-      toast.success('Batch reading complete');
-    } catch (error: any) {
-      // On batch error, mark all as error
-      setReadingValues(prev => {
-        const updated = new Map(prev);
-        prev.forEach((value, code) => {
-          if (value.status === 'reading') {
-            updated.set(code, {
-              ...value,
-              status: 'error',
-              error: error.message || 'Batch read failed',
+          if (response.data.success) {
+            results.push({
+              obisCode: obis.code,
+              name: obis.name,
+              value: response.data.value,
+              unit: obis.unit,
+              timestamp: new Date(),
+              selected: false,
             });
           }
-        });
-        return updated;
-      });
-      toast.error('Batch reading failed: ' + error.message);
-    } finally {
-      setReadingInProgress(false);
-    }
-  };
-
-  const findFunctionByCode = (code: string): ObisFunction | null => {
-    for (const category of categories) {
-      for (const subcategory of category.subcategories) {
-        const func = subcategory.parameters.find(p => p.code === code);
-        if (func) return func;
+        } catch (error) {
+          console.error(`Failed to read ${obis.code}:`, error);
+          // Continue reading other codes even if one fails
+        }
       }
+
+      if (results.length > 0) {
+        setReadingResults(results);
+        toast.success(`Read ${results.length} parameters from ${category}`);
+      } else {
+        toast.warning(`No data retrieved for ${category}`);
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || `Failed to read ${category} data`);
+    } finally {
+      setReading(false);
     }
-    return null;
   };
 
-  const extractParameterName = (description: string): string => {
-    // Extract meaningful name from description
-    // Description format: "Category//Subcategory\t...\tName\t..."
-    const parts = description.split('\t');
-    if (parts.length > 5) {
-      return parts[5] || parts[0];
-    }
-    return description.split('//')[0] || description;
+  const toggleSelectAll = () => {
+    const allSelected = readingResults.every(r => r.selected);
+    setReadingResults(readingResults.map(r => ({ ...r, selected: !allSelected })));
   };
 
-  const exportReadings = () => {
-    const readings = Array.from(readingValues.values());
-    return readings.map(r => ({
+  const toggleSelect = (index: number) => {
+    setReadingResults(readingResults.map((r, i) =>
+      i === index ? { ...r, selected: !r.selected } : r
+    ));
+  };
+
+  const handleExport = () => {
+    const selectedResults = readingResults.filter(r => r.selected);
+
+    if (selectedResults.length === 0) {
+      toast.error('Please select at least one parameter to export');
+      return;
+    }
+
+    const exportData = selectedResults.map(r => ({
       'Parameter': r.name,
       'OBIS Code': r.obisCode,
-      'Value': r.value !== null && r.value !== undefined ? r.value : '-',
-      'Unit': r.unit || '-',
-      'Status': r.status,
-      'Timestamp': r.timestamp ? new Date(r.timestamp).toLocaleString() : '-',
+      'Value': r.value,
+      'Unit': r.unit || '',
+      'Timestamp': format(r.timestamp, 'yyyy-MM-dd HH:mm:ss'),
     }));
+
+    exportToCSV(
+      exportData,
+      `meter_reading_${meter?.meterNumber}_${selectedCategory}`,
+      ['Parameter', 'OBIS Code', 'Value', 'Unit', 'Timestamp']
+    );
   };
 
-  const getCurrentCategory = (): ParameterCategory | null => {
-    return categories.find(c => c.category === selectedCategory) || null;
+  const handlePrint = () => {
+    printElement('reading-results', `Meter Reading - ${meter?.meterNumber}`);
+  };
+
+  const formatValue = (value: any): string => {
+    if (value === null || value === undefined) return 'N/A';
+    if (typeof value === 'object') return JSON.stringify(value);
+    if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+    if (typeof value === 'number') return value.toFixed(2);
+    return String(value);
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, mb: 3, color: '#344767' }}>
-        Advanced Meter Reading
+    <Box>
+      <Typography variant="h4" sx={{ mb: 3, fontWeight: 700, color: 'primary.main' }}>
+        On Demand Meter Reading
       </Typography>
 
       <Grid container spacing={3}>
-        {/* Left Side - Meter Information */}
+        {/* Left Panel - Customer Information */}
         <Grid item xs={12} md={4}>
-          <Card sx={{ height: '100%', borderRadius: 3, boxShadow: 3 }}>
+          <Card sx={{ height: '100%' }}>
             <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
-                Meter Information
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+                Customer Information
               </Typography>
 
-              <Box sx={{ mb: 3 }}>
-                <TextField
-                  fullWidth
-                  placeholder="Enter Meter Number"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton onClick={handleSearch} edge="end" color="primary">
-                        <Search />
-                      </IconButton>
-                    ),
-                  }}
-                  sx={{ mb: 2 }}
-                  size="small"
-                />
-
-                <Grid container spacing={1}>
-                  <Grid item xs={12}>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      startIcon={readingInProgress ? <CircularProgress size={20} color="inherit" /> : <Refresh />}
-                      onClick={readSelectedParameters}
-                      disabled={readingInProgress || !meterInfo || selectedParams.size === 0}
-                      sx={{
-                        background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
-                        mb: 1,
-                      }}
-                    >
-                      {readingInProgress ? 'Reading...' : `Read Selected (${selectedParams.size})`}
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <CSVLink
-                      data={exportReadings()}
-                      filename={`meter_readings_${meterInfo?.meterNumber || 'export'}_${Date.now()}.csv`}
-                      style={{ textDecoration: 'none', width: '100%', display: 'block' }}
-                    >
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        startIcon={<Download />}
-                        disabled={readingValues.size === 0}
-                      >
-                        Export Readings
-                      </Button>
-                    </CSVLink>
-                  </Grid>
-                </Grid>
-              </Box>
-
-              {meterInfo && (
-                <Box sx={{ '& > div': { mb: 2 } }}>
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      Meter Number:
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
-                      {meterInfo.meterNumber}
-                      <Chip
-                        label="✓"
-                        size="small"
-                        color="success"
-                        sx={{ ml: 1, height: 20 }}
-                      />
-                    </Typography>
-                  </Box>
-
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      Brand & Model:
-                    </Typography>
-                    <Typography variant="body2">{meterInfo.brand} - {meterInfo.model}</Typography>
-                  </Box>
-
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      Meter Type:
-                    </Typography>
-                    <Typography variant="body2">{meterInfo.meterType}</Typography>
-                  </Box>
-
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      Communication Status:
-                    </Typography>
-                    <Chip
-                      label={meterInfo.communicationStatus || 'offline'}
-                      size="small"
-                      color={meterInfo.communicationStatus === 'online' ? 'success' : 'error'}
-                      sx={{ mt: 0.5 }}
-                    />
-                  </Box>
-
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      Network:
-                    </Typography>
-                    <Typography variant="body2">{meterInfo.ipAddress || 'N/A'}:{meterInfo.port || 'N/A'}</Typography>
-                  </Box>
-
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      Customer:
-                    </Typography>
-                    <Typography variant="body2">{meterInfo.customer?.customerName || 'Unassigned'}</Typography>
-                  </Box>
-
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      Area:
-                    </Typography>
-                    <Typography variant="body2">{meterInfo.area?.name || 'N/A'}</Typography>
-                  </Box>
+              <Stack spacing={2}>
+                <Box>
+                  <TextField
+                    fullWidth
+                    label="Meter Number"
+                    value={meterNumber}
+                    onChange={(e) => setMeterNumber(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && searchMeter()}
+                    placeholder="Enter meter number"
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton onClick={searchMeter} disabled={loading}>
+                          {loading ? <CircularProgress size={24} /> : <SearchIcon />}
+                        </IconButton>
+                      ),
+                    }}
+                  />
                 </Box>
-              )}
 
-              {!meterInfo && (
-                <Alert severity="info" sx={{ mt: 2 }}>
-                  Search for a meter to view detailed information and perform readings
-                </Alert>
-              )}
+                {meter && (
+                  <>
+                    <Divider />
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        MSNO:
+                      </Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 600, color: 'success.main' }}>
+                        {meter.meterNumber}
+                      </Typography>
+                    </Box>
+
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        Last Vending:
+                      </Typography>
+                      <Typography variant="body2">
+                        {meter.lastSeen ? format(new Date(meter.lastSeen), 'PPpp') : 'N/A'}
+                      </Typography>
+                    </Box>
+
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        Meter Type:
+                      </Typography>
+                      <Typography variant="body2">
+                        {meter.brand} {meter.model}
+                      </Typography>
+                    </Box>
+
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        SGC:
+                      </Typography>
+                      <Typography variant="body2">
+                        {meter.area?.code || 'N/A'}
+                      </Typography>
+                    </Box>
+
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        TI:
+                      </Typography>
+                      <Typography variant="body2">1</Typography>
+                    </Box>
+
+                    {meter.customer && (
+                      <>
+                        <Box>
+                          <Typography variant="caption" color="text.secondary">
+                            User Name:
+                          </Typography>
+                          <Typography variant="body2">{meter.customer.customerName}</Typography>
+                        </Box>
+
+                        <Box>
+                          <Typography variant="caption" color="text.secondary">
+                            Account Number:
+                          </Typography>
+                          <Typography variant="body2">{meter.customer.accountNumber}</Typography>
+                        </Box>
+                      </>
+                    )}
+
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        Supplier Name:
+                      </Typography>
+                      <Typography variant="body2">New Hampshire Capital</Typography>
+                    </Box>
+
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        Identity:
+                      </Typography>
+                      <Typography variant="body2">{meter._id}</Typography>
+                    </Box>
+
+                    <Chip
+                      label={meter.status.toUpperCase()}
+                      color={meter.status === 'online' ? 'success' : 'error'}
+                      size="small"
+                    />
+                  </>
+                )}
+
+                {!meter && (
+                  <Alert severity="info">
+                    <Typography variant="body2">
+                      Enter a meter number and click search to view customer information
+                    </Typography>
+                  </Alert>
+                )}
+              </Stack>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Right Side - Parameter Categories and Readings */}
+        {/* Right Panel - On Demand Reading */}
         <Grid item xs={12} md={8}>
-          <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
+          <Card>
             <CardContent>
-              <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                OBIS Parameters
-              </Typography>
+              <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  On Demand Reading
+                </Typography>
+                {meter && (
+                  <Chip
+                    icon={<InfoIcon />}
+                    label={`Reading: ${meter.meterNumber}`}
+                    color="primary"
+                    variant="outlined"
+                  />
+                )}
+              </Box>
 
-              {loading && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-                  <CircularProgress />
+              {!meter && (
+                <Alert severity="warning" sx={{ mb: 2 }}>
+                  Please search and select a meter to enable reading functions
+                </Alert>
+              )}
+
+              {/* Reading Category Buttons */}
+              <Grid container spacing={1.5} sx={{ mb: 3 }}>
+                {categories.map((category) => (
+                  <Grid item xs={6} sm={4} md={3} key={category}>
+                    <Button
+                      fullWidth
+                      variant={selectedCategory === category ? 'contained' : 'outlined'}
+                      onClick={() => readCategory(category)}
+                      disabled={!meter || reading}
+                      sx={{
+                        height: 60,
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        textTransform: 'none',
+                      }}
+                    >
+                      {reading && selectedCategory === category ? (
+                        <CircularProgress size={20} />
+                      ) : (
+                        category
+                      )}
+                    </Button>
+                  </Grid>
+                ))}
+              </Grid>
+
+              {/* Results Table */}
+              {readingResults.length > 0 && (
+                <Box id="reading-results">
+                  <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                      Reading Results ({selectedCategory})
+                    </Typography>
+                    <Stack direction="row" spacing={1}>
+                      <Button
+                        size="small"
+                        startIcon={<DownloadIcon />}
+                        onClick={handleExport}
+                        variant="outlined"
+                      >
+                        Export
+                      </Button>
+                      <Button
+                        size="small"
+                        startIcon={<PrintIcon />}
+                        onClick={handlePrint}
+                        variant="outlined"
+                      >
+                        Print
+                      </Button>
+                      <Button
+                        size="small"
+                        startIcon={<RefreshIcon />}
+                        onClick={() => selectedCategory && readCategory(selectedCategory as OBISCategory)}
+                        variant="outlined"
+                      >
+                        Refresh
+                      </Button>
+                    </Stack>
+                  </Box>
+
+                  <TableContainer component={Paper} variant="outlined">
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow sx={{ bgcolor: 'primary.main' }}>
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={readingResults.every(r => r.selected)}
+                              indeterminate={
+                                readingResults.some(r => r.selected) &&
+                                !readingResults.every(r => r.selected)
+                              }
+                              onChange={toggleSelectAll}
+                              sx={{ color: 'white', '&.Mui-checked': { color: 'white' } }}
+                            />
+                          </TableCell>
+                          <TableCell sx={{ color: 'white', fontWeight: 700 }}>Select All Item</TableCell>
+                          <TableCell sx={{ color: 'white', fontWeight: 700 }}>Value</TableCell>
+                          <TableCell sx={{ color: 'white', fontWeight: 700 }}>OBIS Code</TableCell>
+                          <TableCell sx={{ color: 'white', fontWeight: 700 }}>Timestamp</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {readingResults.map((result, index) => (
+                          <TableRow
+                            key={result.obisCode}
+                            hover
+                            selected={result.selected}
+                            onClick={() => toggleSelect(index)}
+                            sx={{ cursor: 'pointer' }}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox checked={result.selected} />
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                {result.name}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="body2">
+                                {formatValue(result.value)}
+                                {result.unit && (
+                                  <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                                    {result.unit}
+                                  </Typography>
+                                )}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="caption" color="text.secondary">
+                                {result.obisCode}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="caption">
+                                {format(result.timestamp, 'HH:mm:ss')}
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="caption" color="text.secondary">
+                      {readingResults.filter(r => r.selected).length} of {readingResults.length} parameters selected
+                    </Typography>
+                  </Box>
                 </Box>
               )}
 
-              {!loading && !meterInfo && (
+              {readingResults.length === 0 && meter && (
                 <Alert severity="info">
-                  Please search for a meter to view available parameters
+                  Click a category button above to read parameters from the meter
                 </Alert>
-              )}
-
-              {!loading && meterInfo && categories.length === 0 && (
-                <Alert severity="warning">
-                  No OBIS parameters found for this meter brand
-                </Alert>
-              )}
-
-              {!loading && meterInfo && categories.length > 0 && (
-                <>
-                  {/* Category Tabs */}
-                  <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-                    <Tabs
-                      value={selectedCategory}
-                      onChange={(e, newValue) => setSelectedCategory(newValue)}
-                      variant="scrollable"
-                      scrollButtons="auto"
-                    >
-                      {categories.map((cat) => (
-                        <Tab
-                          key={cat.category}
-                          label={cat.category}
-                          value={cat.category}
-                          sx={{ textTransform: 'none', fontWeight: 600 }}
-                        />
-                      ))}
-                    </Tabs>
-                  </Box>
-
-                  {/* Category Parameters */}
-                  {getCurrentCategory() && (
-                    <Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                          {getCurrentCategory()?.category} Parameters
-                        </Typography>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={() => toggleAllInCategory(getCurrentCategory()!)}
-                        >
-                          Toggle All
-                        </Button>
-                      </Box>
-
-                      <Box sx={{ maxHeight: 600, overflow: 'auto' }}>
-                        {getCurrentCategory()?.subcategories.map((subcategory, idx) => (
-                          <Accordion key={idx} defaultExpanded={idx === 0}>
-                            <AccordionSummary expandIcon={<ExpandMore />}>
-                              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                                {subcategory.name} ({subcategory.parameters.length})
-                              </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                              <Table size="small">
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell padding="checkbox"></TableCell>
-                                    <TableCell>Parameter</TableCell>
-                                    <TableCell>OBIS Code</TableCell>
-                                    <TableCell>Value</TableCell>
-                                    <TableCell>Status</TableCell>
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  {subcategory.parameters.map((param) => {
-                                    const isSelected = selectedParams.has(param.code);
-                                    const readingValue = readingValues.get(param.code);
-                                    const paramName = extractParameterName(param.description);
-
-                                    return (
-                                      <TableRow
-                                        key={param.code}
-                                        hover
-                                        sx={{ bgcolor: isSelected ? 'action.selected' : 'inherit' }}
-                                      >
-                                        <TableCell padding="checkbox">
-                                          <Checkbox
-                                            checked={isSelected}
-                                            onChange={() => toggleParameter(param.code)}
-                                          />
-                                        </TableCell>
-                                        <TableCell>
-                                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                            {paramName}
-                                          </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                          <Typography variant="caption" color="text.secondary">
-                                            {param.code}
-                                          </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                          {readingValue ? (
-                                            <Typography variant="body2">
-                                              {readingValue.status === 'success' && (
-                                                <>
-                                                  {readingValue.value !== null && readingValue.value !== undefined
-                                                    ? `${readingValue.value} ${readingValue.unit || ''}`
-                                                    : '-'}
-                                                </>
-                                              )}
-                                              {readingValue.status === 'reading' && <CircularProgress size={16} />}
-                                              {readingValue.status === 'pending' && '-'}
-                                              {readingValue.status === 'error' && (
-                                                <span style={{ color: 'red' }}>Error</span>
-                                              )}
-                                            </Typography>
-                                          ) : (
-                                            <Typography variant="body2" color="text.secondary">
-                                              -
-                                            </Typography>
-                                          )}
-                                        </TableCell>
-                                        <TableCell>
-                                          {readingValue && (
-                                            <Chip
-                                              label={readingValue.status}
-                                              size="small"
-                                              color={
-                                                readingValue.status === 'success' ? 'success' :
-                                                readingValue.status === 'error' ? 'error' :
-                                                readingValue.status === 'reading' ? 'info' : 'default'
-                                              }
-                                            />
-                                          )}
-                                        </TableCell>
-                                      </TableRow>
-                                    );
-                                  })}
-                                </TableBody>
-                              </Table>
-                            </AccordionDetails>
-                          </Accordion>
-                        ))}
-                      </Box>
-                    </Box>
-                  )}
-                </>
               )}
             </CardContent>
           </Card>
@@ -640,4 +511,6 @@ export default function MeterReadingNew() {
       </Grid>
     </Box>
   );
-}
+};
+
+export default MeterReading;
