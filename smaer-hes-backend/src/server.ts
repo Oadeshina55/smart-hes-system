@@ -22,6 +22,8 @@ import obisRoutes from './routes/obis.routes';
 import templateRoutes from './routes/template.routes';
 import aiRoutes from './routes/ai.routes';
 import dlmsRoutes from './routes/dlms.routes';
+import loadProfileRoutes from './routes/loadProfile.routes';
+import powerQualityRoutes from './routes/powerQuality.routes';
 
 // Import services
 import { MeterStatusService } from './services/meterStatus.service';
@@ -85,6 +87,8 @@ app.use('/api/obis', obisRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/dlms', dlmsRoutes);
+app.use('/api/load-profile', loadProfileRoutes);
+app.use('/api/power-quality', powerQualityRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

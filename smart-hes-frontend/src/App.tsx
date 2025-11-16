@@ -29,6 +29,8 @@ import RemoteLoading from './pages/Remote/RemoteLoading';
 import RemoteControl from './pages/Remote/RemoteControl';
 import UserManagement from './pages/Users/UserManagement';
 import Profile from './pages/Profile/Profile';
+import LoadProfileVisualization from './pages/Advanced/LoadProfileVisualization';
+import PowerQualityMonitoring from './pages/Advanced/PowerQualityMonitoring';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -110,7 +112,13 @@ function App() {
                     
                     {/* Reports Routes - All authenticated users */}
                     <Route path="/reports/consumption" element={<EnergyConsumption />} />
-                    
+
+                    {/* Advanced HES Features - Admin & Operator only */}
+                    <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
+                      <Route path="/advanced/load-profile" element={<LoadProfileVisualization />} />
+                      <Route path="/advanced/power-quality" element={<PowerQualityMonitoring />} />
+                    </Route>
+
                     {/* Remote Routes - Admin & Operator only */}
                     <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
                       <Route path="/remote/loading" element={<RemoteLoading />} />
