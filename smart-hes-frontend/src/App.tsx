@@ -27,7 +27,6 @@ import OnlineRate from './pages/TaskQuery/OnlineRate';
 import EnergyConsumption from './pages/Reports/EnergyConsumption';
 import RemoteLoading from './pages/Remote/RemoteLoading';
 import RemoteControl from './pages/Remote/RemoteControl';
-import UserManagement from './pages/Users/UserManagement';
 import Profile from './pages/Profile/Profile';
 import LoadProfileVisualization from './pages/Advanced/LoadProfileVisualization';
 import PowerQualityMonitoring from './pages/Advanced/PowerQualityMonitoring';
@@ -139,7 +138,7 @@ function App() {
                     
                     {/* User Management - Admin only */}
                     <Route element={<PrivateRoute allowedRoles={['admin']} />}>
-                      <Route path="/users" element={<UserManagement />} />
+                      <Route path="/users" element={<UserAccessControl />} />
                     </Route>
                     
                     {/* Profile - All authenticated users */}
