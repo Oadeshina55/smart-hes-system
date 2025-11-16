@@ -1,4 +1,4 @@
-import nodemailer, { Transporter } from 'nodemailer';
+import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,7 +11,7 @@ interface EmailOptions {
 }
 
 class EmailService {
-  private transporter: Transporter;
+  private transporter: ReturnType<typeof nodemailer.createTransport>;
 
   constructor() {
     // Create transporter with email configuration
