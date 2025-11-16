@@ -139,7 +139,7 @@ const EventLogViewer: React.FC = () => {
       ...events.map(event =>
         [
           format(new Date(event.timestamp), 'yyyy-MM-dd HH:mm:ss'),
-          event.meter.meterNumber,
+          event.meter?.meterNumber || 'N/A',
           event.eventType,
           event.severity,
           event.category,
@@ -427,9 +427,9 @@ const EventLogViewer: React.FC = () => {
                     <TableCell>
                       <Stack>
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {event.meter.meterNumber}
+                          {event.meter?.meterNumber || 'N/A'}
                         </Typography>
-                        {event.meter.brand && (
+                        {event.meter?.brand && (
                           <Typography variant="caption" color="text.secondary">
                             {event.meter.brand} {event.meter.model}
                           </Typography>
@@ -533,7 +533,7 @@ const EventLogViewer: React.FC = () => {
                     Meter Number
                   </Typography>
                   <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                    {selectedEvent.meter.meterNumber}
+                    {selectedEvent.meter?.meterNumber || 'N/A'}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
