@@ -128,7 +128,7 @@ async function addMeters() {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     const allMeters = await Meter.find({ area: ikoroduArea._id }).select('meterNumber brand model status');
 
-    allMeters.forEach((meter, index) => {
+    allMeters.forEach((meter: any, index: number) => {
       console.log(`${index + 1}. ${meter.meterNumber} - ${meter.brand} ${meter.model} [${meter.status}]`);
     });
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
