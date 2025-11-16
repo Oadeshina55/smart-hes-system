@@ -3,6 +3,8 @@ import * as expressValidator from 'express-validator';
 const { body, validationResult } = expressValidator;
 import { User } from '../models/User.model';
 import { generateToken, authenticate } from '../middleware/auth.middleware';
+import { otpService } from '../services/otp.service';
+import axios from 'axios';
 
 const router = express.Router();
 
@@ -248,12 +250,257 @@ router.post('/logout', authenticate, async (req: any, res) => {
   }
 });
 
+// ==================== OTP-BASED AUTHENTICATION ====================
+
+// Step 1: Request OTP for login
+router.post('/request-otp', async (req: express.Request, res: express.Response) => {
+  try {
+    const { email, username } = req.body;
+
+    if (!email && !username) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email or username is required',
+      });
+    }
+
+    // Find user by email or username
+    const user = await User.findOne({
+      $or: [
+        { email: email?.toLowerCase() },
+        { username: username },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (!user.isActive) {
+      return res.status(401).json({
+        success: false,
+        message: 'Account is deactivated',
+      });
+    }
+
+    // Send OTP to user's email
+    const result = await otpService.sendLoginOTP(user.email);
+
+    if (!result.success) {
+      return res.status(500).json(result);
+    }
+
+    res.json({
+      success: true,
+      message: 'OTP sent to your email',
+      data: {
+        email: user.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'), // Partially hide email
+        expiresIn: result.expiresIn,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to request OTP',
+      error: error.message,
+    });
+  }
+});
+
+// Step 2: Verify OTP and complete login
+router.post('/verify-otp', async (req: express.Request, res: express.Response) => {
+  try {
+    const { email, username, otp, password } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'OTP is required',
+      });
+    }
+
+    if (!email && !username) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email or username is required',
+      });
+    }
+
+    // Find user
+    const user = await User.findOne({
+      $or: [
+        { email: email?.toLowerCase() },
+        { username: username },
+      ],
+    }).select('+password');
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    // Verify password if provided (optional - you can make OTP-only login)
+    if (password) {
+      const isPasswordValid = await user.comparePassword(password);
+      if (!isPasswordValid) {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid credentials',
+        });
+      }
+    }
+
+    // Verify OTP
+    const otpResult = await otpService.verifyOTP(user.email, otp, 'login');
+
+    if (!otpResult.success) {
+      return res.status(401).json(otpResult);
+    }
+
+    // Update last login
+    user.lastLogin = new Date();
+    await user.save();
+
+    // Generate token
+    const token = generateToken(user._id.toString());
+
+    res.json({
+      success: true,
+      message: 'Login successful',
+      data: {
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+        token,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to verify OTP',
+      error: error.message,
+    });
+  }
+});
+
+// Resend OTP
+router.post('/resend-otp', async (req: express.Request, res: express.Response) => {
+  try {
+    const { email, username } = req.body;
+
+    if (!email && !username) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email or username is required',
+      });
+    }
+
+    // Find user
+    const user = await User.findOne({
+      $or: [
+        { email: email?.toLowerCase() },
+        { username: username },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    const result = await otpService.resendOTP(user.email, 'login');
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    res.json({
+      success: true,
+      message: 'OTP resent successfully',
+      data: {
+        email: user.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'),
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to resend OTP',
+      error: error.message,
+    });
+  }
+});
+
+// ==================== CAPTCHA VERIFICATION ====================
+
+// Verify Google reCAPTCHA
+router.post('/verify-captcha', async (req: express.Request, res: express.Response) => {
+  try {
+    const { captchaToken } = req.body;
+
+    if (!captchaToken) {
+      return res.status(400).json({
+        success: false,
+        message: 'CAPTCHA token is required',
+      });
+    }
+
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+
+    if (!secretKey) {
+      console.error('RECAPTCHA_SECRET_KEY not configured');
+      // Allow login if CAPTCHA is not configured
+      return res.json({
+        success: true,
+        message: 'CAPTCHA verification bypassed (not configured)',
+      });
+    }
+
+    // Verify with Google reCAPTCHA API
+    const response = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captchaToken}`
+    );
+
+    if (response.data.success) {
+      res.json({
+        success: true,
+        message: 'CAPTCHA verified successfully',
+        score: response.data.score, // For reCAPTCHA v3
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'CAPTCHA verification failed',
+        errors: response.data['error-codes'],
+      });
+    }
+  } catch (error: any) {
+    console.error('CAPTCHA verification error:', error);
+    // Allow login if CAPTCHA verification fails due to network issues
+    res.json({
+      success: true,
+      message: 'CAPTCHA verification bypassed (error occurred)',
+    });
+  }
+});
+
 // Initialize admin user (run once on setup)
 router.post('/init-admin', async (req, res) => {
   try {
     // Check if admin already exists
     const adminExists = await User.findOne({ role: 'admin' });
-    
+
     if (adminExists) {
       return res.status(400).json({
         success: false,
