@@ -31,6 +31,12 @@ import UserManagement from './pages/Users/UserManagement';
 import Profile from './pages/Profile/Profile';
 import LoadProfileVisualization from './pages/Advanced/LoadProfileVisualization';
 import PowerQualityMonitoring from './pages/Advanced/PowerQualityMonitoring';
+import EventLogViewer from './pages/Advanced/EventLogViewer';
+import TamperDetectionDashboard from './pages/Advanced/TamperDetectionDashboard';
+import BillingManagement from './pages/Advanced/BillingManagement';
+import FirmwareManagement from './pages/Advanced/FirmwareManagement';
+import SecurityAudit from './pages/Advanced/SecurityAudit';
+import UserAccessControl from './pages/Advanced/UserAccessControl';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -117,6 +123,12 @@ function App() {
                     <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
                       <Route path="/advanced/load-profile" element={<LoadProfileVisualization />} />
                       <Route path="/advanced/power-quality" element={<PowerQualityMonitoring />} />
+                      <Route path="/advanced/events" element={<EventLogViewer />} />
+                      <Route path="/advanced/tamper" element={<TamperDetectionDashboard />} />
+                      <Route path="/advanced/billing" element={<BillingManagement />} />
+                      <Route path="/advanced/firmware" element={<FirmwareManagement />} />
+                      <Route path="/advanced/security" element={<SecurityAudit />} />
+                      <Route path="/advanced/access-control" element={<UserAccessControl />} />
                     </Route>
 
                     {/* Remote Routes - Admin & Operator only */}

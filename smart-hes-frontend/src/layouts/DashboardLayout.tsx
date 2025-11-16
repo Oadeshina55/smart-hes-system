@@ -51,6 +51,13 @@ import {
   Group,
   ChevronLeft,
   ChevronRight,
+  AutoGraph,
+  Security,
+  Shield,
+  Receipt,
+  CloudUpload,
+  AdminPanelSettings,
+  Timeline,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../contexts/SocketContext';
@@ -166,6 +173,60 @@ const menuItems: MenuItemType[] = [
         title: 'Energy Consumption',
         path: '/reports/consumption',
         icon: <BatteryChargingFull />,
+      },
+    ],
+  },
+  {
+    title: 'Advanced HES',
+    icon: <AutoGraph />,
+    children: [
+      {
+        title: 'Load Profile',
+        path: '/advanced/load-profile',
+        icon: <Timeline />,
+        roles: ['admin', 'operator'],
+      },
+      {
+        title: 'Power Quality',
+        path: '/advanced/power-quality',
+        icon: <QueryStats />,
+        roles: ['admin', 'operator'],
+      },
+      {
+        title: 'Event Logs',
+        path: '/advanced/events',
+        icon: <EventNote />,
+        roles: ['admin', 'operator'],
+      },
+      {
+        title: 'Tamper Detection',
+        path: '/advanced/tamper',
+        icon: <Shield />,
+        roles: ['admin', 'operator'],
+      },
+      {
+        title: 'Billing Management',
+        path: '/advanced/billing',
+        icon: <Receipt />,
+        roles: ['admin', 'operator'],
+      },
+      {
+        title: 'Firmware Upgrade',
+        path: '/advanced/firmware',
+        icon: <CloudUpload />,
+        roles: ['admin', 'operator'],
+      },
+      {
+        title: 'Security Audit',
+        path: '/advanced/security',
+        icon: <Security />,
+        roles: ['admin', 'operator'],
+      },
+      {
+        title: 'Access Control',
+        path: '/advanced/access-control',
+        icon: <AdminPanelSettings />,
+        roles: ['admin'],
       },
     ],
   },
