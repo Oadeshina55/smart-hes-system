@@ -3,6 +3,7 @@ import { Consumption } from '../models/Consumption.model';
 import { Event } from '../models/Event.model';
 import { socketIO } from '../server';
 import logger from '../utils/logger';
+import axios from 'axios';
 
 export interface DLMSReadRequest {
   meterId?: string;
@@ -42,7 +43,57 @@ export interface DLMSWriteResponse {
   error?: string;
 }
 
+// Python DLMS Service configuration
+const PYTHON_DLMS_SERVICE_URL = process.env.PYTHON_DLMS_URL || 'http://localhost:8001';
+const USE_PYTHON_SERVICE = process.env.USE_PYTHON_DLMS === 'true' || true; // Default to true
+
 class DLMSService {
+  private pythonServiceUrl: string;
+  private usePythonService: boolean;
+
+  constructor() {
+    this.pythonServiceUrl = PYTHON_DLMS_SERVICE_URL;
+    this.usePythonService = USE_PYTHON_SERVICE;
+    logger.info(`DLMS Service initialized. Python service: ${this.usePythonService ? 'ENABLED' : 'DISABLED'} at ${this.pythonServiceUrl}`);
+  }
+
+  /**
+   * Ensure meter is connected to Python DLMS service
+   */
+  private async ensureConnection(meter: any): Promise<boolean> {
+    if (!this.usePythonService) {
+      return true; // Skip if not using Python service
+    }
+
+    try {
+      const response = await axios.post(`${this.pythonServiceUrl}/connect`, {
+        meter_number: meter.meterNumber,
+        brand: meter.brand || 'hexing',
+        connection_type: 'tcp',
+        ip_address: meter.ipAddress || meter.ip,
+        port: meter.port || 4059,
+        server_address: meter.serverAddress || 1,
+        client_address: meter.clientAddress || 16,
+        auth_type: meter.authType || 'None',
+        password: meter.password,
+        timeout: 30000,
+      }, {
+        timeout: 35000,
+        validateStatus: (status) => status < 500,
+      });
+
+      if (response.data.success) {
+        logger.info(`Meter ${meter.meterNumber} connected to Python DLMS service`);
+        return true;
+      } else {
+        logger.warn(`Failed to connect meter ${meter.meterNumber}: ${response.data.message}`);
+        return false;
+      }
+    } catch (error: any) {
+      logger.error(`Connection error for meter ${meter.meterNumber}: ${error.message}`);
+      return false;
+    }
+  }
   /**
    * Read single OBIS code from meter
    */
@@ -56,33 +107,51 @@ class DLMSService {
         throw new Error('Meter not found');
       }
 
-      // In a real implementation, this would communicate with the physical meter
-      // via DLMS/COSEM protocol (TCP/IP, Serial, or other transport)
-      // For now, we'll simulate the read operation
-
       logger.info(`Reading OBIS ${request.obisCode} from meter ${meter.meterNumber}`);
 
-      // Emit socket event to trigger real meter communication
-      const responsePromise = new Promise<any>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error('Meter read timeout'));
-        }, 30000); // 30 second timeout
+      let result: any;
 
-        // Listen for meter response
-        socketIO.once(`dlms-response-${meter._id}`, (data) => {
-          clearTimeout(timeout);
-          resolve(data);
+      if (this.usePythonService) {
+        // Use Python DLMS service
+        await this.ensureConnection(meter);
+
+        const response = await axios.post(
+          `${this.pythonServiceUrl}/read`,
+          {
+            meter_number: meter.meterNumber,
+            obis_code: request.obisCode,
+            class_id: request.classId || 3,
+            attribute_id: request.attributeId || 2,
+          },
+          { timeout: 35000 }
+        );
+
+        if (!response.data.success) {
+          throw new Error(response.data.data?.error || 'Read failed');
+        }
+
+        result = response.data.data;
+      } else {
+        // Fallback to Socket.IO communication
+        const responsePromise = new Promise<any>((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error('Meter read timeout'));
+          }, 30000);
+
+          socketIO.once(`dlms-response-${meter._id}`, (data) => {
+            clearTimeout(timeout);
+            resolve(data);
+          });
+
+          socketIO.to(meter._id.toString()).emit('dlms-read', {
+            obisCode: request.obisCode,
+            classId: request.classId || 3,
+            attributeId: request.attributeId || 2,
+          });
         });
 
-        // Send read request to meter
-        socketIO.to(meter._id.toString()).emit('dlms-read', {
-          obisCode: request.obisCode,
-          classId: request.classId || 3, // Default to Register class
-          attributeId: request.attributeId || 2, // Default to value attribute
-        });
-      });
-
-      const result = await responsePromise;
+        result = await responsePromise;
+      }
 
       // Record the reading
       await Event.create({
@@ -116,37 +185,95 @@ class DLMSService {
   }
 
   /**
-   * Read multiple OBIS codes from meter
+   * Read multiple OBIS codes from meter (batch read)
    */
   async readMultipleObis(
     meterIdentifier: string | { meterId?: string; meterNumber?: string },
-    obisCodes: string[]
+    obisCodes: Array<string | { code: string; classId?: number; attributeId?: number }>
   ): Promise<DLMSReadResponse[]> {
-    const results: DLMSReadResponse[] = [];
+    try {
+      const meter = typeof meterIdentifier === 'string'
+        ? await Meter.findOne({ meterNumber: meterIdentifier })
+        : meterIdentifier.meterId
+          ? await Meter.findById(meterIdentifier.meterId)
+          : await Meter.findOne({ meterNumber: meterIdentifier.meterNumber });
 
-    for (const obisCode of obisCodes) {
-      try {
-        const request: DLMSReadRequest =
-          typeof meterIdentifier === 'string'
-            ? { meterNumber: meterIdentifier, obisCode }
-            : { ...meterIdentifier, obisCode };
-
-        const result = await this.readObis(request);
-        results.push(result);
-      } catch (error: any) {
-        results.push({
-          success: false,
-          meterId: '',
-          meterNumber: typeof meterIdentifier === 'string' ? meterIdentifier : meterIdentifier.meterNumber || '',
-          obisCode,
-          value: null,
-          error: error.message,
-          timestamp: new Date(),
-        });
+      if (!meter) {
+        throw new Error('Meter not found');
       }
-    }
 
-    return results;
+      logger.info(`Batch reading ${obisCodes.length} OBIS codes from meter ${meter.meterNumber}`);
+
+      let results: DLMSReadResponse[] = [];
+
+      if (this.usePythonService) {
+        // Use Python DLMS service for batch reading (much faster!)
+        await this.ensureConnection(meter);
+
+        const formattedCodes = obisCodes.map(code =>
+          typeof code === 'string'
+            ? { code, classId: 3, attributeId: 2 }
+            : { code: code.code, classId: code.classId || 3, attributeId: code.attributeId || 2 }
+        );
+
+        const response = await axios.post(
+          `${this.pythonServiceUrl}/read-multiple`,
+          {
+            meter_number: meter.meterNumber,
+            obis_codes: formattedCodes,
+          },
+          { timeout: 60000 } // Longer timeout for batch
+        );
+
+        if (response.data.success) {
+          const readings = response.data.data?.readings || [];
+          results = readings.map((reading: any) => ({
+            success: reading.success || false,
+            meterId: meter._id.toString(),
+            meterNumber: meter.meterNumber,
+            obisCode: reading.obisCode || reading.code,
+            value: reading.value,
+            unit: reading.unit,
+            scaler: reading.scaler,
+            timestamp: new Date(),
+            error: reading.error,
+          }));
+        } else {
+          throw new Error('Batch read failed');
+        }
+      } else {
+        // Fallback to sequential reading (slower)
+        for (const obisCode of obisCodes) {
+          try {
+            const codeStr = typeof obisCode === 'string' ? obisCode : obisCode.code;
+            const request: DLMSReadRequest = {
+              meterId: meter._id.toString(),
+              obisCode: codeStr,
+              classId: typeof obisCode === 'object' ? obisCode.classId : undefined,
+              attributeId: typeof obisCode === 'object' ? obisCode.attributeId : undefined,
+            };
+
+            const result = await this.readObis(request);
+            results.push(result);
+          } catch (error: any) {
+            results.push({
+              success: false,
+              meterId: meter._id.toString(),
+              meterNumber: meter.meterNumber,
+              obisCode: typeof obisCode === 'string' ? obisCode : obisCode.code,
+              value: null,
+              error: error.message,
+              timestamp: new Date(),
+            });
+          }
+        }
+      }
+
+      return results;
+    } catch (error: any) {
+      logger.error(`Batch read error: ${error.message}`);
+      throw error;
+    }
   }
 
   /**
@@ -164,28 +291,47 @@ class DLMSService {
 
       logger.info(`Writing to OBIS ${request.obisCode} on meter ${meter.meterNumber}`);
 
-      // Emit socket event to trigger real meter communication
-      const responsePromise = new Promise<any>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error('Meter write timeout'));
-        }, 30000); // 30 second timeout
+      if (this.usePythonService) {
+        // Use Python DLMS service
+        await this.ensureConnection(meter);
 
-        // Listen for meter response
-        socketIO.once(`dlms-write-response-${meter._id}`, (data) => {
-          clearTimeout(timeout);
-          resolve(data);
+        const response = await axios.post(
+          `${this.pythonServiceUrl}/write`,
+          {
+            meter_number: meter.meterNumber,
+            obis_code: request.obisCode,
+            value: request.value,
+            class_id: request.classId || 3,
+            attribute_id: request.attributeId || 2,
+          },
+          { timeout: 35000 }
+        );
+
+        if (!response.data.success) {
+          throw new Error(response.data.data?.error || 'Write failed');
+        }
+      } else {
+        // Fallback to Socket.IO communication
+        const responsePromise = new Promise<any>((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error('Meter write timeout'));
+          }, 30000);
+
+          socketIO.once(`dlms-write-response-${meter._id}`, (data) => {
+            clearTimeout(timeout);
+            resolve(data);
+          });
+
+          socketIO.to(meter._id.toString()).emit('dlms-write', {
+            obisCode: request.obisCode,
+            value: request.value,
+            classId: request.classId || 3,
+            attributeId: request.attributeId || 2,
+          });
         });
 
-        // Send write request to meter
-        socketIO.to(meter._id.toString()).emit('dlms-write', {
-          obisCode: request.obisCode,
-          value: request.value,
-          classId: request.classId || 3,
-          attributeId: request.attributeId || 2,
-        });
-      });
-
-      await responsePromise;
+        await responsePromise;
+      }
 
       // Record the write operation
       await Event.create({
