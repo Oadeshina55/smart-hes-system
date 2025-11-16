@@ -112,8 +112,9 @@ export default function MeterImport() {
   const downloadTemplate = () => {
     const template = [
       ['meterNumber', 'concentratorId', 'meterType', 'brand', 'model', 'firmware', 'ipAddress', 'port', 'area', 'customer', 'simCard'],
-      ['MET001', 'CONC001', 'Single Phase', 'Hexing', 'HXE310', '1.0.0', '192.168.1.100', '4059', 'AreaCode1', 'CUST001', 'SIM001'],
-      ['MET002', 'CONC001', 'Three Phase', 'Hexcell', 'HCE410', '1.0.1', '192.168.1.101', '4059', 'AreaCode1', '', ''],
+      ['14512345678', 'CONC001', 'single-phase', 'hexing', 'HXE310', '1.0.0', '192.168.1.100', '4059', '', '', ''],
+      ['4612345678', 'CONC002', 'three-phase', 'hexcell', 'HCE410', '1.0.1', '192.168.1.101', '4059', '', '', ''],
+      ['14587654321', '', 'single-phase', 'hexing', 'HXE310', '', '', '', '', '', ''],
     ];
 
     const csvContent = template.map(row => row.join(',')).join('\n');
@@ -284,12 +285,17 @@ export default function MeterImport() {
             <Alert severity="info" icon={<Info />}>
               <Typography variant="body2" sx={{ fontSize: '0.875rem' }}>
                 <strong>Required Fields:</strong><br />
-                • Meter Number (unique)<br />
-                • Meter Type<br />
-                • Brand & Model<br />
+                • Meter Number (unique, real meter numbers only)<br />
+                • Meter Type (single-phase, three-phase, prepaid, postpaid)<br />
+                • Brand (hexing or hexcell)<br />
+                • Model<br />
+                <br />
+                <strong>Meter Number Format:</strong><br />
+                • Hexing meters: Start with "145" (e.g., 14512345678)<br />
+                • Hexcell meters: Start with "46" (e.g., 4612345678)<br />
                 <br />
                 <strong>Optional Fields:</strong><br />
-                • IP Address & Port (for DLMS)<br />
+                • IP Address & Port (for DLMS communication)<br />
                 • Area, Customer, SIM Card<br />
                 • Firmware, Concentrator ID
               </Typography>
