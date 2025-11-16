@@ -44,6 +44,8 @@ export interface ILoadProfile extends Document {
   metadata?: Map<string, any>;
   createdAt: Date;
   updatedAt: Date;
+  // Virtual property
+  duration?: number; // Duration in minutes
 }
 
 const loadProfileEntrySchema = new Schema<ILoadProfileEntry>({
