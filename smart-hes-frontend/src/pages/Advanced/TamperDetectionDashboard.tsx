@@ -38,6 +38,8 @@ import {
   Info as InfoIcon,
   Place as PlaceIcon,
   QueryStats as StatsIcon,
+  Clear as ClearIcon,
+  Delete as DeleteIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -109,6 +111,43 @@ const TamperDetectionDashboard: React.FC = () => {
   });
   const [selectedMeter, setSelectedMeter] = useState<TamperMeter | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [clearConfirmOpen, setClearConfirmOpen] = useState(false);
+  const [clearing, setClearing] = useState(false);
+
+  const handleClearTamper = async () => {
+    if (!selectedMeter) return;
+
+    setClearing(true);
+    try {
+      // Reset tamper counter via DLMS write
+      // OBIS code: 0.0.94.91.0.255 (Tamper Event Counter)
+      await axios.post('/dlms/write', {
+        meterId: selectedMeter._id,
+        obisCode: '0.0.94.91.0.255',
+        value: 0, // Reset counter to 0
+      });
+
+      // Also update the meter's tamper status in the database
+      await axios.patch(`/meters/${selectedMeter._id}`, {
+        tamperStatus: {
+          coverOpen: false,
+          magneticTamper: false,
+          reverseFlow: false,
+          neutralDisturbance: false,
+        },
+      });
+
+      toast.success('Tamper status cleared successfully');
+      setClearConfirmOpen(false);
+      setDetailOpen(false);
+      fetchTamperData();
+    } catch (error: any) {
+      console.error('Failed to clear tamper:', error);
+      toast.error(error.response?.data?.message || 'Failed to clear tamper status');
+    } finally {
+      setClearing(false);
+    }
+  };
 
   const fetchTamperData = async () => {
     setLoading(true);
@@ -594,12 +633,115 @@ const TamperDetectionDashboard: React.FC = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setDetailOpen(false)}>Close</Button>
+              <Button
+                variant="contained"
+                color="warning"
+                startIcon={<ClearIcon />}
+                onClick={() => setClearConfirmOpen(true)}
+              >
+                Clear Tamper
+              </Button>
               <Button variant="contained" color="error">
                 Create Alert
               </Button>
             </DialogActions>
           </>
         )}
+      </Dialog>
+
+      {/* Clear Tamper Confirmation Dialog */}
+      <Dialog open={clearConfirmOpen} onClose={() => setClearConfirmOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <WarningIcon color="warning" />
+          <Typography variant="h6">Confirm Clear Tamper Status</Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          {selectedMeter && (
+            <Stack spacing={2}>
+              <Alert severity="warning" icon={<InfoIcon />}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  Meter: {selectedMeter.meterNumber}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {selectedMeter.brand} {selectedMeter.model}
+                </Typography>
+              </Alert>
+
+              <Box>
+                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                  Active Tamper Issues to be Cleared:
+                </Typography>
+                <List dense>
+                  {selectedMeter.tamperStatus.coverOpen && (
+                    <ListItem>
+                      <DeleteIcon fontSize="small" color="error" sx={{ mr: 1 }} />
+                      <ListItemText primary="Cover Open" />
+                    </ListItem>
+                  )}
+                  {selectedMeter.tamperStatus.magneticTamper && (
+                    <ListItem>
+                      <DeleteIcon fontSize="small" color="error" sx={{ mr: 1 }} />
+                      <ListItemText primary="Magnetic Tamper" />
+                    </ListItem>
+                  )}
+                  {selectedMeter.tamperStatus.reverseFlow && (
+                    <ListItem>
+                      <DeleteIcon fontSize="small" color="error" sx={{ mr: 1 }} />
+                      <ListItemText primary="Reverse Flow" />
+                    </ListItem>
+                  )}
+                  {selectedMeter.tamperStatus.neutralDisturbance && (
+                    <ListItem>
+                      <DeleteIcon fontSize="small" color="error" sx={{ mr: 1 }} />
+                      <ListItemText primary="Neutral Disturbance" />
+                    </ListItem>
+                  )}
+                </List>
+              </Box>
+
+              <Alert severity="info">
+                <Typography variant="body2">
+                  This action will:
+                </Typography>
+                <List dense sx={{ mt: 1 }}>
+                  <ListItem sx={{ py: 0 }}>
+                    <Typography variant="caption">
+                      • Reset tamper event counter via DLMS (OBIS: 0.0.94.91.0.255)
+                    </Typography>
+                  </ListItem>
+                  <ListItem sx={{ py: 0 }}>
+                    <Typography variant="caption">
+                      • Clear all tamper status flags in the system
+                    </Typography>
+                  </ListItem>
+                  <ListItem sx={{ py: 0 }}>
+                    <Typography variant="caption">
+                      • Write reset command to the physical meter
+                    </Typography>
+                  </ListItem>
+                </List>
+              </Alert>
+
+              <Alert severity="error">
+                <Typography variant="caption" sx={{ fontWeight: 600 }}>
+                  ⚠️ Only clear tamper status after verifying the issue has been physically resolved!
+                </Typography>
+              </Alert>
+            </Stack>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setClearConfirmOpen(false)}>Cancel</Button>
+          <Button
+            onClick={handleClearTamper}
+            variant="contained"
+            color="warning"
+            startIcon={clearing ? <RefreshIcon /> : <ClearIcon />}
+            disabled={clearing}
+          >
+            {clearing ? 'Clearing...' : 'Confirm Clear'}
+          </Button>
+        </DialogActions>
       </Dialog>
     </Box>
   );
