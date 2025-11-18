@@ -20,6 +20,6 @@
     "declarationMap": false,
     "sourceMap": true
   },
-  "include": ["src/**/*", "obis-parse.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "obis-parse.ts"]
 }
