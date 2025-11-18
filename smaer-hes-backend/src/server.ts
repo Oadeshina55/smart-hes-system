@@ -24,6 +24,10 @@ import aiRoutes from './routes/ai.routes';
 import dlmsRoutes from './routes/dlms.routes';
 import loadProfileRoutes from './routes/loadProfile.routes';
 import powerQualityRoutes from './routes/powerQuality.routes';
+import auditRoutes from './routes/audit.routes';
+
+// Import middleware
+import { auditLogger } from './middleware/audit.middleware';
 
 // Import services
 import { MeterStatusService } from './services/meterStatus.service';
@@ -56,6 +60,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Audit logging middleware (log all API requests)
+app.use('/api', auditLogger);
 
 // Global Socket.io instance
 export const socketIO = io;
@@ -139,6 +146,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/dlms', dlmsRoutes);
 app.use('/api/load-profile', loadProfileRoutes);
 app.use('/api/power-quality', powerQualityRoutes);
+app.use('/api/audit', auditRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

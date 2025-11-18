@@ -57,6 +57,7 @@ import {
   AdminPanelSettings,
   Timeline,
   Psychology,
+  Assessment,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../contexts/SocketContext';
@@ -203,6 +204,12 @@ const menuItems: MenuItemType[] = [
     title: 'Access Control',
     path: '/advanced/access-control',
     icon: <AdminPanelSettings />,
+    roles: ['admin'],
+  },
+  {
+    title: 'Audit Trail',
+    path: '/advanced/audit-trail',
+    icon: <Assessment />,
     roles: ['admin'],
   },
 ];

@@ -35,6 +35,7 @@ import BillingManagement from './pages/Advanced/BillingManagement';
 import FirmwareManagement from './pages/Advanced/FirmwareManagement';
 import SecurityAudit from './pages/Advanced/SecurityAudit';
 import UserAccessControl from './pages/Advanced/UserAccessControl';
+import AuditTrail from './pages/Advanced/AuditTrail';
 import AIDashboard from './pages/AI/AIDashboard';
 import SessionLockModal from './components/SessionLockModal';
 
@@ -134,6 +135,11 @@ function App() {
                       <Route path="/advanced/firmware" element={<FirmwareManagement />} />
                       <Route path="/advanced/security" element={<SecurityAudit />} />
                       <Route path="/advanced/access-control" element={<UserAccessControl />} />
+                    </Route>
+
+                    {/* Audit Trail - Admin only */}
+                    <Route element={<PrivateRoute allowedRoles={['admin']} />}>
+                      <Route path="/advanced/audit-trail" element={<AuditTrail />} />
                     </Route>
 
                     {/* User Management - Admin only */}
