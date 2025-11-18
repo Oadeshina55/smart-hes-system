@@ -80,17 +80,6 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
     if (!body.ipAddress) body.ipAddress = process.env.METER_HOST || '0.0.0.0';
     if (!body.port) body.port = process.env.METER_PORT ? Number(process.env.METER_PORT) : 5000;
 
-    // if brand is known and no obisConfiguration provided, parse default OBIS for brand
-    if (body.brand && !body.obisConfiguration && ['hexing', 'hexcell'].includes(body.brand)) {
-      try {
-        const parsed = parseObisForBrand(body.brand);
-        body.obisConfiguration = parsed;
-      } catch (e) {
-        console.error('Failed to parse OBIS for brand:', e);
-        // ignore parsing errors
-      }
-    }
-
     const meter = await Meter.create(body);
 
     // Log success
@@ -182,15 +171,6 @@ router.post('/import', authenticate, authorize('admin', 'operator'), upload.sing
               customer: row.customer || undefined,
               simCard: row.simCard || undefined,
             };
-
-            // attach parsed OBIS if brand known
-            if (createBody.brand && ['hexing', 'hexcell'].includes(createBody.brand) && !createBody.obisConfiguration) {
-              try {
-                createBody.obisConfiguration = parseObisForBrand(createBody.brand);
-              } catch (e) {
-                // ignore
-              }
-            }
 
             const meter = await Meter.create(createBody);
             rowResults.push({ index: i, success: true, data: meter });
