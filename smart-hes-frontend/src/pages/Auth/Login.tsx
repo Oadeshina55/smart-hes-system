@@ -267,9 +267,9 @@ const Login: React.FC = () => {
       <Paper
         elevation={24}
         sx={{
-          p: 6,
+          p: 3,
           width: '100%',
-          maxWidth: 500,
+          maxWidth: 450,
           borderRadius: 3,
           position: 'relative',
           zIndex: 2,
@@ -280,15 +280,15 @@ const Login: React.FC = () => {
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
         }}
       >
-        <Box sx={{ textAlign: 'center', mb: 3 }}>
+        <Box sx={{ textAlign: 'center', mb: 2 }}>
           <Typography
-            variant="h3"
+            variant="h4"
             gutterBottom
             sx={{ fontWeight: 700, color: '#1a1a2e', letterSpacing: '-0.5px' }}
           >
             🔐 Welcome Back
           </Typography>
-          <Typography variant="body1" sx={{ color: '#8892a4', fontWeight: 400, mt: 1 }}>
+          <Typography variant="body2" sx={{ color: '#8892a4', fontWeight: 400, mt: 0.5 }}>
             Sign in to New Hampshire Capital HES
           </Typography>
         </Box>
@@ -302,14 +302,14 @@ const Login: React.FC = () => {
             setOtpSent(false);
           }}
           variant="fullWidth"
-          sx={{ mb: 3 }}
+          sx={{ mb: 2 }}
         >
           <Tab label="Password Login" icon={<Lock />} iconPosition="start" />
           <Tab label="OTP Login" icon={<Email />} iconPosition="start" />
         </Tabs>
 
         {error && (
-          <Alert severity="error" sx={{ mb: 3 }}>
+          <Alert severity="error" sx={{ mb: 2 }}>
             {error}
           </Alert>
         )}
@@ -324,7 +324,7 @@ const Login: React.FC = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={loading}
-              sx={{ mb: 2 }}
+              sx={{ mb: 1.5 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -342,7 +342,7 @@ const Login: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
-              sx={{ mb: 2 }}
+              sx={{ mb: 1.5 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -363,7 +363,7 @@ const Login: React.FC = () => {
               }}
             />
 
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -380,29 +380,28 @@ const Login: React.FC = () => {
             </Stack>
 
             {/* Login Passcode */}
-            <Box sx={{ mb: 3 }}>
-              <Alert severity="info" icon={<Security />} sx={{ mb: 2 }}>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            <Box sx={{ mb: 2 }}>
+              <Alert severity="info" icon={<Security />} sx={{ mb: 1.5, py: 1 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>
                   Your unique login passcode:
                 </Typography>
                 <Box
                   sx={{
-                    mt: 1,
-                    p: 2,
+                    p: 1,
                     bgcolor: 'rgba(0, 0, 0, 0.05)',
-                    borderRadius: 2,
+                    borderRadius: 1.5,
                     textAlign: 'center',
                     border: '2px dashed #667eea',
                   }}
                 >
                   {loadingPasscode ? (
-                    <CircularProgress size={24} />
+                    <CircularProgress size={20} />
                   ) : (
                     <Typography
-                      variant="h4"
+                      variant="h5"
                       sx={{
                         fontWeight: 700,
-                        letterSpacing: 8,
+                        letterSpacing: 6,
                         fontFamily: 'monospace',
                         color: '#667eea',
                       }}
@@ -413,11 +412,12 @@ const Login: React.FC = () => {
                 </Box>
               </Alert>
 
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={1.5} alignItems="center">
                 <TextField
                   fullWidth
                   label="Enter Passcode"
                   variant="outlined"
+                  size="small"
                   value={userPasscode}
                   onChange={(e) => setUserPasscode(e.target.value.toUpperCase())}
                   disabled={loading || loadingPasscode}
@@ -435,6 +435,7 @@ const Login: React.FC = () => {
                 />
                 <IconButton
                   color="primary"
+                  size="small"
                   onClick={generateNewPasscode}
                   disabled={loading || loadingPasscode}
                   sx={{
@@ -445,7 +446,7 @@ const Login: React.FC = () => {
                   <Refresh />
                 </IconButton>
               </Stack>
-              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5, ml: 1 }}>
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5, ml: 0.5 }}>
                 Type the passcode shown above to verify you're human
               </Typography>
             </Box>
@@ -457,7 +458,7 @@ const Login: React.FC = () => {
               size="large"
               disabled={loading}
               sx={{
-                py: 1.5,
+                py: 1.2,
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 '&:hover': {
                   background: 'linear-gradient(135deg, #5568d3 0%, #6a4193 100%)',
@@ -474,8 +475,10 @@ const Login: React.FC = () => {
           <>
             {!otpSent ? (
               <Box>
-                <Alert severity="info" icon={<Security />} sx={{ mb: 3 }}>
-                  Enter your email or username. We'll send a verification code to your registered email.
+                <Alert severity="info" icon={<Security />} sx={{ mb: 2, py: 1 }}>
+                  <Typography variant="caption">
+                    Enter your email or username. We'll send a verification code to your registered email.
+                  </Typography>
                 </Alert>
 
                 <TextField
@@ -485,7 +488,7 @@ const Login: React.FC = () => {
                   value={otpEmail}
                   onChange={(e) => setOtpEmail(e.target.value)}
                   disabled={loading}
-                  sx={{ mb: 3 }}
+                  sx={{ mb: 2 }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -502,7 +505,7 @@ const Login: React.FC = () => {
                   onClick={handleRequestOTP}
                   disabled={loading}
                   sx={{
-                    py: 1.5,
+                    py: 1.2,
                     background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
                     '&:hover': {
                       background: 'linear-gradient(135deg, #3d94e5 0%, #00d9e5 100%)',
@@ -514,8 +517,10 @@ const Login: React.FC = () => {
               </Box>
             ) : (
               <form onSubmit={handleVerifyOTP}>
-                <Alert severity="success" icon={<Email />} sx={{ mb: 3 }}>
-                  OTP sent to your email! Please check your inbox.
+                <Alert severity="success" icon={<Email />} sx={{ mb: 2, py: 1 }}>
+                  <Typography variant="caption">
+                    OTP sent to your email! Please check your inbox.
+                  </Typography>
                 </Alert>
 
                 <TextField
@@ -525,10 +530,10 @@ const Login: React.FC = () => {
                   value={otpCode}
                   onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   disabled={loading}
-                  sx={{ mb: 2 }}
+                  sx={{ mb: 1.5 }}
                   inputProps={{
                     maxLength: 6,
-                    style: { textAlign: 'center', fontSize: '24px', letterSpacing: '8px' },
+                    style: { textAlign: 'center', fontSize: '20px', letterSpacing: '6px' },
                   }}
                   InputProps={{
                     startAdornment: (
@@ -539,7 +544,7 @@ const Login: React.FC = () => {
                   }}
                 />
 
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                   <Chip
                     label={`Expires in ${formatTime(otpTimer)}`}
                     color={otpTimer > 120 ? 'success' : 'warning'}
@@ -562,7 +567,7 @@ const Login: React.FC = () => {
                   size="large"
                   disabled={loading || otpCode.length !== 6}
                   sx={{
-                    py: 1.5,
+                    py: 1.2,
                     background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
                     '&:hover': {
                       background: 'linear-gradient(135deg, #3ad069 0%, #2fe0c5 100%)',
@@ -575,12 +580,13 @@ const Login: React.FC = () => {
                 <Button
                   fullWidth
                   variant="text"
+                  size="small"
                   onClick={() => {
                     setOtpSent(false);
                     setOtpCode('');
                     setOtpTimer(0);
                   }}
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 1.5 }}
                 >
                   Use different email
                 </Button>
@@ -589,7 +595,7 @@ const Login: React.FC = () => {
           </>
         )}
 
-        <Divider sx={{ my: 3 }} />
+        <Divider sx={{ my: 2 }} />
 
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
