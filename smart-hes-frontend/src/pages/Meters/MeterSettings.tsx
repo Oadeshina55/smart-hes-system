@@ -36,6 +36,7 @@ import {
   Warning as WarningIcon,
   Info as InfoIcon,
   CheckCircle as CheckCircleIcon,
+  BatteryChargingFull,
 } from '@mui/icons-material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -355,6 +356,39 @@ const MeterSettings: React.FC = () => {
 
   const modifiedCount = Array.from(settingValues.values()).filter(s => s.modified).length;
 
+  // Remote Loading State
+  const [tokenAmount, setTokenAmount] = useState<number | ''>('');
+  const [tokenValue, setTokenValue] = useState('');
+  const [loadingToken, setLoadingToken] = useState(false);
+
+  const handleRemoteLoad = async () => {
+    if (!meter) {
+      toast.error('Please select a meter first');
+      return;
+    }
+    if (!tokenAmount && !tokenValue) {
+      toast.error('Provide an amount or token');
+      return;
+    }
+
+    setLoadingToken(true);
+    try {
+      const body: any = { meterNumber: meter.meterNumber };
+      if (tokenValue) body.token = tokenValue;
+      if (tokenAmount) body.amount = tokenAmount;
+
+      const res = await axios.post('/remote/load', body);
+      toast.success(res.data.message || 'Load command sent successfully');
+      setTokenAmount('');
+      setTokenValue('');
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Failed to send load command');
+    } finally {
+      setLoadingToken(false);
+    }
+  };
+
   return (
     <Box>
       <Typography variant="h4" sx={{ mb: 3, fontWeight: 700, color: 'primary.main' }}>
@@ -477,6 +511,51 @@ const MeterSettings: React.FC = () => {
               </Stack>
             </CardContent>
           </Card>
+
+          {/* Remote Token Loading Card */}
+          {meter && (
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+                  Remote Token Loading
+                </Typography>
+                <Stack spacing={2}>
+                  <TextField
+                    fullWidth
+                    label="Amount (Optional)"
+                    type="number"
+                    value={tokenAmount}
+                    onChange={(e) => setTokenAmount(e.target.value === '' ? '' : Number(e.target.value))}
+                    disabled={loadingToken}
+                    helperText="Enter amount to generate token"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Token (Optional)"
+                    value={tokenValue}
+                    onChange={(e) => setTokenValue(e.target.value)}
+                    disabled={loadingToken}
+                    helperText="Or paste pre-generated token"
+                  />
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="success"
+                    startIcon={loadingToken ? <CircularProgress size={20} color="inherit" /> : <BatteryChargingFull />}
+                    onClick={handleRemoteLoad}
+                    disabled={loadingToken || (!tokenAmount && !tokenValue)}
+                  >
+                    {loadingToken ? 'Sending...' : 'Send Load Command'}
+                  </Button>
+                  <Alert severity="info" icon={<InfoIcon />}>
+                    <Typography variant="caption">
+                      Provide either an amount or a token to send load command to the meter
+                    </Typography>
+                  </Alert>
+                </Stack>
+              </CardContent>
+            </Card>
+          )}
         </Grid>
 
         {/* Right Panel - Settings Categories */}

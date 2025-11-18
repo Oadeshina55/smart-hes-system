@@ -33,7 +33,6 @@ import {
   LocationOn,
   EventNote,
   SignalWifi4Bar,
-  Wifi,
   AccountCircle,
   Logout,
   Notifications,
@@ -47,7 +46,6 @@ import {
   MonitorHeart,
   QueryStats,
   BatteryChargingFull,
-  ControlCamera,
   Group,
   ChevronLeft,
   ChevronRight,
@@ -194,24 +192,6 @@ const menuItems: MenuItemType[] = [
     title: 'Energy Consumption',
     path: '/reports/consumption',
     icon: <BatteryChargingFull />,
-  },
-  {
-    title: 'Remote',
-    icon: <Wifi />,
-    children: [
-      {
-        title: 'Remote Loading',
-        path: '/remote/loading',
-        icon: <BatteryChargingFull />,
-        roles: ['admin', 'operator'],
-      },
-      {
-        title: 'Remote Control',
-        path: '/remote/control',
-        icon: <ControlCamera />,
-        roles: ['admin', 'operator'],
-      },
-    ],
   },
   {
     title: 'User Management',

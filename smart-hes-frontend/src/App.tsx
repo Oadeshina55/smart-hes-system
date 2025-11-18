@@ -26,8 +26,6 @@ import RealTimeMonitoring from './pages/TaskQuery/RealTimeMonitoring';
 import EventAnalysis from './pages/TaskQuery/EventAnalysis';
 import OnlineRate from './pages/TaskQuery/OnlineRate';
 import EnergyConsumption from './pages/Reports/EnergyConsumption';
-import RemoteLoading from './pages/Remote/RemoteLoading';
-import RemoteControl from './pages/Remote/RemoteControl';
 import Profile from './pages/Profile/Profile';
 import LoadProfileVisualization from './pages/Advanced/LoadProfileVisualization';
 import PowerQualityMonitoring from './pages/Advanced/PowerQualityMonitoring';
@@ -138,12 +136,6 @@ function App() {
                       <Route path="/advanced/access-control" element={<UserAccessControl />} />
                     </Route>
 
-                    {/* Remote Routes - Admin & Operator only */}
-                    <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
-                      <Route path="/remote/loading" element={<RemoteLoading />} />
-                      <Route path="/remote/control" element={<RemoteControl />} />
-                    </Route>
-                    
                     {/* User Management - Admin only */}
                     <Route element={<PrivateRoute allowedRoles={['admin']} />}>
                       <Route path="/users" element={<UserAccessControl />} />
