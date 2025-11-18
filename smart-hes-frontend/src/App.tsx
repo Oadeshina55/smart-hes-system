@@ -14,6 +14,7 @@ import Register from './pages/Auth/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
 import MeterManagement from './pages/Meters/MeterManagement';
 import AddMeter from './pages/Meters/AddMeter';
+import EditMeter from './pages/Meters/EditMeter';
 import MeterImport from './pages/Meters/MeterImport';
 import MeterReading from './pages/Meters/MeterReading';
 import MeterSettings from './pages/Meters/MeterSettings';
@@ -101,6 +102,7 @@ function App() {
                     <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
                       <Route path="/meters" element={<MeterManagement />} />
                       <Route path="/meters/add" element={<AddMeter />} />
+                      <Route path="/meters/edit/:id" element={<EditMeter />} />
                       <Route path="/meters/import" element={<MeterImport />} />
                       <Route path="/meters/sims" element={<SimManagement />} />
                       <Route path="/meters/reading" element={<MeterReading />} />
