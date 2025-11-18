@@ -21,8 +21,66 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
   try {
     const body = { ...(req.body || {}) };
 
+    // Validate required fields
+    if (!body.meterNumber) {
+      return res.status(400).json({
+        success: false,
+        message: 'Meter number is required',
+        error: 'meterNumber is a required field'
+      });
+    }
+
+    if (!body.area) {
+      return res.status(400).json({
+        success: false,
+        message: 'Area is required',
+        error: 'area is a required field'
+      });
+    }
+
+    // Normalize meter number to uppercase
+    body.meterNumber = String(body.meterNumber).toUpperCase();
+
+    // Check if meter number already exists
+    const existingMeter = await Meter.findOne({ meterNumber: body.meterNumber });
+    if (existingMeter) {
+      return res.status(409).json({
+        success: false,
+        message: 'Meter number already exists',
+        error: `Meter with number ${body.meterNumber} already exists in the system`
+      });
+    }
+
+    // Validate area exists
+    const areaExists = await Area.findById(body.area);
+    if (!areaExists) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid area',
+        error: 'The specified area does not exist'
+      });
+    }
+
     // normalize brand
     if (body.brand) body.brand = String(body.brand).toLowerCase();
+
+    // Validate brand-specific meter number patterns
+    if (body.brand) {
+      const brandPatterns: Record<string, RegExp> = {
+        hexing: /^145\d{7,}$/,
+        hexcell: /^46\d{7,}$/,
+      };
+
+      if (brandPatterns[body.brand] && !brandPatterns[body.brand].test(body.meterNumber)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid meter number format for brand',
+          error: body.brand === 'hexing'
+            ? 'Hexing meters must start with "145"'
+            : 'Hexcell meters must start with "46"'
+        });
+      }
+    }
 
     // set default IP/PORT if missing
     if (!body.ipAddress) body.ipAddress = process.env.METER_HOST || '0.0.0.0';
@@ -34,14 +92,48 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
         const parsed = parseObisForBrand(body.brand);
         body.obisConfiguration = parsed;
       } catch (e) {
+        console.error('Failed to parse OBIS for brand:', e);
         // ignore parsing errors
       }
     }
 
     const meter = await Meter.create(body);
-    res.status(201).json({ success: true, message: 'Meter created', data: meter });
+
+    // Log success
+    console.log(`✓ Meter created: ${meter.meterNumber} (${meter._id})`);
+
+    res.status(201).json({
+      success: true,
+      message: 'Meter created successfully',
+      data: meter
+    });
   } catch (error: any) {
-    res.status(500).json({ success: false, message: 'Failed to create meter', error: error.message });
+    console.error('Error creating meter:', error);
+
+    // Handle mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map((err: any) => err.message);
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        error: messages.join(', ')
+      });
+    }
+
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: 'Meter number already exists',
+        error: 'A meter with this number already exists in the system'
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create meter',
+      error: error.message
+    });
   }
 });
 

@@ -36,6 +36,7 @@ import BillingManagement from './pages/Advanced/BillingManagement';
 import FirmwareManagement from './pages/Advanced/FirmwareManagement';
 import SecurityAudit from './pages/Advanced/SecurityAudit';
 import UserAccessControl from './pages/Advanced/UserAccessControl';
+import AIDashboard from './pages/AI/AIDashboard';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -117,6 +118,9 @@ function App() {
                     
                     {/* Reports Routes - All authenticated users */}
                     <Route path="/reports/consumption" element={<EnergyConsumption />} />
+
+                    {/* AI Dashboard - All authenticated users */}
+                    <Route path="/ai/dashboard" element={<AIDashboard />} />
 
                     {/* Advanced HES Features - Admin & Operator only */}
                     <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>

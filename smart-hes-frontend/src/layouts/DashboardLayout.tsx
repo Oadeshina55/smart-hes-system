@@ -58,6 +58,7 @@ import {
   CloudUpload,
   AdminPanelSettings,
   Timeline,
+  Psychology,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../contexts/SocketContext';
@@ -80,6 +81,11 @@ const menuItems: MenuItemType[] = [
     title: 'Dashboard',
     path: '/dashboard',
     icon: <Dashboard />,
+  },
+  {
+    title: 'AI Analytics',
+    path: '/ai/dashboard',
+    icon: <Psychology />,
   },
   {
     title: 'Area Management',
