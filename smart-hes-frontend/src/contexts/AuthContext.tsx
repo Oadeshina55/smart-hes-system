@@ -184,7 +184,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         throw new Error('Username not found. Please login again.');
       }
 
-      const response = await axios.post('/auth/login', {
+      const response = await axios.post('/auth/quick-relogin', {
         username: savedUsername,
         password,
       });
