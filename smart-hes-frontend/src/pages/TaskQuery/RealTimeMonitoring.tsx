@@ -155,9 +155,9 @@ const RealTimeMonitoring: React.FC = () => {
       setLoadingParameters(true);
       const response = await axios.get('/obis/functions');
 
-      if (response.data.success) {
+      if (response.data.success && response.data.data.functions) {
         // Transform OBIS functions to ObisParameter format
-        const parameters: ObisParameter[] = response.data.data.map((func: any) => ({
+        const parameters: ObisParameter[] = response.data.data.functions.map((func: any) => ({
           code: func.code,
           name: func.name || func.code,
           category: categorizeObisCode(func.code, func.group),
@@ -170,6 +170,7 @@ const RealTimeMonitoring: React.FC = () => {
         }));
 
         setObisParameters(parameters);
+        console.log(`✅ Loaded ${parameters.length} OBIS parameters`);
       }
     } catch (error) {
       console.error('Failed to fetch OBIS parameters:', error);
