@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
-import theme from './theme/theme';
+import { ThemeContextProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import PrivateRoute from './components/PrivateRoute';
 import DashboardLayout from './layouts/DashboardLayout';
 import Login from './pages/Auth/Login';
@@ -27,8 +27,16 @@ import OnlineRate from './pages/TaskQuery/OnlineRate';
 import EnergyConsumption from './pages/Reports/EnergyConsumption';
 import RemoteLoading from './pages/Remote/RemoteLoading';
 import RemoteControl from './pages/Remote/RemoteControl';
-import UserManagement from './pages/Users/UserManagement';
 import Profile from './pages/Profile/Profile';
+import LoadProfileVisualization from './pages/Advanced/LoadProfileVisualization';
+import PowerQualityMonitoring from './pages/Advanced/PowerQualityMonitoring';
+import EventLogViewer from './pages/Advanced/EventLogViewer';
+import TamperDetectionDashboard from './pages/Advanced/TamperDetectionDashboard';
+import BillingManagement from './pages/Advanced/BillingManagement';
+import FirmwareManagement from './pages/Advanced/FirmwareManagement';
+import SecurityAudit from './pages/Advanced/SecurityAudit';
+import UserAccessControl from './pages/Advanced/UserAccessControl';
+import AIDashboard from './pages/AI/AIDashboard';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -43,30 +51,33 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <AuthProvider>
-            <SocketProvider>
-              <Toaster 
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeContextProvider>
+          <CssBaseline />
+          <Router>
+            <AuthProvider>
+              <SocketProvider>
+                <Toaster
                 position="top-right"
                 toastOptions={{
                   duration: 4000,
                   style: {
-                    background: '#363636',
-                    color: '#fff',
+                    borderRadius: '12px',
+                    fontSize: '14px',
                   },
                   success: {
                     duration: 3000,
-                    style: {
-                      background: '#4caf50',
+                    iconTheme: {
+                      primary: '#00C853',
+                      secondary: '#FFFFFF',
                     },
                   },
                   error: {
                     duration: 4000,
-                    style: {
-                      background: '#f44336',
+                    iconTheme: {
+                      primary: '#D32F2F',
+                      secondary: '#FFFFFF',
                     },
                   },
                 }}
@@ -107,7 +118,22 @@ function App() {
                     
                     {/* Reports Routes - All authenticated users */}
                     <Route path="/reports/consumption" element={<EnergyConsumption />} />
-                    
+
+                    {/* AI Dashboard - All authenticated users */}
+                    <Route path="/ai/dashboard" element={<AIDashboard />} />
+
+                    {/* Advanced HES Features - Admin & Operator only */}
+                    <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
+                      <Route path="/advanced/load-profile" element={<LoadProfileVisualization />} />
+                      <Route path="/advanced/power-quality" element={<PowerQualityMonitoring />} />
+                      <Route path="/advanced/events" element={<EventLogViewer />} />
+                      <Route path="/advanced/tamper" element={<TamperDetectionDashboard />} />
+                      <Route path="/advanced/billing" element={<BillingManagement />} />
+                      <Route path="/advanced/firmware" element={<FirmwareManagement />} />
+                      <Route path="/advanced/security" element={<SecurityAudit />} />
+                      <Route path="/advanced/access-control" element={<UserAccessControl />} />
+                    </Route>
+
                     {/* Remote Routes - Admin & Operator only */}
                     <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
                       <Route path="/remote/loading" element={<RemoteLoading />} />
@@ -116,7 +142,7 @@ function App() {
                     
                     {/* User Management - Admin only */}
                     <Route element={<PrivateRoute allowedRoles={['admin']} />}>
-                      <Route path="/users" element={<UserManagement />} />
+                      <Route path="/users" element={<UserAccessControl />} />
                     </Route>
                     
                     {/* Profile - All authenticated users */}
@@ -127,8 +153,9 @@ function App() {
             </SocketProvider>
           </AuthProvider>
         </Router>
-      </ThemeProvider>
+      </ThemeContextProvider>
     </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

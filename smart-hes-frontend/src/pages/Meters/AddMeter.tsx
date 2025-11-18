@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Paper, Grid, TextField, Button, MenuItem, Alert } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const meterTypes = ['single-phase', 'three-phase', 'prepaid', 'postpaid'];
 
@@ -12,6 +14,7 @@ const METER_PATTERNS: Record<string, { regex: RegExp; hint: string }> = {
 };
 
 export default function AddMeter() {
+	const navigate = useNavigate();
 	const [meterNumber, setMeterNumber] = useState('');
 	const [meterType, setMeterType] = useState('single-phase');
 	const [brand, setBrand] = useState('hexing');
@@ -61,6 +64,7 @@ export default function AddMeter() {
 	};
 
 	const handleCreate = async () => {
+		// Validation
 		if (!meterNumber) {
 			toast.error('Meter number is required');
 			return;
@@ -69,22 +73,52 @@ export default function AddMeter() {
 			toast.error(meterNumberError);
 			return;
 		}
+		if (!model) {
+			toast.error('Model is required');
+			return;
+		}
+		if (!area) {
+			toast.error('Area is required');
+			return;
+		}
+
 		try {
-			await axios.post('/meters', { meterNumber, meterType, brand: brand.toLowerCase(), model, area, ipAddress: ipAddress || undefined, port: port ? Number(port) : undefined });
-			toast.success('Meter created');
+			await axios.post('/meters', {
+				meterNumber,
+				meterType,
+				brand: brand.toLowerCase(),
+				model,
+				area,
+				ipAddress: ipAddress || undefined,
+				port: port ? Number(port) : undefined
+			});
+			toast.success('Meter created successfully');
 			// redirect to management
-			window.location.href = '/meters';
+			navigate('/meters');
 		} catch (err: any) {
 			console.error(err);
-			toast.error(err.response?.data?.message || 'Failed to create meter');
+			const errorMessage = err.response?.data?.message || err.response?.data?.error || 'Failed to create meter';
+			toast.error(errorMessage);
 		}
 	};
 
 	return (
-		<Box>
-			<Typography variant="h4" sx={{ mb: 2 }}>Add Meter</Typography>
-			<Paper sx={{ p: 3 }}>
-				<Grid container spacing={2}>
+		<Box sx={{ p: 3 }}>
+			<Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+				<Typography variant="h4" sx={{ fontWeight: 700, color: '#344767' }}>
+					Add New Meter
+				</Typography>
+				<Button
+					variant="outlined"
+					startIcon={<ArrowBackIcon />}
+					onClick={() => navigate('/meters')}
+				>
+					Back to Meters
+				</Button>
+			</Box>
+
+			<Paper sx={{ p: 4, borderRadius: 3 }}>
+				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<Alert icon={<InfoIcon />} severity="info">
 							{METER_PATTERNS[brand.toLowerCase()].hint}
@@ -111,7 +145,16 @@ export default function AddMeter() {
 							<MenuItem value="hexcell">Hexcell</MenuItem>
 						</TextField>
 					</Grid>
-					<Grid item xs={12} md={6}><TextField fullWidth label="Model" value={model} onChange={(e) => setModel(e.target.value)} /></Grid>
+					<Grid item xs={12} md={6}>
+						<TextField
+							fullWidth
+							label="Model"
+							value={model}
+							onChange={(e) => setModel(e.target.value)}
+							required
+							helperText="Model name is required"
+						/>
+					</Grid>
 					<Grid item xs={12} md={6}>
 						<TextField fullWidth label="IP Address" value={ipAddress} onChange={(e) => setIpAddress(e.target.value)} />
 					</Grid>
@@ -119,13 +162,31 @@ export default function AddMeter() {
 						<TextField fullWidth label="Port" value={port} onChange={(e) => setPort(e.target.value)} />
 					</Grid>
 					<Grid item xs={12} md={6}>
-						<TextField select fullWidth label="Area" value={area} onChange={(e) => setArea(e.target.value)}>
-							<MenuItem value="">Unassigned</MenuItem>
+						<TextField
+							select
+							fullWidth
+							label="Area"
+							value={area}
+							onChange={(e) => setArea(e.target.value)}
+							required
+							helperText="Area assignment is required"
+						>
+							<MenuItem value="">Select Area</MenuItem>
 							{areas.map(a => <MenuItem key={a._id} value={a._id}>{a.name}</MenuItem>)}
 						</TextField>
 					</Grid>
 					<Grid item xs={12}>
-						<Button variant="contained" onClick={handleCreate}>Create Meter</Button>
+						<Button
+							variant="contained"
+							onClick={handleCreate}
+							size="large"
+							sx={{
+								background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
+								px: 4
+							}}
+						>
+							Create Meter
+						</Button>
 					</Grid>
 				</Grid>
 			</Paper>

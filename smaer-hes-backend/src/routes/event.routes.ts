@@ -37,6 +37,47 @@ router.post('/', async (req, res) => {
 	}
 });
 
+// Get single event by ID
+router.get('/:id', authenticate, async (req, res) => {
+	try {
+		const event = await Event.findById(req.params.id).populate('meter', 'meterNumber brand model');
+		if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
+		res.json({ success: true, data: event });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to fetch event', error: error.message });
+	}
+});
+
+// Update event
+router.put('/:id', authenticate, authorize('admin', 'operator'), async (req, res) => {
+	try {
+		const { description, severity, category, metadata } = req.body;
+		const updateData: any = {};
+
+		if (description !== undefined) updateData.description = description;
+		if (severity !== undefined) updateData.severity = severity;
+		if (category !== undefined) updateData.category = category;
+		if (metadata !== undefined) updateData.metadata = metadata;
+
+		const event = await Event.findByIdAndUpdate(req.params.id, updateData, { new: true, runValidators: true });
+		if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
+		res.json({ success: true, message: 'Event updated successfully', data: event });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to update event', error: error.message });
+	}
+});
+
+// Delete event
+router.delete('/:id', authenticate, authorize('admin'), async (req, res) => {
+	try {
+		const event = await Event.findByIdAndDelete(req.params.id);
+		if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
+		res.json({ success: true, message: 'Event deleted successfully' });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to delete event', error: error.message });
+	}
+});
+
 // Acknowledge event
 router.post('/:id/acknowledge', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
 	try {

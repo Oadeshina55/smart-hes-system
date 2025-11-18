@@ -47,6 +47,8 @@ import CountUp from 'react-countup';
 import axios from 'axios';
 import { useSocket } from '../../contexts/SocketContext';
 import toast from 'react-hot-toast';
+import AIInsights from '../../components/AIInsights';
+import AIAnomalyDetection from '../../components/AIAnomalyDetection';
 
 interface DashboardStats {
   meters: {
@@ -477,6 +479,16 @@ const Dashboard: React.FC = () => {
               ))}
             </Box>
           </Paper>
+        </Grid>
+      </Grid>
+
+      {/* AI Insights and Anomaly Detection Section */}
+      <Grid container spacing={3} sx={{ mt: 2 }}>
+        <Grid item xs={12} lg={6}>
+          <AIInsights />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <AIAnomalyDetection />
         </Grid>
       </Grid>
 

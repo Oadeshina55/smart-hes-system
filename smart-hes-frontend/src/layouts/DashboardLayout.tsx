@@ -19,6 +19,7 @@ import {
   Menu,
   MenuItem,
   Chip,
+  Tooltip,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -30,7 +31,6 @@ import {
   ExpandLess,
   ExpandMore,
   LocationOn,
-  Speed,
   EventNote,
   SignalWifi4Bar,
   Wifi,
@@ -43,18 +43,30 @@ import {
   SimCard,
   ReadMore,
   SettingsSuggest,
-  PersonAdd,
   Upload,
   MonitorHeart,
   QueryStats,
   BatteryChargingFull,
   ControlCamera,
   Group,
+  ChevronLeft,
+  ChevronRight,
+  AutoGraph,
+  Security,
+  Shield,
+  Receipt,
+  CloudUpload,
+  AdminPanelSettings,
+  Timeline,
+  Psychology,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../contexts/SocketContext';
+import { useThemeMode } from '../contexts/ThemeContext';
+import { NHLogoCompact, NHLogo } from '../components/Logo';
 
-const drawerWidth = 280;
+const drawerWidth = 260;
+const collapsedDrawerWidth = 65;
 
 interface MenuItemType {
   title: string;
@@ -71,31 +83,24 @@ const menuItems: MenuItemType[] = [
     icon: <Dashboard />,
   },
   {
-    title: 'System',
-    icon: <Settings />,
-    children: [
-      {
-        title: 'Area Management',
-        path: '/system/areas',
-        icon: <LocationOn />,
-        roles: ['admin', 'operator'],
-      },
-    ],
+    title: 'AI Analytics',
+    path: '/ai/dashboard',
+    icon: <Psychology />,
   },
   {
-    title: 'Meter Management',
+    title: 'Area Management',
+    path: '/system/areas',
+    icon: <LocationOn />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Meters',
     icon: <ElectricBolt />,
     children: [
       {
         title: 'All Meters',
         path: '/meters',
         icon: <ElectricBolt />,
-      },
-      {
-        title: 'Add Meter',
-        path: '/meters/add',
-        icon: <ElectricBolt />,
-        roles: ['admin', 'operator'],
       },
       {
         title: 'SIM Management',
@@ -117,7 +122,7 @@ const menuItems: MenuItemType[] = [
     ],
   },
   {
-    title: 'Customer Management',
+    title: 'Customers',
     icon: <People />,
     children: [
       {
@@ -134,36 +139,61 @@ const menuItems: MenuItemType[] = [
     ],
   },
   {
-    title: 'Task Query',
-    icon: <QueryStats />,
-    children: [
-      {
-        title: 'Real-Time Monitoring',
-        path: '/task-query/monitoring',
-        icon: <MonitorHeart />,
-      },
-      {
-        title: 'Event Analysis',
-        path: '/task-query/events',
-        icon: <EventNote />,
-      },
-      {
-        title: 'Online Rate',
-        path: '/task-query/online-rate',
-        icon: <SignalWifi4Bar />,
-      },
-    ],
+    title: 'Load Profile',
+    path: '/advanced/load-profile',
+    icon: <Timeline />,
+    roles: ['admin', 'operator'],
   },
   {
-    title: 'Consumption Report',
-    icon: <Assessment />,
-    children: [
-      {
-        title: 'Energy Consumption',
-        path: '/reports/consumption',
-        icon: <BatteryChargingFull />,
-      },
-    ],
+    title: 'Power Quality',
+    path: '/advanced/power-quality',
+    icon: <QueryStats />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Event Logs',
+    path: '/advanced/events',
+    icon: <EventNote />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Tamper Detection',
+    path: '/advanced/tamper',
+    icon: <Shield />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Billing Management',
+    path: '/advanced/billing',
+    icon: <Receipt />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Firmware Upgrade',
+    path: '/advanced/firmware',
+    icon: <CloudUpload />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Security Audit',
+    path: '/advanced/security',
+    icon: <Security />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Real-Time Monitoring',
+    path: '/task-query/monitoring',
+    icon: <MonitorHeart />,
+  },
+  {
+    title: 'Online Rate',
+    path: '/task-query/online-rate',
+    icon: <SignalWifi4Bar />,
+  },
+  {
+    title: 'Energy Consumption',
+    path: '/reports/consumption',
+    icon: <BatteryChargingFull />,
   },
   {
     title: 'Remote',
@@ -189,29 +219,50 @@ const menuItems: MenuItemType[] = [
     icon: <Group />,
     roles: ['admin'],
   },
+  {
+    title: 'Access Control',
+    path: '/advanced/access-control',
+    icon: <AdminPanelSettings />,
+    roles: ['admin'],
+  },
 ];
 
 const DashboardLayout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
-  const [darkMode, setDarkMode] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationAnchor, setNotificationAnchor] = useState<null | HTMLElement>(null);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
   const { activeAlerts } = useSocket();
+  const { mode, toggleTheme } = useThemeMode();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed);
+    // Close all menus when collapsing
+    if (!collapsed) {
+      setOpenMenus({});
+    }
+  };
+
   const handleMenuClick = (title: string) => {
-    setOpenMenus(prev => ({
-      ...prev,
-      [title]: !prev[title],
-    }));
+    if (collapsed) {
+      // If collapsed, expand the sidebar when clicking a parent menu
+      setCollapsed(false);
+      setOpenMenus({ [title]: true });
+    } else {
+      setOpenMenus(prev => ({
+        ...prev,
+        [title]: !prev[title],
+      }));
+    }
   };
 
   const handleNavigate = (path: string) => {
@@ -250,88 +301,142 @@ const DashboardLayout: React.FC = () => {
     return user && item.roles.includes(user.role);
   };
 
+  const currentDrawerWidth = collapsed ? collapsedDrawerWidth : drawerWidth;
+
   const drawer = (
     <div>
-      <Toolbar sx={{ 
-        background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
-        color: 'white'
+      <Toolbar sx={{
+        background: mode === 'light'
+          ? 'linear-gradient(135deg, #003A5D 0%, #00758F 100%)'
+          : 'linear-gradient(135deg, #004070 0%, #008FA0 100%)',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: collapsed ? 'center' : 'flex-start',
+        gap: collapsed ? 0 : 1,
+        minHeight: '64px !important',
       }}>
-        <ElectricBolt sx={{ mr: 2 }} />
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700 }}>
-          HES Core
-        </Typography>
+        {collapsed ? (
+          <NHLogoCompact sx={{ height: 36 }} />
+        ) : (
+          <NHLogo sx={{ height: 45, width: 'auto' }} />
+        )}
       </Toolbar>
       <Divider />
-      <List>
+
+      {/* Collapse Toggle Button */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
+        <Tooltip title={collapsed ? "Expand Sidebar" : "Collapse Sidebar"} placement="right">
+          <IconButton onClick={toggleCollapse} size="small">
+            {collapsed ? <ChevronRight /> : <ChevronLeft />}
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <Divider />
+
+      <List sx={{ px: collapsed ? 0.5 : 1 }}>
         {menuItems.map((item) => {
           if (!hasAccess(item)) return null;
 
           if (item.children) {
             return (
               <div key={item.title}>
-                <ListItemButton onClick={() => handleMenuClick(item.title)}>
-                  <ListItemIcon sx={{ color: '#67748e' }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={item.title} 
-                    sx={{ color: '#67748e' }}
-                  />
-                  {openMenus[item.title] ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-                <Collapse in={openMenus[item.title]} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {item.children.map((child) => {
-                      if (!hasAccess(child)) return null;
-                      return (
-                        <ListItemButton
-                          key={child.path}
-                          sx={{ 
-                            pl: 4,
-                            background: location.pathname === child.path ? 
-                              'linear-gradient(195deg, rgba(73,163,241,0.1) 0%, rgba(26,115,232,0.1) 100%)' : 
-                              'transparent',
-                            borderLeft: location.pathname === child.path ? 
-                              '3px solid #1A73E8' : 'none',
-                          }}
-                          onClick={() => child.path && handleNavigate(child.path)}
-                        >
-                          <ListItemIcon sx={{ color: '#8392AB', minWidth: 40 }}>
-                            {child.icon}
-                          </ListItemIcon>
-                          <ListItemText 
-                            primary={child.title}
-                            sx={{ color: '#67748e' }}
-                          />
-                        </ListItemButton>
-                      );
-                    })}
-                  </List>
-                </Collapse>
+                <Tooltip title={collapsed ? item.title : ""} placement="right">
+                  <ListItemButton
+                    onClick={() => handleMenuClick(item.title)}
+                    sx={{
+                      justifyContent: collapsed ? 'center' : 'flex-start',
+                      px: collapsed ? 1 : 2,
+                      borderRadius: 1,
+                      mb: 0.5,
+                    }}
+                  >
+                    <ListItemIcon sx={{
+                      color: 'text.secondary',
+                      minWidth: collapsed ? 'auto' : 40,
+                    }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    {!collapsed && (
+                      <>
+                        <ListItemText
+                          primary={item.title}
+                          sx={{ color: 'text.secondary' }}
+                          primaryTypographyProps={{ fontSize: '0.875rem' }}
+                        />
+                        {openMenus[item.title] ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
+                      </>
+                    )}
+                  </ListItemButton>
+                </Tooltip>
+                {!collapsed && (
+                  <Collapse in={openMenus[item.title]} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      {item.children.map((child) => {
+                        if (!hasAccess(child)) return null;
+                        return (
+                          <ListItemButton
+                            key={child.path}
+                            sx={{
+                              pl: 4,
+                              py: 0.75,
+                              borderRadius: 1,
+                              mb: 0.5,
+                              bgcolor: location.pathname === child.path ? 'action.selected' : 'transparent',
+                              borderLeft: location.pathname === child.path ?
+                                '3px solid' : 'none',
+                              borderColor: 'primary.main',
+                            }}
+                            onClick={() => child.path && handleNavigate(child.path)}
+                          >
+                            <ListItemIcon sx={{ color: 'text.secondary', minWidth: 36 }}>
+                              {child.icon}
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={child.title}
+                              sx={{ color: 'text.primary' }}
+                              primaryTypographyProps={{ fontSize: '0.8125rem' }}
+                            />
+                          </ListItemButton>
+                        );
+                      })}
+                    </List>
+                  </Collapse>
+                )}
               </div>
             );
           }
 
           return (
             <ListItem key={item.title} disablePadding>
-              <ListItemButton
-                sx={{ 
-                  background: location.pathname === item.path ? 
-                    'linear-gradient(195deg, rgba(73,163,241,0.1) 0%, rgba(26,115,232,0.1) 100%)' : 
-                    'transparent',
-                  borderLeft: location.pathname === item.path ? 
-                    '3px solid #1A73E8' : 'none',
-                }}
-                onClick={() => item.path && handleNavigate(item.path)}
-              >
-                <ListItemIcon sx={{ color: '#67748e' }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText 
-                  primary={item.title}
-                  sx={{ color: '#67748e' }}
-                />
-              </ListItemButton>
+              <Tooltip title={collapsed ? item.title : ""} placement="right">
+                <ListItemButton
+                  sx={{
+                    justifyContent: collapsed ? 'center' : 'flex-start',
+                    px: collapsed ? 1 : 2,
+                    borderRadius: 1,
+                    mb: 0.5,
+                    bgcolor: location.pathname === item.path ? 'action.selected' : 'transparent',
+                    borderLeft: location.pathname === item.path ? '3px solid' : 'none',
+                    borderColor: 'primary.main',
+                  }}
+                  onClick={() => item.path && handleNavigate(item.path)}
+                >
+                  <ListItemIcon sx={{
+                    color: 'text.secondary',
+                    minWidth: collapsed ? 'auto' : 40,
+                  }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  {!collapsed && (
+                    <ListItemText
+                      primary={item.title}
+                      sx={{ color: 'text.primary' }}
+                      primaryTypographyProps={{ fontSize: '0.875rem' }}
+                    />
+                  )}
+                </ListItemButton>
+              </Tooltip>
             </ListItem>
           );
         })}
@@ -340,15 +445,16 @@ const DashboardLayout: React.FC = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex', bgcolor: '#f8f9fa', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          bgcolor: 'white',
-          color: '#67748e',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          width: { sm: `calc(100% - ${currentDrawerWidth}px)` },
+          ml: { sm: `${currentDrawerWidth}px` },
+          bgcolor: 'background.paper',
+          color: 'text.primary',
+          backgroundImage: 'none',
+          transition: 'width 0.3s, margin 0.3s',
         }}
       >
         <Toolbar>
@@ -361,13 +467,13 @@ const DashboardLayout: React.FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, color: '#344767' }}>
-            Smart Meter Management System
+
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 600, fontSize: '1.125rem' }}>
+            New Hampshire Capital - Head End System
           </Typography>
 
-          <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
-            {darkMode ? <Brightness7 /> : <Brightness4 />}
+          <IconButton onClick={toggleTheme} color="inherit" sx={{ mr: 1 }}>
+            {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
 
           <IconButton color="inherit" onClick={handleNotificationMenu}>
@@ -377,12 +483,12 @@ const DashboardLayout: React.FC = () => {
           </IconButton>
 
           <Chip
-            avatar={<Avatar>{user?.firstName?.[0]}{user?.lastName?.[0]}</Avatar>}
+            avatar={<Avatar sx={{ width: 32, height: 32 }}>{user?.firstName?.[0]}{user?.lastName?.[0]}</Avatar>}
             label={`${user?.firstName} ${user?.lastName}`}
             onClick={handleProfileMenu}
-            sx={{ ml: 2 }}
+            sx={{ ml: 2, height: 36 }}
           />
-          
+
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
@@ -414,13 +520,15 @@ const DashboardLayout: React.FC = () => {
               <MenuItem>No active alerts</MenuItem>
             ) : (
               activeAlerts.map((alert, index) => (
-                <MenuItem key={index} onClick={() => navigate('/task-query/events')}>
+                <MenuItem key={index} onClick={() => navigate('/advanced/events')}>
                   <ListItemIcon>
                     <Warning fontSize="small" color="error" />
                   </ListItemIcon>
-                  <ListItemText 
+                  <ListItemText
                     primary={alert.title}
                     secondary={alert.description}
+                    primaryTypographyProps={{ fontSize: '0.875rem' }}
+                    secondaryTypographyProps={{ fontSize: '0.75rem' }}
                   />
                 </MenuItem>
               ))
@@ -431,7 +539,7 @@ const DashboardLayout: React.FC = () => {
 
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ width: { sm: currentDrawerWidth }, flexShrink: { sm: 0 } }}
       >
         <Drawer
           variant="temporary"
@@ -442,12 +550,12 @@ const DashboardLayout: React.FC = () => {
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
-              bgcolor: 'white',
-              borderRight: 'none',
-              boxShadow: '0 10px 30px -12px rgba(0, 0, 0, 0.42)',
+              bgcolor: 'background.paper',
+              borderRight: '1px solid',
+              borderColor: 'divider',
             },
           }}
         >
@@ -457,12 +565,14 @@ const DashboardLayout: React.FC = () => {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
-              width: drawerWidth,
-              bgcolor: 'white',
-              borderRight: 'none',
-              boxShadow: '0 10px 30px -12px rgba(0, 0, 0, 0.42)',
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: currentDrawerWidth,
+              bgcolor: 'background.paper',
+              borderRight: '1px solid',
+              borderColor: 'divider',
+              transition: 'width 0.3s',
+              overflowX: 'hidden',
             },
           }}
           open
@@ -470,14 +580,15 @@ const DashboardLayout: React.FC = () => {
           {drawer}
         </Drawer>
       </Box>
-      
+
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { sm: `calc(100% - ${currentDrawerWidth}px)` },
           mt: 8,
+          transition: 'width 0.3s',
         }}
       >
         <Outlet />

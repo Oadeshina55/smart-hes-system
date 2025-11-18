@@ -1,0 +1,15 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+python-dotenv==1.0.0
+pyserial==3.5
+requests==2.31.0
+python-multipart==0.0.6
+
+# For Windows DLL integration (Windows only)
+pywin32==306; sys_platform == 'win32'
+
+# For DLMS protocol (pure Python implementation as fallback)
+gurux-dlms==1.0.145
+gurux-serial==1.0.14
+gurux-net==1.0.14

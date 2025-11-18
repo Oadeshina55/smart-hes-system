@@ -19,6 +19,11 @@ import simRoutes from './routes/sim.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import remoteRoutes from './routes/remote.routes';
 import obisRoutes from './routes/obis.routes';
+import templateRoutes from './routes/template.routes';
+import aiRoutes from './routes/ai.routes';
+import dlmsRoutes from './routes/dlms.routes';
+import loadProfileRoutes from './routes/loadProfile.routes';
+import powerQualityRoutes from './routes/powerQuality.routes';
 
 // Import services
 import { MeterStatusService } from './services/meterStatus.service';
@@ -26,6 +31,7 @@ import { AlertService } from './services/alert.service';
 import { AnomalyDetectionService } from './services/anomalyDetection.service';
 import { meterPollingService } from './services/meterPolling.service';
 import { obisFunctionService } from './services/obisFunction.service';
+import aiMonitoringService from './services/aiMonitoring.service';
 
 // Load environment variables
 dotenv.config();
@@ -55,18 +61,65 @@ app.use(express.urlencoded({ extended: true }));
 export const socketIO = io;
 export { io };
 
-// Database connection
-mongoose.connect(process.env.MONGODB_URI!)
-  .then(() => {
-    console.log('✅ Connected to MongoDB');
-    
-    // Initialize services after DB connection
-    initializeServices();
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
-    process.exit(1);
-  });
+// Database connection with retry logic
+const connectDB = async (retries = 5) => {
+  const options = {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    serverSelectionTimeoutMS: 10000, // 10 seconds timeout
+    socketTimeoutMS: 45000, // 45 seconds socket timeout
+    family: 4, // Use IPv4, skip trying IPv6
+    retryWrites: true,
+    w: 'majority' as const
+  };
+
+  for (let i = 0; i < retries; i++) {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI!, options);
+      console.log('✅ Connected to MongoDB');
+      console.log(`📊 Database: ${mongoose.connection.name}`);
+      console.log(`🌍 Host: ${mongoose.connection.host}`);
+
+      // Initialize services after DB connection
+      initializeServices();
+      return;
+    } catch (err: any) {
+      console.error(`❌ MongoDB connection attempt ${i + 1}/${retries} failed:`, err.message);
+
+      if (i < retries - 1) {
+        const delay = Math.min(1000 * Math.pow(2, i), 10000); // Exponential backoff, max 10s
+        console.log(`⏳ Retrying in ${delay / 1000}s...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      } else {
+        console.error('💥 Failed to connect to MongoDB after all retries');
+        process.exit(1);
+      }
+    }
+  }
+};
+
+// Handle connection events
+mongoose.connection.on('connected', () => {
+  console.log('🔗 Mongoose connected to MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ Mongoose connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('⚠️  Mongoose disconnected from MongoDB');
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  await mongoose.connection.close();
+  console.log('🛑 MongoDB connection closed due to app termination');
+  process.exit(0);
+});
+
+// Connect to database
+connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -81,6 +134,11 @@ app.use('/api/sims', simRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/remote', remoteRoutes);
 app.use('/api/obis', obisRoutes);
+app.use('/api/templates', templateRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/dlms', dlmsRoutes);
+app.use('/api/load-profile', loadProfileRoutes);
+app.use('/api/power-quality', powerQualityRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -140,6 +198,16 @@ function initializeServices() {
       await AnomalyDetectionService.detectAnomalies();
     } catch (error) {
       console.error('Error in anomaly detection:', error);
+    }
+  });
+
+  // Run AI monitoring and analysis (every 15 minutes)
+  cron.schedule('*/15 * * * *', async () => {
+    try {
+      await aiMonitoringService.detectAnomalies();
+      console.log('✓ AI monitoring completed');
+    } catch (error) {
+      console.error('Error in AI monitoring:', error);
     }
   });
 

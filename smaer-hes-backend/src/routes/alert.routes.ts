@@ -37,6 +37,48 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
 	}
 });
 
+// Get single alert by ID
+router.get('/:id', authenticate, async (req, res) => {
+	try {
+		const alert = await Alert.findById(req.params.id).populate('meter', 'meterNumber brand model area');
+		if (!alert) return res.status(404).json({ success: false, message: 'Alert not found' });
+		res.json({ success: true, data: alert });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to fetch alert', error: error.message });
+	}
+});
+
+// Update alert
+router.put('/:id', authenticate, authorize('admin', 'operator'), async (req, res) => {
+	try {
+		const { priority, category, description, status, metadata } = req.body;
+		const updateData: any = {};
+
+		if (priority !== undefined) updateData.priority = priority;
+		if (category !== undefined) updateData.category = category;
+		if (description !== undefined) updateData.description = description;
+		if (status !== undefined) updateData.status = status;
+		if (metadata !== undefined) updateData.metadata = metadata;
+
+		const alert = await Alert.findByIdAndUpdate(req.params.id, updateData, { new: true, runValidators: true });
+		if (!alert) return res.status(404).json({ success: false, message: 'Alert not found' });
+		res.json({ success: true, message: 'Alert updated successfully', data: alert });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to update alert', error: error.message });
+	}
+});
+
+// Delete alert
+router.delete('/:id', authenticate, authorize('admin'), async (req, res) => {
+	try {
+		const alert = await Alert.findByIdAndDelete(req.params.id);
+		if (!alert) return res.status(404).json({ success: false, message: 'Alert not found' });
+		res.json({ success: true, message: 'Alert deleted successfully' });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to delete alert', error: error.message });
+	}
+});
+
 // Acknowledge alert
 router.post('/:id/acknowledge', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
 	try {
