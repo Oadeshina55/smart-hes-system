@@ -247,7 +247,7 @@ class MeterPollingService {
   /**
    * Process raw meter readings into OBIS reading format
    */
-  private processReadings(data: any, brand?: string): IObisReading[] {
+  private processReadings(data: any, brand?: 'hexing' | 'hexcell'): IObisReading[] {
     const readings: IObisReading[] = [];
 
     // Handle different response formats

@@ -671,7 +671,7 @@ router.get('/:id/obis-readings/history', authenticate, async (req: any, res) => 
 });
 
 // Helper function to process OBIS readings
-function processObisReadings(obisData: any, brand?: string): IObisReading[] {
+function processObisReadings(obisData: any, brand?: 'hexing' | 'hexcell'): IObisReading[] {
   const readings: IObisReading[] = [];
 
   // Handle array format
