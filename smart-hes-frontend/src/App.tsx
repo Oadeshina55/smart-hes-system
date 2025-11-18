@@ -37,6 +37,7 @@ import FirmwareManagement from './pages/Advanced/FirmwareManagement';
 import SecurityAudit from './pages/Advanced/SecurityAudit';
 import UserAccessControl from './pages/Advanced/UserAccessControl';
 import AIDashboard from './pages/AI/AIDashboard';
+import SessionLockModal from './components/SessionLockModal';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -57,6 +58,7 @@ function App() {
           <CssBaseline />
           <Router>
             <AuthProvider>
+              <SessionLockModal />
               <SocketProvider>
                 <Toaster
                 position="top-right"

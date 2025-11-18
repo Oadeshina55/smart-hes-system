@@ -8,10 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 const meterTypes = ['single-phase', 'three-phase', 'prepaid', 'postpaid'];
 
-const METER_PATTERNS: Record<string, { regex: RegExp; hint: string }> = {
-	hexing: { regex: /^145\d{7,}$/, hint: 'Hexing meters start with "145" (e.g., 145xxxxxxxx)' },
-	hexcell: { regex: /^46\d{7,}$/, hint: 'Hexcell meters start with "46" (e.g., 46xxxxxxxxx)' },
-};
+const METER_NUMBER_PATTERN = /^\d{11}$|^\d{13}$/;
+const METER_NUMBER_HINT = 'Meter number must be exactly 11 or 13 digits';
 
 export default function AddMeter() {
 	const navigate = useNavigate();
@@ -37,14 +35,13 @@ export default function AddMeter() {
 		}
 	};
 
-	const validateMeterNumber = (number: string, selectedBrand: string) => {
+	const validateMeterNumber = (number: string) => {
 		if (!number) {
 			setMeterNumberError('');
 			return true;
 		}
-		const pattern = METER_PATTERNS[selectedBrand.toLowerCase()];
-		if (!pattern.regex.test(number)) {
-			setMeterNumberError(`Invalid meter number. ${pattern.hint}`);
+		if (!METER_NUMBER_PATTERN.test(number)) {
+			setMeterNumberError(METER_NUMBER_HINT);
 			return false;
 		}
 		setMeterNumberError('');
@@ -52,15 +49,10 @@ export default function AddMeter() {
 	};
 
 	const handleMeterNumberChange = (value: string) => {
-		setMeterNumber(value);
-		validateMeterNumber(value, brand);
-	};
-
-	const handleBrandChange = (newBrand: string) => {
-		setBrand(newBrand);
-		if (meterNumber) {
-			validateMeterNumber(meterNumber, newBrand);
-		}
+		// Only allow digits
+		const digitsOnly = value.replace(/\D/g, '');
+		setMeterNumber(digitsOnly);
+		validateMeterNumber(digitsOnly);
 	};
 
 	const handleCreate = async () => {
@@ -69,7 +61,7 @@ export default function AddMeter() {
 			toast.error('Meter number is required');
 			return;
 		}
-		if (!validateMeterNumber(meterNumber, brand)) {
+		if (!validateMeterNumber(meterNumber)) {
 			toast.error(meterNumberError);
 			return;
 		}
@@ -121,17 +113,18 @@ export default function AddMeter() {
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<Alert icon={<InfoIcon />} severity="info">
-							{METER_PATTERNS[brand.toLowerCase()].hint}
+							{METER_NUMBER_HINT}
 						</Alert>
 					</Grid>
 					<Grid item xs={12} md={6}>
-						<TextField 
-							fullWidth 
-							label="Meter Number" 
-							value={meterNumber} 
+						<TextField
+							fullWidth
+							label="Meter Number"
+							value={meterNumber}
 							onChange={(e) => handleMeterNumberChange(e.target.value)}
 							error={!!meterNumberError}
 							helperText={meterNumberError}
+							inputProps={{ maxLength: 13, inputMode: 'numeric' }}
 						/>
 					</Grid>
 					<Grid item xs={12} md={6}>

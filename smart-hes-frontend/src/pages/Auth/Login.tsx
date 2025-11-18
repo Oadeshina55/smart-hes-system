@@ -33,8 +33,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import AuthBackground from '../../components/AuthBackground';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import ReCAPTCHA from 'react-google-recaptcha';
-
 const Login: React.FC = () => {
   // Tab state: 0 = Regular Login, 1 = OTP Login
   const [tabValue, setTabValue] = useState(0);
@@ -52,9 +50,11 @@ const Login: React.FC = () => {
   const [otpTimer, setOtpTimer] = useState(0);
   const [canResend, setCanResend] = useState(false);
 
-  // CAPTCHA state
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [captchaRequired, setCaptchaRequired] = useState(true);
+  // Passcode state (replaces CAPTCHA)
+  const [sessionPasscode, setSessionPasscode] = useState('');
+  const [sessionId, setSessionId] = useState('');
+  const [userPasscode, setUserPasscode] = useState('');
+  const [loadingPasscode, setLoadingPasscode] = useState(true);
 
   // General states
   const [loading, setLoading] = useState(false);
@@ -63,8 +63,10 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
-  // Read CAPTCHA site key from env or config
-  const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Test key
+  // Generate passcode on mount
+  useEffect(() => {
+    generateNewPasscode();
+  }, []);
 
   // OTP Timer countdown
   useEffect(() => {
@@ -82,12 +84,25 @@ const Login: React.FC = () => {
     }
   }, [otpTimer]);
 
-  // Handle CAPTCHA verification
-  const handleCaptchaChange = (token: string | null) => {
-    setCaptchaToken(token);
+  // Generate new login passcode
+  const generateNewPasscode = async () => {
+    setLoadingPasscode(true);
+    try {
+      const response = await axios.post('/auth/generate-passcode');
+      if (response.data.success) {
+        setSessionPasscode(response.data.data.passcode);
+        setSessionId(response.data.data.sessionId);
+        setUserPasscode(''); // Clear user input
+      }
+    } catch (err) {
+      console.error('Failed to generate passcode:', err);
+      toast.error('Failed to generate login passcode');
+    } finally {
+      setLoadingPasscode(false);
+    }
   };
 
-  // Regular login with optional CAPTCHA
+  // Regular login with passcode verification
   const handleRegularLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -97,32 +112,43 @@ const Login: React.FC = () => {
       return;
     }
 
-    // Verify CAPTCHA if required
-    if (captchaRequired && !captchaToken) {
-      setError('Please complete the CAPTCHA verification');
+    if (!userPasscode) {
+      setError('Please enter the passcode shown above');
+      return;
+    }
+
+    if (userPasscode.toUpperCase() !== sessionPasscode) {
+      setError('Invalid passcode. Please check and try again.');
       return;
     }
 
     setLoading(true);
 
     try {
-      // Verify CAPTCHA first if enabled
-      if (captchaRequired && captchaToken) {
-        try {
-          await axios.post('/auth/verify-captcha', { captchaToken });
-        } catch (err) {
-          console.warn('CAPTCHA verification warning:', err);
-          // Continue with login even if CAPTCHA fails (optional)
-        }
-      }
+      // Login with username, password, passcode, and sessionId
+      const response = await axios.post('/auth/login', {
+        username,
+        password,
+        passcode: userPasscode,
+        sessionId,
+      });
 
-      // Proceed with regular login
-      await authLogin(username, password);
+      const { user, token } = response.data.data;
+
+      // Store auth data
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('savedUsername', username);
+      localStorage.setItem('lastActivity', Date.now().toString());
+
       toast.success('Login successful!');
       navigate('/dashboard');
+      window.location.reload(); // Refresh to update auth context
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
       toast.error('Login failed');
+      // Generate new passcode after failed attempt
+      generateNewPasscode();
     } finally {
       setLoading(false);
     }
@@ -353,16 +379,76 @@ const Login: React.FC = () => {
               </Link>
             </Stack>
 
-            {/* CAPTCHA */}
-            {captchaRequired && (
-              <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center' }}>
-                <ReCAPTCHA
-                  sitekey={RECAPTCHA_SITE_KEY}
-                  onChange={handleCaptchaChange}
-                  theme="light"
+            {/* Login Passcode */}
+            <Box sx={{ mb: 3 }}>
+              <Alert severity="info" icon={<Security />} sx={{ mb: 2 }}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  Your unique login passcode:
+                </Typography>
+                <Box
+                  sx={{
+                    mt: 1,
+                    p: 2,
+                    bgcolor: 'rgba(0, 0, 0, 0.05)',
+                    borderRadius: 2,
+                    textAlign: 'center',
+                    border: '2px dashed #667eea',
+                  }}
+                >
+                  {loadingPasscode ? (
+                    <CircularProgress size={24} />
+                  ) : (
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontWeight: 700,
+                        letterSpacing: 8,
+                        fontFamily: 'monospace',
+                        color: '#667eea',
+                      }}
+                    >
+                      {sessionPasscode}
+                    </Typography>
+                  )}
+                </Box>
+              </Alert>
+
+              <Stack direction="row" spacing={2} alignItems="center">
+                <TextField
+                  fullWidth
+                  label="Enter Passcode"
+                  variant="outlined"
+                  value={userPasscode}
+                  onChange={(e) => setUserPasscode(e.target.value.toUpperCase())}
+                  disabled={loading || loadingPasscode}
+                  inputProps={{
+                    maxLength: 6,
+                    style: { textTransform: 'uppercase', letterSpacing: 4 },
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <VerifiedUser color="action" />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
-              </Box>
-            )}
+                <IconButton
+                  color="primary"
+                  onClick={generateNewPasscode}
+                  disabled={loading || loadingPasscode}
+                  sx={{
+                    bgcolor: 'rgba(102, 126, 234, 0.1)',
+                    '&:hover': { bgcolor: 'rgba(102, 126, 234, 0.2)' },
+                  }}
+                >
+                  <Refresh />
+                </IconButton>
+              </Stack>
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5, ml: 1 }}>
+                Type the passcode shown above to verify you're human
+              </Typography>
+            </Box>
 
             <Button
               type="submit"
@@ -512,24 +598,6 @@ const Login: React.FC = () => {
               Sign up here
             </Link>
           </Typography>
-        </Box>
-
-        {/* Toggle CAPTCHA */}
-        <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={captchaRequired}
-                onChange={(e) => setCaptchaRequired(e.target.checked)}
-                size="small"
-              />
-            }
-            label={
-              <Typography variant="caption" color="text.secondary">
-                Enable CAPTCHA verification
-              </Typography>
-            }
-          />
         </Box>
       </Paper>
     </Box>

@@ -8,6 +8,36 @@ import axios from 'axios';
 
 const router = express.Router();
 
+// In-memory store for login passcodes (session-based)
+interface LoginPasscode {
+  sessionId: string;
+  passcode: string;
+  createdAt: number;
+  expiresAt: number;
+}
+
+const loginPasscodes = new Map<string, LoginPasscode>();
+
+// Cleanup expired passcodes every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [sessionId, data] of loginPasscodes.entries()) {
+    if (now > data.expiresAt) {
+      loginPasscodes.delete(sessionId);
+    }
+  }
+}, 5 * 60 * 1000);
+
+// Generate a unique 6-character alphanumeric passcode
+const generatePasscode = (): string => {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed similar-looking chars
+  let passcode = '';
+  for (let i = 0; i < 6; i++) {
+    passcode += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return passcode;
+};
+
 // Validation rules
 const registerValidation = [
   body('username').isLength({ min: 3 }).withMessage('Username must be at least 3 characters'),
@@ -20,7 +50,42 @@ const registerValidation = [
 const loginValidation = [
   body('username').notEmpty().withMessage('Username is required'),
   body('password').notEmpty().withMessage('Password is required'),
+  body('passcode').notEmpty().withMessage('Passcode is required'),
+  body('sessionId').notEmpty().withMessage('Session ID is required'),
 ];
+
+// Generate login passcode
+router.post('/generate-passcode', (req: express.Request, res: express.Response) => {
+  try {
+    const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const passcode = generatePasscode();
+    const now = Date.now();
+
+    const passcodeData: LoginPasscode = {
+      sessionId,
+      passcode,
+      createdAt: now,
+      expiresAt: now + (10 * 60 * 1000), // Expires in 10 minutes
+    };
+
+    loginPasscodes.set(sessionId, passcodeData);
+
+    res.json({
+      success: true,
+      data: {
+        sessionId,
+        passcode,
+        expiresIn: 600, // 10 minutes in seconds
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate passcode',
+      error: error.message,
+    });
+  }
+});
 
 // Register a new user
 router.post('/register', registerValidation, async (req: express.Request, res: express.Response) => {
@@ -98,7 +163,35 @@ router.post('/login', loginValidation, async (req: express.Request, res: express
       });
     }
 
-    const { username, password } = req.body;
+    const { username, password, passcode, sessionId } = req.body;
+
+    // Validate passcode
+    const passcodeData = loginPasscodes.get(sessionId);
+
+    if (!passcodeData) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid or expired login session. Please refresh the page.',
+      });
+    }
+
+    if (passcodeData.passcode.toUpperCase() !== passcode.toUpperCase()) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid passcode. Please check and try again.',
+      });
+    }
+
+    if (Date.now() > passcodeData.expiresAt) {
+      loginPasscodes.delete(sessionId);
+      return res.status(401).json({
+        success: false,
+        message: 'Passcode has expired. Please refresh the page.',
+      });
+    }
+
+    // Delete used passcode
+    loginPasscodes.delete(sessionId);
 
     // Find user and include password for verification
     const user = await User.findOne({ username }).select('+password');

@@ -44,6 +44,15 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
     // Normalize meter number to uppercase
     body.meterNumber = String(body.meterNumber).toUpperCase();
 
+    // Validate meter number is 11 or 13 digits
+    if (!/^\d{11}$|^\d{13}$/.test(body.meterNumber)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid meter number format',
+        error: 'Meter number must be exactly 11 or 13 digits'
+      });
+    }
+
     // Check if meter number already exists
     const existingMeter = await Meter.findOne({ meterNumber: body.meterNumber });
     if (existingMeter) {
@@ -66,24 +75,6 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
 
     // normalize brand
     if (body.brand) body.brand = String(body.brand).toLowerCase();
-
-    // Validate brand-specific meter number patterns
-    if (body.brand) {
-      const brandPatterns: Record<string, RegExp> = {
-        hexing: /^145\d{7,}$/,
-        hexcell: /^46\d{7,}$/,
-      };
-
-      if (brandPatterns[body.brand] && !brandPatterns[body.brand].test(body.meterNumber)) {
-        return res.status(400).json({
-          success: false,
-          message: 'Invalid meter number format for brand',
-          error: body.brand === 'hexing'
-            ? 'Hexing meters must start with "145"'
-            : 'Hexcell meters must start with "46"'
-        });
-      }
-    }
 
     // set default IP/PORT if missing
     if (!body.ipAddress) body.ipAddress = process.env.METER_HOST || '0.0.0.0';
