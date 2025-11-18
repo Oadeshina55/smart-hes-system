@@ -24,8 +24,17 @@ class ObisFunctionService {
 	/**
 	 * Get a single OBIS function by code
 	 */
-	getFunction(code: string): ObisFunction | null {
+	getFunction(code: string, brand?: 'hexing' | 'hexcell'): ObisFunction | null {
 		const normalized = code.toUpperCase().trim();
+
+		// If brand specified, search in brand-specific database first
+		if (brand) {
+			const source = brand === 'hexing' ? this.db.hexing : this.db.hexcell;
+			const found = source.find((f: ObisFunction) => f.code.toUpperCase() === normalized);
+			if (found) return found;
+		}
+
+		// Fall back to unified map
 		return this.functionMap.get(normalized) || null;
 	}
 
