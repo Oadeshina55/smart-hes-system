@@ -89,4 +89,31 @@ router.post('/:id/acknowledge', authenticate, authorize('admin', 'operator'), as
 	}
 });
 
+// Resolve event
+router.post('/:id/resolve', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+	try {
+		const { resolution } = req.body;
+
+		if (!resolution) {
+			return res.status(400).json({ success: false, message: 'Resolution notes are required' });
+		}
+
+		const event = await Event.findByIdAndUpdate(
+			req.params.id,
+			{
+				acknowledged: true,
+				acknowledgedBy: req.user._id,
+				acknowledgedAt: new Date(),
+				resolution
+			},
+			{ new: true }
+		);
+
+		if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
+		res.json({ success: true, message: 'Event resolved successfully', data: event });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to resolve event', error: error.message });
+	}
+});
+
 export default router;
