@@ -11,6 +11,7 @@ export interface IUser extends Document {
   phoneNumber: string;
   isActive: boolean;
   lastLogin?: Date;
+  permissions?: string[];
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -66,6 +67,10 @@ const userSchema = new Schema<IUser>(
     },
     lastLogin: {
       type: Date
+    },
+    permissions: {
+      type: [String],
+      default: []
     }
   },
   {
