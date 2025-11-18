@@ -133,7 +133,7 @@ export default function AddMeter() {
 						</TextField>
 					</Grid>
 					<Grid item xs={12} md={6}>
-						<TextField select fullWidth label="Brand" value={brand} onChange={(e) => handleBrandChange(e.target.value)}>
+						<TextField select fullWidth label="Brand" value={brand} onChange={(e) => setBrand(e.target.value)}>
 							<MenuItem value="hexing">Hexing</MenuItem>
 							<MenuItem value="hexcell">Hexcell</MenuItem>
 						</TextField>
