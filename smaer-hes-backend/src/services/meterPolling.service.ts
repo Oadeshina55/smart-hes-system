@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import { Meter } from '../models/Meter.model';
 import { MeterReading, IObisReading } from '../models/MeterReading.model';
-import { obisFunctionService } from './obisFunction.service';
+import obisFunctionService from './obisFunction.service';
 import { io } from '../server';
 import axios from 'axios';
 import logger from '../utils/logger';

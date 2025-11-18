@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
 /**
  * Individual OBIS parameter reading
@@ -39,6 +39,24 @@ export interface IMeterReading extends Document {
 
   createdAt: Date;
   updatedAt: Date;
+}
+
+/**
+ * MeterReading model with static methods
+ */
+export interface IMeterReadingModel extends Model<IMeterReading> {
+  getLatestReading(meterId: string | mongoose.Types.ObjectId): Promise<IMeterReading | null>;
+  getReadingsInRange(
+    meterId: string | mongoose.Types.ObjectId,
+    startDate: Date,
+    endDate: Date
+  ): Promise<IMeterReading[]>;
+  getObisTimeSeries(
+    meterId: string | mongoose.Types.ObjectId,
+    obisCode: string,
+    startDate: Date,
+    endDate: Date
+  ): Promise<Array<{ timestamp: Date; value: any; actualValue?: number }>>;
 }
 
 const ObisReadingSchema = new Schema({
@@ -178,4 +196,4 @@ MeterReadingSchema.statics.getObisTimeSeries = async function(
   });
 };
 
-export const MeterReading = mongoose.model<IMeterReading>('MeterReading', MeterReadingSchema);
+export const MeterReading = mongoose.model<IMeterReading, IMeterReadingModel>('MeterReading', MeterReadingSchema);

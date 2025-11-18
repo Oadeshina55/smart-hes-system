@@ -10,7 +10,7 @@ import { Area } from '../models/Area.model';
 import { SimCard } from '../models/SimCard.model';
 import { MeterStatusService } from '../services/meterStatus.service';
 import { meterPollingService } from '../services/meterPolling.service';
-import { obisFunctionService } from '../services/obisFunction.service';
+import obisFunctionService from '../services/obisFunction.service';
 import { socketIO } from '../server';
 import multer from 'multer';
 import csv from 'csv-parser';

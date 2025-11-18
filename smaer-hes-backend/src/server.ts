@@ -30,7 +30,7 @@ import { MeterStatusService } from './services/meterStatus.service';
 import { AlertService } from './services/alert.service';
 import { AnomalyDetectionService } from './services/anomalyDetection.service';
 import { meterPollingService } from './services/meterPolling.service';
-import { obisFunctionService } from './services/obisFunction.service';
+import obisFunctionService from './services/obisFunction.service';
 import aiMonitoringService from './services/aiMonitoring.service';
 
 // Load environment variables
