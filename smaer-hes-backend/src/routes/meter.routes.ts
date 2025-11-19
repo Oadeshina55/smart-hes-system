@@ -250,6 +250,49 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
+// Get single meter by ID
+router.get('/:id', authenticate, async (req, res) => {
+  try {
+    const param = req.params.id;
+    let meter = null;
+
+    // Try by object ID first, otherwise treat as meterNumber
+    try {
+      meter = await Meter.findById(param)
+        .populate('area', 'name code')
+        .populate('customer', 'firstName lastName accountNumber email phoneNumber')
+        .populate('simCard', 'iccid phoneNumber provider status');
+    } catch (e) {
+      // If not a valid ObjectId, try meterNumber
+    }
+
+    if (!meter) {
+      meter = await Meter.findOne({ meterNumber: String(param).toUpperCase() })
+        .populate('area', 'name code')
+        .populate('customer', 'firstName lastName accountNumber email phoneNumber')
+        .populate('simCard', 'iccid phoneNumber provider status');
+    }
+
+    if (!meter) {
+      return res.status(404).json({
+        success: false,
+        message: 'Meter not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: meter
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch meter',
+      error: error.message
+    });
+  }
+});
+
 // Request an immediate meter read (emit to meter via socket)
 router.post('/:id/read', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
   try {

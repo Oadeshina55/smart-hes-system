@@ -36,12 +36,13 @@ router.put('/:id', authenticate, async (req: any, res) => {
 		if (req.user.role !== 'admin' && req.user._id.toString() !== req.params.id) {
 			return res.status(403).json({ success: false, message: 'Forbidden' });
 		}
-		// Prevent non-admins from changing role or isActive
+		// Prevent non-admins from changing role, isActive, or permissions
 		if (req.user.role !== 'admin') {
 			delete req.body.role;
 			delete req.body.isActive;
+			delete req.body.permissions;
 		}
-		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('-password');
+		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).select('-password');
 		if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 		res.json({ success: true, message: 'User updated', data: user });
 	} catch (error: any) {
