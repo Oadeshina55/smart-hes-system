@@ -40,7 +40,7 @@ router.post('/register', [
       });
     }
 
-    const { email, password, firstName, lastName, phoneNumber } = req.body;
+    const { email, password, firstName, lastName, phoneNumber, address } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
