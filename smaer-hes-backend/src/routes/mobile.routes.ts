@@ -76,17 +76,22 @@ router.post('/register', [
 
     // Create customer profile
     const customer = await Customer.create({
-      firstName,
-      lastName,
+      customerName: `${firstName} ${lastName}`,
       email,
       phoneNumber,
       accountNumber: `CUST${Date.now()}`,
-      user: user._id,
+      address: {
+        street: address || 'Not provided',
+        city: 'Not provided',
+        state: 'Not provided',
+        country: 'Nigeria',
+      },
+      connectionType: 'residential',
+      status: 'active',
+      createdBy: user._id,
     });
 
-    // Update user with customer reference
-    user.customerId = customer._id;
-    await user.save();
+    // Customer is now linked to user via createdBy field
 
     const token = generateToken(user._id.toString());
 
@@ -402,7 +407,7 @@ router.get('/consumption-trend/:meterId', authenticate, async (req: any, res) =>
     }).sort({ timestamp: 1 });
 
     // Calculate statistics
-    const totalConsumption = consumptionData.reduce((sum, c) => sum + (c.consumption || 0), 0);
+    const totalConsumption = consumptionData.reduce((sum, c) => sum + (c.energy.activeEnergy || 0), 0);
     const avgConsumption = consumptionData.length > 0 ? totalConsumption / consumptionData.length : 0;
 
     // Get current balance (from currentReading.totalEnergy)
@@ -417,7 +422,7 @@ router.get('/consumption-trend/:meterId', authenticate, async (req: any, res) =>
         currentBalance,
         dataPoints: consumptionData.map(c => ({
           timestamp: c.timestamp,
-          consumption: c.consumption,
+          consumption: c.energy.activeEnergy,
           voltage: c.voltage,
           current: c.current,
           power: c.power,
