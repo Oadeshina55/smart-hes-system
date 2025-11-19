@@ -16,7 +16,7 @@ import MeterManagement from './pages/Meters/MeterManagement';
 import AddMeter from './pages/Meters/AddMeter';
 import EditMeter from './pages/Meters/EditMeter';
 import MeterImport from './pages/Meters/MeterImport';
-import MeterReading from './pages/Meters/MeterReading';
+import MeterReading from './pages/Meters/MeterReadingEnhanced';
 import MeterSettings from './pages/Meters/MeterSettings';
 import SimManagement from './pages/Meters/SimManagement';
 import AreaManagement from './pages/System/AreaManagement';

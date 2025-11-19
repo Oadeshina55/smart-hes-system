@@ -25,6 +25,7 @@ import dlmsRoutes from './routes/dlms.routes';
 import loadProfileRoutes from './routes/loadProfile.routes';
 import powerQualityRoutes from './routes/powerQuality.routes';
 import auditRoutes from './routes/audit.routes';
+import mobileRoutes from './routes/mobile.routes';
 
 // Import middleware
 import { auditLogger } from './middleware/audit.middleware';
@@ -36,6 +37,7 @@ import { AnomalyDetectionService } from './services/anomalyDetection.service';
 import { meterPollingService } from './services/meterPolling.service';
 import obisFunctionService from './services/obisFunction.service';
 import aiMonitoringService from './services/aiMonitoring.service';
+import { NotificationService } from './services/notification.service';
 
 // Load environment variables
 dotenv.config();
@@ -147,6 +149,7 @@ app.use('/api/dlms', dlmsRoutes);
 app.use('/api/load-profile', loadProfileRoutes);
 app.use('/api/power-quality', powerQualityRoutes);
 app.use('/api/audit', auditRoutes);
+app.use('/api/mobile', mobileRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -188,6 +191,10 @@ function initializeServices() {
   console.log(`🔄 Starting meter polling service (interval: ${pollingInterval}ms)...`);
   meterPollingService.start(pollingInterval);
   console.log('✅ Meter polling service started');
+
+  // Start notification service
+  NotificationService.start();
+  console.log('✅ Notification service started');
 
   // Start meter status monitoring (every 30 seconds)
   cron.schedule('*/30 * * * * *', async () => {
