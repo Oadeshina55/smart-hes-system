@@ -107,7 +107,7 @@ const dlmsServer = net.createServer((socket) => {
       // Parse DLMS frames from buffer
       const result = parseDLMSFrame(dataBuffer);
 
-      if (result.frame) {
+      if (result.frame && result.frameType) {
         console.log('✅ Parsed DLMS frame:', result.frameType);
 
         // Process the frame
