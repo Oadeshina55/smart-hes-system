@@ -114,10 +114,7 @@ io.on('connection', (socket) => {
 
 // Initialize services
 function initializeServices() {
-  // Load OBIS function database
-  console.log('📊 Loading OBIS function database...');
-  obisFunctionService.loadFunctions();
-  console.log('✅ OBIS function database loaded');
+  // OBIS function database is automatically loaded on import
 
   // Start meter polling service (default: every 60 seconds)
   const pollingInterval = parseInt(process.env.METER_POLLING_INTERVAL || '60000');
