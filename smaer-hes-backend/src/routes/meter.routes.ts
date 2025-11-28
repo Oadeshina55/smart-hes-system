@@ -805,7 +805,7 @@ function processObisReadings(obisData: any, brand?: string): IObisReading[] {
   // Handle array format
   if (Array.isArray(obisData)) {
     for (const item of obisData) {
-      const obisFunction = obisFunctionService.getFunction(item.obisCode, brand);
+      const obisFunction = obisFunctionService.getFunction(item.obisCode);
       const reading: IObisReading = {
         obisCode: item.obisCode,
         name: obisFunction?.name || item.name,
@@ -830,7 +830,7 @@ function processObisReadings(obisData: any, brand?: string): IObisReading[] {
   else if (typeof obisData === 'object') {
     for (const [obisCode, value] of Object.entries(obisData)) {
       if (obisCode.match(/\d+-\d+:\d+\.\d+\.\d+\.\d+/)) {
-        const obisFunction = obisFunctionService.getFunction(obisCode, brand);
+        const obisFunction = obisFunctionService.getFunction(obisCode);
         const reading: IObisReading = {
           obisCode: obisCode,
           name: obisFunction?.name,
