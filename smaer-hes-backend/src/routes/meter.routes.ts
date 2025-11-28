@@ -587,6 +587,119 @@ router.get('/:id/obis-readings/history', authenticate, async (req: any, res) => 
   }
 });
 
+// Get polling service status
+router.get('/polling/status', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+  try {
+    const status = meterPollingService.getStatus();
+
+    // Get count of online meters
+    const onlineMeterCount = await Meter.countDocuments({
+      status: 'online',
+      ipAddress: { $exists: true, $ne: null }
+    });
+
+    res.json({
+      success: true,
+      data: {
+        ...status,
+        onlineMeterCount
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get polling status',
+      error: error.message
+    });
+  }
+});
+
+// Batch configure meters for online monitoring
+router.post('/batch/configure-online', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+  try {
+    const { meterIds, ipAddress, port, status } = req.body;
+
+    if (!meterIds || !Array.isArray(meterIds) || meterIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'meterIds array is required'
+      });
+    }
+
+    const updateData: any = {};
+
+    if (ipAddress) updateData.ipAddress = ipAddress;
+    if (port) updateData.port = port;
+    if (status) updateData.status = status;
+
+    // Update all specified meters
+    const result = await Meter.updateMany(
+      { _id: { $in: meterIds } },
+      { $set: updateData }
+    );
+
+    res.json({
+      success: true,
+      message: `Updated ${result.modifiedCount} meters`,
+      data: {
+        matchedCount: result.matchedCount,
+        modifiedCount: result.modifiedCount
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to configure meters',
+      error: error.message
+    });
+  }
+});
+
+// Configure all meters with default online settings
+router.post('/batch/enable-all-online', authenticate, authorize('admin'), async (req: any, res) => {
+  try {
+    const { ipAddress, port } = req.body;
+
+    const updateData: any = {
+      status: 'online'
+    };
+
+    if (ipAddress) {
+      updateData.ipAddress = ipAddress;
+    } else {
+      updateData.ipAddress = process.env.METER_HOST || '192.168.1.100';
+    }
+
+    if (port) {
+      updateData.port = port;
+    } else {
+      updateData.port = parseInt(process.env.METER_PORT || '8080');
+    }
+
+    // Update all active meters
+    const result = await Meter.updateMany(
+      { isActive: true },
+      { $set: updateData }
+    );
+
+    res.json({
+      success: true,
+      message: `Configured ${result.modifiedCount} meters for online monitoring`,
+      data: {
+        matchedCount: result.matchedCount,
+        modifiedCount: result.modifiedCount,
+        configuration: updateData
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to enable online monitoring',
+      error: error.message
+    });
+  }
+});
+
 // Helper function to process OBIS readings
 function processObisReadings(obisData: any, brand?: string): IObisReading[] {
   const readings: IObisReading[] = [];
