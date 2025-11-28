@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticate, authorize } from '../middleware/auth.middleware';
+import { authenticate, authorize, getAreaFilter } from '../middleware/auth.middleware';
 import { Meter } from '../models/Meter.model';
 import { Alert } from '../models/Alert.model';
 import { Event } from '../models/Event.model';
@@ -12,11 +12,17 @@ import moment from 'moment';
 const router = express.Router();
 
 // Get dashboard statistics
-router.get('/stats', authenticate, async (req, res) => {
+router.get('/stats', authenticate, async (req: any, res) => {
   try {
     const { areaId } = req.query;
     const filter: any = { isActive: true };
-    
+
+    // Apply area-based filtering for customer users
+    const areaFilter = getAreaFilter(req.user);
+    if (areaFilter) {
+      Object.assign(filter, areaFilter);
+    }
+
     if (areaId) {
       filter.area = areaId;
     }
@@ -84,7 +90,7 @@ router.get('/stats', authenticate, async (req, res) => {
 });
 
 // Get energy consumption chart data (last 24 hours)
-router.get('/consumption-chart', authenticate, async (req, res) => {
+router.get('/consumption-chart', authenticate, async (req: any, res) => {
   try {
     const { areaId, interval = 'hourly' } = req.query;
     const now = moment();
@@ -113,6 +119,12 @@ router.get('/consumption-chart', authenticate, async (req, res) => {
       timestamp: { $gte: startDate },
       interval: groupInterval
     };
+
+    // Apply area-based filtering for customer users
+    const areaFilter = getAreaFilter(req.user);
+    if (areaFilter && areaFilter.area) {
+      match.area = areaFilter.area;
+    }
 
     if (areaId) {
       match.area = areaId;
@@ -277,7 +289,7 @@ router.get('/area-stats', authenticate, async (req, res) => {
 });
 
 // Get top consuming meters
-router.get('/top-consumers', authenticate, async (req, res) => {
+router.get('/top-consumers', authenticate, async (req: any, res) => {
   try {
     const { limit = 10, areaId } = req.query;
     const yesterday = moment().subtract(1, 'day').startOf('day').toDate();
@@ -287,6 +299,12 @@ router.get('/top-consumers', authenticate, async (req, res) => {
       timestamp: { $gte: yesterday, $lt: today },
       interval: 'daily'
     };
+
+    // Apply area-based filtering for customer users
+    const areaFilter = getAreaFilter(req.user);
+    if (areaFilter && areaFilter.area) {
+      match.area = areaFilter.area;
+    }
 
     if (areaId) {
       match.area = areaId;

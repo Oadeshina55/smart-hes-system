@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', authenticate, authorize('admin'), async (req, res) => {
 	try {
 		const { page = 1, limit = 50 } = req.query;
-		const users = await User.find({}).select('-password').limit(Number(limit)).skip((Number(page) - 1) * Number(limit)).sort('-createdAt');
+		const users = await User.find({}).select('-password').populate('assignedAreas', 'name code').limit(Number(limit)).skip((Number(page) - 1) * Number(limit)).sort('-createdAt');
 		const total = await User.countDocuments({});
 		res.json({ success: true, data: users, pagination: { total, page: Number(page), pages: Math.ceil(total / Number(limit)) } });
 	} catch (error: any) {
@@ -22,7 +22,7 @@ router.get('/:id', authenticate, async (req: any, res) => {
 		if (req.user.role !== 'admin' && req.user._id.toString() !== req.params.id) {
 			return res.status(403).json({ success: false, message: 'Forbidden' });
 		}
-		const user = await User.findById(req.params.id).select('-password');
+		const user = await User.findById(req.params.id).select('-password').populate('assignedAreas', 'name code');
 		if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 		res.json({ success: true, data: user });
 	} catch (error: any) {
@@ -36,12 +36,13 @@ router.put('/:id', authenticate, async (req: any, res) => {
 		if (req.user.role !== 'admin' && req.user._id.toString() !== req.params.id) {
 			return res.status(403).json({ success: false, message: 'Forbidden' });
 		}
-		// Prevent non-admins from changing role or isActive
+		// Prevent non-admins from changing role, isActive, or assignedAreas
 		if (req.user.role !== 'admin') {
 			delete req.body.role;
 			delete req.body.isActive;
+			delete req.body.assignedAreas;
 		}
-		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('-password');
+		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('-password').populate('assignedAreas', 'name code');
 		if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 		res.json({ success: true, message: 'User updated', data: user });
 	} catch (error: any) {

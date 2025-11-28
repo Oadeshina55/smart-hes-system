@@ -9,6 +9,7 @@ export interface IUser extends Document {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  assignedAreas?: mongoose.Types.ObjectId[]; // For customer role: areas they can access
   isActive: boolean;
   lastLogin?: Date;
   createdAt: Date;
@@ -60,6 +61,10 @@ const userSchema = new Schema<IUser>(
       type: String,
       trim: true
     },
+    assignedAreas: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Area'
+    }],
     isActive: {
       type: Boolean,
       default: true

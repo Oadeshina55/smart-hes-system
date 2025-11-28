@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticate, authorize } from '../middleware/auth.middleware';
+import { authenticate, authorize, getAreaFilter } from '../middleware/auth.middleware';
 import { Meter } from '../models/Meter.model';
 import { parseObisForBrand } from '../utils/obisParser';
 import { Consumption } from '../models/Consumption.model';
@@ -133,24 +133,30 @@ router.post('/import', authenticate, authorize('admin', 'operator'), upload.sing
 });
 
 // Get all meters with filters
-router.get('/', authenticate, async (req, res) => {
+router.get('/', authenticate, async (req: any, res) => {
   try {
     const { status, area, customer, search, page = 1, limit = 10 } = req.query;
-    
+
     const filter: any = { isActive: true };
-    
+
+    // Apply area-based filtering for customer users
+    const areaFilter = getAreaFilter(req.user);
+    if (areaFilter) {
+      Object.assign(filter, areaFilter);
+    }
+
     if (status && status !== 'all') {
       filter.status = status;
     }
-    
+
     if (area && area !== 'all') {
       filter.area = area;
     }
-    
+
     if (customer) {
       filter.customer = customer;
     }
-    
+
     if (search) {
       filter.$or = [
         { meterNumber: { $regex: search, $options: 'i' } },
@@ -158,7 +164,7 @@ router.get('/', authenticate, async (req, res) => {
         { model: { $regex: search, $options: 'i' } },
       ];
     }
-    
+
     const meters = await Meter.find(filter)
       .populate('area', 'name code')
       .populate('customer', 'customerName accountNumber')
@@ -166,9 +172,9 @@ router.get('/', authenticate, async (req, res) => {
       .sort('-createdAt')
       .limit(Number(limit))
       .skip((Number(page) - 1) * Number(limit));
-    
+
     const total = await Meter.countDocuments(filter);
-    
+
     res.json({
       success: true,
       data: meters,
@@ -311,6 +317,98 @@ router.post('/:id/settings', authenticate, authorize('admin', 'operator'), async
     res.json({ success: true, message: 'Meter settings updated', data: { obisConfiguration: meter.obisConfiguration, metadata: meter.metadata } });
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Failed to update meter settings', error: error.message });
+  }
+});
+
+// Get writeable OBIS parameters for a meter
+router.get('/:id/writeable-parameters', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+  try {
+    const param = req.params.id;
+    let meter: any = null;
+
+    try {
+      meter = await Meter.findById(param);
+    } catch (e) {}
+
+    if (!meter) {
+      meter = await Meter.findOne({ meterNumber: String(param).toUpperCase() });
+    }
+
+    if (!meter) return res.status(404).json({ success: false, message: 'Meter not found' });
+
+    // Get all OBIS functions for the meter's brand
+    const brand = meter.brand ? (meter.brand.toLowerCase() === 'hexing' ? 'hexing' : meter.brand.toLowerCase() === 'hexcell' ? 'hexcell' : undefined) : undefined;
+    const allFunctions = obisFunctionService.getAllFunctions(brand);
+
+    // Filter for writeable parameters (accessRight includes 'W' or 'RW')
+    const writeableParams = allFunctions.filter((func: any) => {
+      const accessRight = func.accessRight?.toUpperCase();
+      return accessRight && (accessRight.includes('W') || accessRight === 'RW');
+    });
+
+    // Group writeable parameters
+    const grouped: any = {};
+    writeableParams.forEach((param: any) => {
+      const group = param.group || 'Other';
+      if (!grouped[group]) {
+        grouped[group] = {
+          name: group,
+          items: []
+        };
+      }
+      grouped[group].items.push({
+        code: param.code,
+        name: param.name,
+        description: param.description,
+        unit: param.unit,
+        dataType: param.dataType,
+        accessRight: param.accessRight
+      });
+    });
+
+    res.json({
+      success: true,
+      data: {
+        writeableParameters: Object.values(grouped),
+        totalCount: writeableParams.length
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Failed to fetch writeable parameters', error: error.message });
+  }
+});
+
+// Read current meter OBIS values from the physical meter
+router.post('/:id/read-current-values', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+  try {
+    const param = req.params.id;
+    const { obisCodes } = req.body;
+
+    let meter: any = null;
+    try {
+      meter = await Meter.findById(param);
+    } catch (e) {}
+
+    if (!meter) {
+      meter = await Meter.findOne({ meterNumber: String(param).toUpperCase() });
+    }
+
+    if (!meter) return res.status(404).json({ success: false, message: 'Meter not found' });
+
+    // Use the polling service to read from the meter
+    const result = await meterPollingService.pollMeterOnDemand(meter._id.toString(), obisCodes);
+
+    res.json({
+      success: true,
+      message: 'Meter values read successfully',
+      data: result
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to read meter values',
+      error: error.message
+    });
   }
 });
 

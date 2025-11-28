@@ -32,7 +32,7 @@ router.post('/register', registerValidation, async (req: express.Request, res: e
       });
     }
 
-    const { username, email, password, firstName, lastName, phoneNumber, role } = req.body;
+    const { username, email, password, firstName, lastName, phoneNumber, role, assignedAreas } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({
@@ -54,7 +54,8 @@ router.post('/register', registerValidation, async (req: express.Request, res: e
       firstName,
       lastName,
       phoneNumber,
-      role: role || 'customer'
+      role: role || 'customer',
+      assignedAreas: (role === 'customer' && assignedAreas) ? assignedAreas : undefined
     });
 
     // Generate token
@@ -70,7 +71,8 @@ router.post('/register', registerValidation, async (req: express.Request, res: e
           email: user.email,
           role: user.role,
           firstName: user.firstName,
-          lastName: user.lastName
+          lastName: user.lastName,
+          assignedAreas: user.assignedAreas
         },
         token
       }
@@ -133,17 +135,21 @@ router.post('/login', loginValidation, async (req: express.Request, res: express
     // Generate token
     const token = generateToken(user._id.toString());
 
+    // Get user with assignedAreas populated
+    const userWithAreas = await User.findById(user._id).select('-password').populate('assignedAreas', 'name code');
+
     res.json({
       success: true,
       message: 'Login successful',
       data: {
         user: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          firstName: user.firstName,
-          lastName: user.lastName
+          id: userWithAreas._id,
+          username: userWithAreas.username,
+          email: userWithAreas.email,
+          role: userWithAreas.role,
+          firstName: userWithAreas.firstName,
+          lastName: userWithAreas.lastName,
+          assignedAreas: userWithAreas.assignedAreas
         },
         token
       }
@@ -160,8 +166,8 @@ router.post('/login', loginValidation, async (req: express.Request, res: express
 // Get current user
 router.get('/me', authenticate, async (req: any, res) => {
   try {
-    const user = await User.findById(req.user._id).select('-password');
-    
+    const user = await User.findById(req.user._id).select('-password').populate('assignedAreas', 'name code');
+
     res.json({
       success: true,
       data: user

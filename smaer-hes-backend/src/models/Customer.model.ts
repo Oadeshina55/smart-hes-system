@@ -14,6 +14,7 @@ export interface ICustomer extends Document {
   };
   meterNumber?: string;
   meter?: mongoose.Types.ObjectId;
+  assignedAreas?: mongoose.Types.ObjectId[]; // Areas this customer can access
   simNumber?: string;
   tariffPlan?: string;
   connectionType: 'residential' | 'commercial' | 'industrial';
@@ -91,6 +92,10 @@ const customerSchema = new Schema<ICustomer>(
       type: Schema.Types.ObjectId,
       ref: 'Meter'
     },
+    assignedAreas: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Area'
+    }],
     simNumber: {
       type: String,
       trim: true
