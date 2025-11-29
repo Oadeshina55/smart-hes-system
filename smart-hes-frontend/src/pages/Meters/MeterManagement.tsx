@@ -25,6 +25,7 @@ import {
   MenuItem,
   Typography,
   Tooltip,
+  Alert,
 } from '@mui/material';
 import {
   Search,
@@ -38,10 +39,18 @@ import {
   WifiTetheringOff,
   Warning,
   CheckCircle,
+  Info as InfoIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { CSVLink } from 'react-csv';
+
+const meterTypes = ['single-phase', 'three-phase', 'prepaid', 'postpaid'];
+
+const METER_PATTERNS: Record<string, { regex: RegExp; hint: string }> = {
+  hexing: { regex: /^145\d{7,}$/, hint: 'Hexing meters start with "145" (e.g., 145xxxxxxxx)' },
+  hexcell: { regex: /^46\d{7,}$/, hint: 'Hexcell meters start with "46" (e.g., 46xxxxxxxxx)' },
+};
 
 interface Meter {
   _id: string;
@@ -80,6 +89,17 @@ const MeterManagement: React.FC = () => {
   const [selectedMeter, setSelectedMeter] = useState<Meter | null>(null);
   const [detailsDialog, setDetailsDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
+
+  // Add Meter Dialog States
+  const [addDialog, setAddDialog] = useState(false);
+  const [newMeterNumber, setNewMeterNumber] = useState('');
+  const [newMeterType, setNewMeterType] = useState('single-phase');
+  const [newBrand, setNewBrand] = useState('hexing');
+  const [newModel, setNewModel] = useState('');
+  const [newIpAddress, setNewIpAddress] = useState('');
+  const [newPort, setNewPort] = useState('');
+  const [newArea, setNewArea] = useState('');
+  const [meterNumberError, setMeterNumberError] = useState('');
 
   const fetchMeters = useCallback(async () => {
     try {
@@ -135,6 +155,89 @@ const MeterManagement: React.FC = () => {
       } catch (error) {
         toast.error('Failed to delete meter');
       }
+    }
+  };
+
+  // Add Meter Dialog Handlers
+  const validateMeterNumber = (number: string, selectedBrand: string) => {
+    if (!number) {
+      setMeterNumberError('');
+      return true;
+    }
+    const pattern = METER_PATTERNS[selectedBrand.toLowerCase()];
+    if (!pattern.regex.test(number)) {
+      setMeterNumberError(`Invalid meter number. ${pattern.hint}`);
+      return false;
+    }
+    setMeterNumberError('');
+    return true;
+  };
+
+  const handleMeterNumberChange = (value: string) => {
+    setNewMeterNumber(value);
+    validateMeterNumber(value, newBrand);
+  };
+
+  const handleBrandChange = (brand: string) => {
+    setNewBrand(brand);
+    if (newMeterNumber) {
+      validateMeterNumber(newMeterNumber, brand);
+    }
+  };
+
+  const resetAddMeterForm = () => {
+    setNewMeterNumber('');
+    setNewMeterType('single-phase');
+    setNewBrand('hexing');
+    setNewModel('');
+    setNewIpAddress('');
+    setNewPort('');
+    setNewArea('');
+    setMeterNumberError('');
+  };
+
+  const handleOpenAddDialog = () => {
+    resetAddMeterForm();
+    setAddDialog(true);
+  };
+
+  const handleCreateMeter = async () => {
+    // Validation
+    if (!newMeterNumber) {
+      toast.error('Meter number is required');
+      return;
+    }
+    if (!validateMeterNumber(newMeterNumber, newBrand)) {
+      toast.error(meterNumberError);
+      return;
+    }
+    if (!newModel) {
+      toast.error('Model is required');
+      return;
+    }
+    if (!newArea) {
+      toast.error('Area is required');
+      return;
+    }
+
+    try {
+      await axios.post('/meters', {
+        meterNumber: newMeterNumber,
+        meterType: newMeterType,
+        brand: newBrand.toLowerCase(),
+        model: newModel,
+        area: newArea,
+        ipAddress: newIpAddress || undefined,
+        port: newPort ? Number(newPort) : undefined
+      });
+      toast.success('Meter created successfully');
+      setAddDialog(false);
+      resetAddMeterForm();
+      fetchMeters();
+    } catch (err: any) {
+      console.error(err);
+      const errorMessage = err.response?.data?.message || err.response?.data?.error || 'Failed to create meter';
+      toast.error(errorMessage);
     }
   };
 
@@ -208,7 +311,7 @@ const MeterManagement: React.FC = () => {
           <Button
             variant="contained"
             startIcon={<Add />}
-            onClick={() => window.location.href = '/meters/add'}
+            onClick={handleOpenAddDialog}
             sx={{
               background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
             }}
@@ -539,6 +642,112 @@ const MeterManagement: React.FC = () => {
           <Button onClick={() => setDeleteDialog(false)}>Cancel</Button>
           <Button onClick={handleDelete} color="error" variant="contained">
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Add Meter Dialog */}
+      <Dialog open={addDialog} onClose={() => setAddDialog(false)} maxWidth="md" fullWidth>
+        <DialogTitle>
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
+            Add New Meter
+          </Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={3} sx={{ mt: 0.5 }}>
+            <Grid item xs={12}>
+              <Alert icon={<InfoIcon />} severity="info">
+                {METER_PATTERNS[newBrand.toLowerCase()].hint}
+              </Alert>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Meter Number"
+                value={newMeterNumber}
+                onChange={(e) => handleMeterNumberChange(e.target.value)}
+                error={!!meterNumberError}
+                helperText={meterNumberError}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                select
+                fullWidth
+                label="Meter Type"
+                value={newMeterType}
+                onChange={(e) => setNewMeterType(e.target.value)}
+              >
+                {meterTypes.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
+              </TextField>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                select
+                fullWidth
+                label="Brand"
+                value={newBrand}
+                onChange={(e) => handleBrandChange(e.target.value)}
+              >
+                <MenuItem value="hexing">Hexing</MenuItem>
+                <MenuItem value="hexcell">Hexcell</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Model"
+                value={newModel}
+                onChange={(e) => setNewModel(e.target.value)}
+                required
+                helperText="Model name is required"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="IP Address (Optional)"
+                value={newIpAddress}
+                onChange={(e) => setNewIpAddress(e.target.value)}
+                placeholder="e.g., 192.168.1.100"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Port (Optional)"
+                value={newPort}
+                onChange={(e) => setNewPort(e.target.value)}
+                placeholder="e.g., 4059"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                select
+                fullWidth
+                label="Area"
+                value={newArea}
+                onChange={(e) => setNewArea(e.target.value)}
+                required
+                helperText="Area assignment is required"
+              >
+                <MenuItem value="">Select Area</MenuItem>
+                {areas.map(a => <MenuItem key={a._id} value={a._id}>{a.name}</MenuItem>)}
+              </TextField>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setAddDialog(false)}>Cancel</Button>
+          <Button
+            onClick={handleCreateMeter}
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
+            }}
+          >
+            Create Meter
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,0 +1,4 @@
+meterNumber,concentratorId,meterType,brand,model,firmware,ipAddress,port,area,customer,simCard
+MTR001,CONC001,single-phase,hexing,HXE310,v2.1.0,192.168.1.100,5000,,,SIM001
+MTR002,CONC001,three-phase,hexcell,HXC510,v3.0.2,192.168.1.101,5000,,,SIM002
+MTR003,CONC002,single-phase,hexing,HXE310,v2.1.0,192.168.1.102,5000,,,SIM003

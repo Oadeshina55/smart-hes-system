@@ -96,6 +96,8 @@ const RealTimeMonitoring: React.FC = () => {
   const [refreshInterval, setRefreshInterval] = useState(30);
   const [obisParameters, setObisParameters] = useState<ObisParameter[]>([]);
   const [loadingParameters, setLoadingParameters] = useState(false);
+  const [relayAction, setRelayAction] = useState<'disconnect' | 'connect'>('disconnect');
+  const [sendingRelayCommand, setSendingRelayCommand] = useState(false);
 
   const { socket } = useSocket();
 
@@ -155,9 +157,9 @@ const RealTimeMonitoring: React.FC = () => {
       setLoadingParameters(true);
       const response = await axios.get('/obis/functions');
 
-      if (response.data.success) {
+      if (response.data.success && response.data.data.functions) {
         // Transform OBIS functions to ObisParameter format
-        const parameters: ObisParameter[] = response.data.data.map((func: any) => ({
+        const parameters: ObisParameter[] = response.data.data.functions.map((func: any) => ({
           code: func.code,
           name: func.name || func.code,
           category: categorizeObisCode(func.code, func.group),
@@ -170,6 +172,7 @@ const RealTimeMonitoring: React.FC = () => {
         }));
 
         setObisParameters(parameters);
+        console.log(`✅ Loaded ${parameters.length} OBIS parameters`);
       }
     } catch (error) {
       console.error('Failed to fetch OBIS parameters:', error);
@@ -294,6 +297,54 @@ const RealTimeMonitoring: React.FC = () => {
     // Open dialog to get values for writable parameters
     // Implementation would include a form to input values
     toast('Execute command dialog would open here');
+  };
+
+  const handleRelayControl = async () => {
+    if (selectedMeters.size === 0) {
+      toast.error('Please select at least one meter');
+      return;
+    }
+
+    setSendingRelayCommand(true);
+    let successCount = 0;
+    let failCount = 0;
+
+    try {
+      const selectedMeterList = Array.from(selectedMeters);
+
+      for (const meterId of selectedMeterList) {
+        const meter = meters.find(m => m._id === meterId);
+        if (!meter) continue;
+
+        try {
+          const res = await axios.post('/remote/control', {
+            meterNumber: meter.meterNumber,
+            action: relayAction,
+          });
+
+          if (res.data.success) {
+            successCount++;
+          } else {
+            failCount++;
+          }
+        } catch (err) {
+          console.error(`Failed to control relay for meter ${meter.meterNumber}:`, err);
+          failCount++;
+        }
+      }
+
+      if (successCount > 0) {
+        toast.success(`Relay ${relayAction} command sent to ${successCount} meter(s)`);
+      }
+      if (failCount > 0) {
+        toast.error(`Failed to control ${failCount} meter(s)`);
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.message || 'Failed to send relay command');
+    } finally {
+      setSendingRelayCommand(false);
+    }
   };
 
   const getStatusIcon = (status: string) => {
@@ -486,6 +537,51 @@ const RealTimeMonitoring: React.FC = () => {
             >
               Execute
             </Button>
+          </Grid>
+        </Grid>
+      </Paper>
+
+      {/* Relay Control Section */}
+      <Paper sx={{ p: 3, mb: 3, borderRadius: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#344767' }}>
+          Relay Control
+        </Typography>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Action</InputLabel>
+              <Select
+                value={relayAction}
+                onChange={(e) => setRelayAction(e.target.value as 'disconnect' | 'connect')}
+                label="Action"
+              >
+                <MenuItem value="disconnect">Disconnect Relay</MenuItem>
+                <MenuItem value="connect">Connect Relay</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Button
+              fullWidth
+              variant="contained"
+              color={relayAction === 'disconnect' ? 'error' : 'success'}
+              onClick={handleRelayControl}
+              disabled={sendingRelayCommand || selectedMeters.size === 0}
+              startIcon={sendingRelayCommand ? <LinearProgress /> : <ElectricBolt />}
+            >
+              {sendingRelayCommand
+                ? 'Sending...'
+                : `${relayAction === 'disconnect' ? 'Disconnect' : 'Connect'} ${selectedMeters.size > 0 ? `(${selectedMeters.size} meter${selectedMeters.size > 1 ? 's' : ''})` : 'Relay'}`
+              }
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, p: 1.5, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+              <Warning sx={{ color: '#ff9800', fontSize: 20 }} />
+              <Typography variant="caption" sx={{ color: '#555' }}>
+                Select one or more meters from the table below to control their relays. {relayAction === 'disconnect' ? 'Disconnecting the relay will cut power to the customer.' : 'Connecting the relay will restore power to the customer.'}
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </Paper>

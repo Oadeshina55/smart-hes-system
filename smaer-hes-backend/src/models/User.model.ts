@@ -12,6 +12,7 @@ export interface IUser extends Document {
   assignedAreas?: mongoose.Types.ObjectId[]; // For customer role: areas they can access
   isActive: boolean;
   lastLogin?: Date;
+  permissions?: string[];
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -71,6 +72,10 @@ const userSchema = new Schema<IUser>(
     },
     lastLogin: {
       type: Date
+    },
+    permissions: {
+      type: [String],
+      default: []
     }
   },
   {

@@ -24,6 +24,55 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
   try {
     const body = { ...(req.body || {}) };
 
+    // Validate required fields
+    if (!body.meterNumber) {
+      return res.status(400).json({
+        success: false,
+        message: 'Meter number is required',
+        error: 'meterNumber is a required field'
+      });
+    }
+
+    if (!body.area) {
+      return res.status(400).json({
+        success: false,
+        message: 'Area is required',
+        error: 'area is a required field'
+      });
+    }
+
+    // Normalize meter number to uppercase
+    body.meterNumber = String(body.meterNumber).toUpperCase();
+
+    // Validate meter number is 11 or 13 digits
+    if (!/^\d{11}$|^\d{13}$/.test(body.meterNumber)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid meter number format',
+        error: 'Meter number must be exactly 11 or 13 digits'
+      });
+    }
+
+    // Check if meter number already exists
+    const existingMeter = await Meter.findOne({ meterNumber: body.meterNumber });
+    if (existingMeter) {
+      return res.status(409).json({
+        success: false,
+        message: 'Meter number already exists',
+        error: `Meter with number ${body.meterNumber} already exists in the system`
+      });
+    }
+
+    // Validate area exists
+    const areaExists = await Area.findById(body.area);
+    if (!areaExists) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid area',
+        error: 'The specified area does not exist'
+      });
+    }
+
     // normalize brand
     if (body.brand) body.brand = String(body.brand).toLowerCase();
 
@@ -31,20 +80,43 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
     if (!body.ipAddress) body.ipAddress = process.env.METER_HOST || '0.0.0.0';
     if (!body.port) body.port = process.env.METER_PORT ? Number(process.env.METER_PORT) : 5000;
 
-    // if brand is known and no obisConfiguration provided, parse default OBIS for brand
-    if (body.brand && !body.obisConfiguration && ['hexing', 'hexcell'].includes(body.brand)) {
-      try {
-        const parsed = parseObisForBrand(body.brand);
-        body.obisConfiguration = parsed;
-      } catch (e) {
-        // ignore parsing errors
-      }
+    const meter = await Meter.create(body);
+
+    // Log success
+    console.log(`✓ Meter created: ${meter.meterNumber} (${meter._id})`);
+
+    res.status(201).json({
+      success: true,
+      message: 'Meter created successfully',
+      data: meter
+    });
+  } catch (error: any) {
+    console.error('Error creating meter:', error);
+
+    // Handle mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map((err: any) => err.message);
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        error: messages.join(', ')
+      });
     }
 
-    const meter = await Meter.create(body);
-    res.status(201).json({ success: true, message: 'Meter created', data: meter });
-  } catch (error: any) {
-    res.status(500).json({ success: false, message: 'Failed to create meter', error: error.message });
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: 'Meter number already exists',
+        error: 'A meter with this number already exists in the system'
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create meter',
+      error: error.message
+    });
   }
 });
 
@@ -99,15 +171,6 @@ router.post('/import', authenticate, authorize('admin', 'operator'), upload.sing
               customer: row.customer || undefined,
               simCard: row.simCard || undefined,
             };
-
-            // attach parsed OBIS if brand known
-            if (createBody.brand && ['hexing', 'hexcell'].includes(createBody.brand) && !createBody.obisConfiguration) {
-              try {
-                createBody.obisConfiguration = parseObisForBrand(createBody.brand);
-              } catch (e) {
-                // ignore
-              }
-            }
 
             const meter = await Meter.create(createBody);
             rowResults.push({ index: i, success: true, data: meter });
@@ -189,6 +252,49 @@ router.get('/', authenticate, async (req: any, res) => {
       success: false,
       message: 'Failed to fetch meters',
       error: error.message,
+    });
+  }
+});
+
+// Get single meter by ID
+router.get('/:id', authenticate, async (req, res) => {
+  try {
+    const param = req.params.id;
+    let meter = null;
+
+    // Try by object ID first, otherwise treat as meterNumber
+    try {
+      meter = await Meter.findById(param)
+        .populate('area', 'name code')
+        .populate('customer', 'firstName lastName accountNumber email phoneNumber')
+        .populate('simCard', 'iccid phoneNumber provider status');
+    } catch (e) {
+      // If not a valid ObjectId, try meterNumber
+    }
+
+    if (!meter) {
+      meter = await Meter.findOne({ meterNumber: String(param).toUpperCase() })
+        .populate('area', 'name code')
+        .populate('customer', 'firstName lastName accountNumber email phoneNumber')
+        .populate('simCard', 'iccid phoneNumber provider status');
+    }
+
+    if (!meter) {
+      return res.status(404).json({
+        success: false,
+        message: 'Meter not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: meter
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch meter',
+      error: error.message
     });
   }
 });
@@ -799,7 +905,7 @@ router.post('/batch/enable-all-online', authenticate, authorize('admin'), async 
 });
 
 // Helper function to process OBIS readings
-function processObisReadings(obisData: any, brand?: string): IObisReading[] {
+function processObisReadings(obisData: any, brand?: 'hexing' | 'hexcell'): IObisReading[] {
   const readings: IObisReading[] = [];
 
   // Handle array format

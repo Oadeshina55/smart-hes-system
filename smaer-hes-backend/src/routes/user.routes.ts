@@ -36,15 +36,37 @@ router.put('/:id', authenticate, async (req: any, res) => {
 		if (req.user.role !== 'admin' && req.user._id.toString() !== req.params.id) {
 			return res.status(403).json({ success: false, message: 'Forbidden' });
 		}
-		// Prevent non-admins from changing role, isActive, or assignedAreas
+		// Prevent non-admins from changing role, isActive, permissions, or assignedAreas
 		if (req.user.role !== 'admin') {
 			delete req.body.role;
 			delete req.body.isActive;
+			delete req.body.permissions;
 			delete req.body.assignedAreas;
 		}
-		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('-password').populate('assignedAreas', 'name code');
+		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).select('-password').populate('assignedAreas', 'name code');
 		if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 		res.json({ success: true, message: 'User updated', data: user });
+	} catch (error: any) {
+		res.status(500).json({ success: false, message: 'Failed to update user', error: error.message });
+	}
+});
+
+// Patch user (partial update) - admin or self
+router.patch('/:id', authenticate, async (req: any, res) => {
+	try {
+		if (req.user.role !== 'admin' && req.user._id.toString() !== req.params.id) {
+			return res.status(403).json({ success: false, message: 'Forbidden' });
+		}
+		// Prevent non-admins from changing role or isActive
+		if (req.user.role !== 'admin') {
+			delete req.body.role;
+			delete req.body.isActive;
+			delete req.body.permissions;
+		}
+		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).select('-password');
+>>>>>>> claude/remove-mock-data-ui-overhaul-01QHZxu3Vb8vyDYkap93ULSz
+		if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+		res.json({ success: true, message: 'User updated successfully', data: user });
 	} catch (error: any) {
 		res.status(500).json({ success: false, message: 'Failed to update user', error: error.message });
 	}

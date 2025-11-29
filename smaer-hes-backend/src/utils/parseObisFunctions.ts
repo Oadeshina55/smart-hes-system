@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { loadSoftwareConfigurations, EnhancedObisCode } from './softwareConfigParser';
 
 export interface ObisFunction {
 	code: string;                    // OBIS code (e.g., "0-0:96.7.21.255")
@@ -164,29 +165,100 @@ function parseHexcellObis(filePath: string): ObisFunction[] {
 }
 
 /**
+ * Convert EnhancedObisCode to ObisFunction format
+ */
+function convertToObisFunction(enhanced: EnhancedObisCode): ObisFunction {
+	return {
+		code: enhanced.code,
+		name: enhanced.name,
+		description: enhanced.description,
+		unit: enhanced.unit,
+		scaler: enhanced.scaler,
+		dataType: enhanced.dataType,
+		classId: enhanced.classId?.toString(),
+		attributeId: enhanced.attributeId,
+		group: enhanced.category || enhanced.subcategory || 'General',
+		brand: enhanced.brand,
+		accessRight: enhanced.accessRight?.read ? (enhanced.accessRight?.write ? 'RW' : 'R') : 'W',
+	};
+}
+
+/**
  * Load and parse all OBIS functions from both brands
+ * Now integrates with software configuration parsers for complete meter data
  */
 export function loadObisFunctions(): ObisFunctionDatabase {
 	const hexingPath = path.join(__dirname, '../../uploads/Hexing OBIS Function.txt');
 	const hexcellPath = path.join(__dirname, '../../uploads/Hexcell AMI System Unified OBIS List.txt');
 
-	const hexing = fs.existsSync(hexingPath) ? parseHexingObis(hexingPath) : [];
-	const hexcell = fs.existsSync(hexcellPath) ? parseHexcellObis(hexcellPath) : [];
-	console.error(`[DEBUG] Hexing path: ${hexingPath}`);
-	console.error(`[DEBUG] Hexcell path: ${hexcellPath}`);
-	console.error(`[DEBUG] Hexing exists: ${fs.existsSync(hexingPath)}`);
-	console.error(`[DEBUG] Hexcell exists: ${fs.existsSync(hexcellPath)}`);
+	// Load from TSV files (legacy method)
+	const hexingFromTsv = fs.existsSync(hexingPath) ? parseHexingObis(hexingPath) : [];
+	const hexcellFromTsv = fs.existsSync(hexcellPath) ? parseHexcellObis(hexcellPath) : [];
+
+	// Load from software configurations (NEW - comprehensive data)
+	let hexingFromSoftware: ObisFunction[] = [];
+	let hexcellFromSoftware: ObisFunction[] = [];
+
+	try {
+		const softwareConfigs = loadSoftwareConfigurations();
+		hexingFromSoftware = softwareConfigs.hexing.map(convertToObisFunction);
+		hexcellFromSoftware = softwareConfigs.hexcell.map(convertToObisFunction);
+		console.log(`[OBIS] Loaded ${hexingFromSoftware.length} Hexing OBIS codes from software config`);
+		console.log(`[OBIS] Loaded ${hexcellFromSoftware.length} Hexcell OBIS codes from software config`);
+	} catch (error: any) {
+		console.error(`[OBIS] Error loading software configurations: ${error.message}`);
+	}
+
+	// Merge TSV and software config data (software config takes precedence for richer metadata)
+	const mergeArrays = (tsv: ObisFunction[], software: ObisFunction[]): ObisFunction[] => {
+		const map = new Map<string, ObisFunction>();
+
+		// Add TSV data first
+		tsv.forEach(f => map.set(f.code.toUpperCase(), f));
+
+		// Override/enhance with software config data (has better metadata)
+		software.forEach(f => {
+			const key = f.code.toUpperCase();
+			if (map.has(key)) {
+				// Merge: keep software config data but preserve any TSV data not in software config
+				const existing = map.get(key)!;
+				map.set(key, {
+					...existing,
+					...f,
+					// Preserve better name/description if available
+					name: f.name || existing.name,
+					description: f.description || existing.description,
+				});
+			} else {
+				map.set(key, f);
+			}
+		});
+
+		return Array.from(map.values());
+	};
+
+	const hexing = mergeArrays(hexingFromTsv, hexingFromSoftware);
+	const hexcell = mergeArrays(hexcellFromTsv, hexcellFromSoftware);
+
+	console.log(`[OBIS] Total Hexing OBIS functions after merge: ${hexing.length}`);
+	console.log(`[OBIS] Total Hexcell OBIS functions after merge: ${hexcell.length}`);
 
 	// Create unified list (avoid duplicates by code)
 	const codeMap = new Map<string, ObisFunction>();
-	hexing.forEach(f => codeMap.set(f.code, f));
+	hexing.forEach(f => codeMap.set(f.code.toUpperCase(), { ...f, brand: 'hexing' }));
 	hexcell.forEach(f => {
-		if (!codeMap.has(f.code)) {
-			codeMap.set(f.code, f);
+		const key = f.code.toUpperCase();
+		if (!codeMap.has(key)) {
+			codeMap.set(key, { ...f, brand: 'hexcell' });
+		} else {
+			// Mark as available in both brands
+			const existing = codeMap.get(key)!;
+			codeMap.set(key, { ...existing, brand: 'hexing,hexcell' });
 		}
 	});
 
 	const unified = Array.from(codeMap.values());
+	console.log(`[OBIS] Total unified OBIS functions: ${unified.length}`);
 
 	return { hexing, hexcell, unified };
 }

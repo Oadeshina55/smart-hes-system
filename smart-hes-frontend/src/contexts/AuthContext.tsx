@@ -15,14 +15,18 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isLoading: boolean;
+  isSessionLocked: boolean;
   login: (username: string, password: string) => Promise<void>;
+  quickRelogin: (password: string) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
+  unlockSession: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
 
 // Configure axios defaults
 axios.defaults.baseURL = API_URL;
@@ -58,6 +62,64 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSessionLocked, setIsSessionLocked] = useState(false);
+  const [lastActivity, setLastActivity] = useState<number>(Date.now());
+  const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null);
+
+  // Reset activity timer
+  const resetActivityTimer = () => {
+    setLastActivity(Date.now());
+    localStorage.setItem('lastActivity', Date.now().toString());
+  };
+
+  // Track user activity
+  useEffect(() => {
+    if (!user || isSessionLocked) return;
+
+    const activities = ['mousedown', 'keypress', 'scroll', 'touchstart', 'click'];
+
+    const handleActivity = () => {
+      resetActivityTimer();
+    };
+
+    activities.forEach(activity => {
+      window.addEventListener(activity, handleActivity);
+    });
+
+    return () => {
+      activities.forEach(activity => {
+        window.removeEventListener(activity, handleActivity);
+      });
+    };
+  }, [user, isSessionLocked]);
+
+  // Check for inactivity
+  useEffect(() => {
+    if (!user || isSessionLocked) return;
+
+    const checkInactivity = () => {
+      const savedLastActivity = localStorage.getItem('lastActivity');
+      const lastActivityTime = savedLastActivity ? parseInt(savedLastActivity) : Date.now();
+      const timeSinceLastActivity = Date.now() - lastActivityTime;
+
+      if (timeSinceLastActivity >= INACTIVITY_TIMEOUT) {
+        // Lock the session instead of logging out
+        setIsSessionLocked(true);
+        toast.info('Session locked due to inactivity. Please re-enter your password.');
+      }
+    };
+
+    // Check immediately
+    checkInactivity();
+
+    // Then check every 30 seconds
+    const timer = setInterval(checkInactivity, 30000);
+    setInactivityTimer(timer);
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [user, isSessionLocked]);
 
   useEffect(() => {
     checkAuth();
@@ -97,13 +159,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
 
       const { user, token } = response.data.data;
-      
+
       setUser(user);
       setToken(token);
-      
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      
+      localStorage.setItem('savedUsername', username); // Save username for quick re-login
+      localStorage.setItem('lastActivity', Date.now().toString());
+
+      setIsSessionLocked(false);
       toast.success('Login successful!');
     } catch (error: any) {
       const message = error.response?.data?.message || 'Login failed';
@@ -112,11 +177,52 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const quickRelogin = async (password: string) => {
+    try {
+      const savedUsername = localStorage.getItem('savedUsername');
+      if (!savedUsername) {
+        throw new Error('Username not found. Please login again.');
+      }
+
+      const response = await axios.post('/auth/quick-relogin', {
+        username: savedUsername,
+        password,
+      });
+
+      const { user, token } = response.data.data;
+
+      setUser(user);
+      setToken(token);
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('lastActivity', Date.now().toString());
+
+      setIsSessionLocked(false);
+      toast.success('Session unlocked successfully!');
+    } catch (error: any) {
+      const message = error.response?.data?.message || 'Authentication failed';
+      toast.error(message);
+      throw error;
+    }
+  };
+
+  const unlockSession = () => {
+    setIsSessionLocked(false);
+    resetActivityTimer();
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
+    setIsSessionLocked(false);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('lastActivity');
+    // Don't remove savedUsername - keep it for quick re-login
+    if (inactivityTimer) {
+      clearInterval(inactivityTimer);
+    }
     toast.success('Logged out successfully');
   };
 
@@ -126,9 +232,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         user,
         token,
         isLoading,
+        isSessionLocked,
         login,
+        quickRelogin,
         logout,
         checkAuth,
+        unlockSession,
       }}
     >
       {children}
