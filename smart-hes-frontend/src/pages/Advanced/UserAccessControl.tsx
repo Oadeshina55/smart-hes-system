@@ -61,7 +61,15 @@ interface User {
   isActive: boolean;
   lastLogin?: string;
   permissions?: string[];
+  assignedAreas?: Array<{ _id: string; name: string; code: string }>;
   createdAt: string;
+}
+
+interface Area {
+  _id: string;
+  name: string;
+  code: string;
+  description?: string;
 }
 
 const AVAILABLE_PERMISSIONS = [
@@ -92,10 +100,12 @@ const AVAILABLE_PERMISSIONS = [
 
 const UserAccessControl: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [areas, setAreas] = useState<Area[]>([]);
   const [loading, setLoading] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [permissions, setPermissions] = useState<string[]>([]);
+  const [assignedAreaIds, setAssignedAreaIds] = useState<string[]>([]);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -109,13 +119,24 @@ const UserAccessControl: React.FC = () => {
     }
   };
 
+  const fetchAreas = async () => {
+    try {
+      const response = await axios.get('/areas');
+      setAreas(response.data.data || []);
+    } catch (error: any) {
+      console.error('Failed to fetch areas:', error);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
+    fetchAreas();
   }, []);
 
   const handleEditUser = (user: User) => {
     setSelectedUser(user);
     setPermissions(user.permissions || []);
+    setAssignedAreaIds(user.assignedAreas?.map(a => a._id) || []);
     setEditDialogOpen(true);
   };
 
@@ -127,18 +148,33 @@ const UserAccessControl: React.FC = () => {
     );
   };
 
+  const handleToggleArea = (areaId: string) => {
+    setAssignedAreaIds((prev) =>
+      prev.includes(areaId)
+        ? prev.filter((id) => id !== areaId)
+        : [...prev, areaId]
+    );
+  };
+
   const handleSavePermissions = async () => {
     if (!selectedUser) return;
 
     try {
-      await axios.patch(`/users/${selectedUser._id}`, {
+      const updateData: any = {
         permissions,
-      });
-      toast.success('Permissions updated successfully');
+      };
+
+      // Only include assignedAreas for customer users
+      if (selectedUser.role === 'customer') {
+        updateData.assignedAreas = assignedAreaIds;
+      }
+
+      await axios.patch(`/users/${selectedUser._id}`, updateData);
+      toast.success('User settings updated successfully');
       setEditDialogOpen(false);
       fetchUsers();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to update permissions');
+      toast.error(error.response?.data?.message || 'Failed to update user settings');
     }
   };
 
@@ -280,6 +316,7 @@ const UserAccessControl: React.FC = () => {
                     <TableCell sx={{ color: 'white', fontWeight: 700 }}>Email</TableCell>
                     <TableCell sx={{ color: 'white', fontWeight: 700 }}>Role</TableCell>
                     <TableCell sx={{ color: 'white', fontWeight: 700 }}>Phone</TableCell>
+                    <TableCell sx={{ color: 'white', fontWeight: 700 }}>Assigned Areas</TableCell>
                     <TableCell sx={{ color: 'white', fontWeight: 700 }}>Status</TableCell>
                     <TableCell sx={{ color: 'white', fontWeight: 700 }}>Last Login</TableCell>
                     <TableCell sx={{ color: 'white', fontWeight: 700 }}>Actions</TableCell>
@@ -311,6 +348,31 @@ const UserAccessControl: React.FC = () => {
                         />
                       </TableCell>
                       <TableCell>{user.phoneNumber || 'N/A'}</TableCell>
+                      <TableCell>
+                        {user.role === 'customer' ? (
+                          user.assignedAreas && user.assignedAreas.length > 0 ? (
+                            <Stack direction="row" spacing={0.5} flexWrap="wrap">
+                              {user.assignedAreas.map((area) => (
+                                <Chip
+                                  key={area._id}
+                                  label={area.name}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ mb: 0.5 }}
+                                />
+                              ))}
+                            </Stack>
+                          ) : (
+                            <Typography variant="caption" color="error">
+                              No areas assigned
+                            </Typography>
+                          )
+                        ) : (
+                          <Typography variant="caption" color="text.secondary">
+                            All areas
+                          </Typography>
+                        )}
+                      </TableCell>
                       <TableCell>
                         <Chip
                           icon={user.isActive ? <UnlockIcon /> : <LockIcon />}
@@ -376,6 +438,64 @@ const UserAccessControl: React.FC = () => {
                 </Typography>
               </Alert>
               <Divider sx={{ my: 2 }} />
+
+              {/* Area Access Control for Customer Users */}
+              {selectedUser.role === 'customer' && (
+                <>
+                  <Typography variant="h6" sx={{ mb: 2 }}>
+                    Area Access Control
+                  </Typography>
+                  <Alert severity="warning" sx={{ mb: 2 }}>
+                    Customer users can only access meters and data from their assigned areas.
+                    Select the areas this customer should have access to.
+                  </Alert>
+                  <Grid container spacing={2} sx={{ mb: 3 }}>
+                    {areas.length === 0 ? (
+                      <Grid item xs={12}>
+                        <Alert severity="info">No areas found. Please create areas first.</Alert>
+                      </Grid>
+                    ) : (
+                      areas.map((area) => (
+                        <Grid item xs={12} sm={6} md={4} key={area._id}>
+                          <Card
+                            variant="outlined"
+                            sx={{
+                              border: assignedAreaIds.includes(area._id) ? 2 : 1,
+                              borderColor: assignedAreaIds.includes(area._id) ? 'primary.main' : 'divider',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              '&:hover': {
+                                borderColor: 'primary.main',
+                                boxShadow: 2,
+                              }
+                            }}
+                            onClick={() => handleToggleArea(area._id)}
+                          >
+                            <CardContent>
+                              <Stack direction="row" spacing={1} alignItems="center">
+                                <Checkbox
+                                  checked={assignedAreaIds.includes(area._id)}
+                                  onChange={() => handleToggleArea(area._id)}
+                                />
+                                <Box>
+                                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                    {area.name}
+                                  </Typography>
+                                  <Typography variant="caption" color="text.secondary">
+                                    Code: {area.code}
+                                  </Typography>
+                                </Box>
+                              </Stack>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      ))
+                    )}
+                  </Grid>
+                  <Divider sx={{ my: 2 }} />
+                </>
+              )}
+
               <Typography variant="h6" sx={{ mb: 2 }}>
                 Permissions
               </Typography>
