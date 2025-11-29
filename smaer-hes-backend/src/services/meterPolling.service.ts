@@ -254,7 +254,7 @@ class MeterPollingService {
     if (data.readings && Array.isArray(data.readings)) {
       // Format 1: { readings: [ { obisCode, value }, ... ] }
       for (const reading of data.readings) {
-        const obisFunction = obisFunctionService.getFunction(reading.obisCode, brand);
+        const obisFunction = obisFunctionService.getFunction(reading.obisCode);
         const obisReading: IObisReading = {
           obisCode: reading.obisCode,
           name: obisFunction?.name || reading.name,
@@ -278,7 +278,7 @@ class MeterPollingService {
       // Format 2: { "obisCode": value, ... }
       for (const [obisCode, value] of Object.entries(data)) {
         if (obisCode.match(/\d+-\d+:\d+\.\d+\.\d+\.\d+/)) {
-          const obisFunction = obisFunctionService.getFunction(obisCode, brand);
+          const obisFunction = obisFunctionService.getFunction(obisCode);
           const obisReading: IObisReading = {
             obisCode: obisCode,
             name: obisFunction?.name,
