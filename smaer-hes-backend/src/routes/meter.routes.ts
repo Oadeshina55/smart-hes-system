@@ -256,6 +256,57 @@ router.get('/', authenticate, async (req: any, res) => {
   }
 });
 
+// Autocomplete meter search - returns meter numbers matching the search query
+router.get('/autocomplete/search', authenticate, async (req: any, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q || q.trim().length < 2) {
+      return res.json({
+        success: true,
+        data: [],
+      });
+    }
+
+    const filter: any = { isActive: true };
+
+    // Apply area-based filtering for customer users
+    const areaFilter = getAreaFilter(req.user);
+    if (areaFilter) {
+      Object.assign(filter, areaFilter);
+    }
+
+    // Search by meter number (starts with query)
+    filter.meterNumber = { $regex: `^${q}`, $options: 'i' };
+
+    // Fetch only meter numbers (lightweight)
+    const meters = await Meter.find(filter)
+      .select('meterNumber brand area customer')
+      .populate('area', 'name')
+      .populate('customer', 'customerName')
+      .limit(10)
+      .sort('meterNumber');
+
+    const suggestions = meters.map(m => ({
+      meterNumber: m.meterNumber,
+      brand: m.brand,
+      area: (m.area as any)?.name,
+      customer: (m.customer as any)?.customerName,
+    }));
+
+    res.json({
+      success: true,
+      data: suggestions,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch autocomplete suggestions',
+      error: error.message,
+    });
+  }
+});
+
 // Get single meter by ID
 router.get('/:id', authenticate, async (req, res) => {
   try {

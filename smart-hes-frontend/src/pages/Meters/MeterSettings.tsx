@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import MeterAutocomplete from '../../components/MeterAutocomplete';
 
 interface ObisParameter {
   code: string;
@@ -156,14 +157,14 @@ export default function MeterSettings() {
       </Typography>
 
       <Paper sx={{ p: 2, mb: 2 }}>
-        <TextField
-          label="Meter ID or Meter Number"
-          value={meterIdOrNumber}
-          onChange={(e) => setMeterIdOrNumber(e.target.value)}
-          fullWidth
-          sx={{ mb: 2 }}
-          placeholder="Enter meter ID or number"
-        />
+        <Box sx={{ mb: 2 }}>
+          <MeterAutocomplete
+            value={meterIdOrNumber}
+            onChange={setMeterIdOrNumber}
+            label="Meter Number"
+            placeholder="Type to search for meters..."
+          />
+        </Box>
 
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
           <Button

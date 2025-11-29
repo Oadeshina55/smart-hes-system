@@ -46,6 +46,7 @@ import {
 import CountUp from 'react-countup';
 import axios from 'axios';
 import { useSocket } from '../../contexts/SocketContext';
+import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import AIInsights from '../../components/AIInsights';
 import AIAnomalyDetection from '../../components/AIAnomalyDetection';
@@ -89,8 +90,10 @@ const Dashboard: React.FC = () => {
   const [selectedArea, setSelectedArea] = useState<string>('all');
   const [areas, setAreas] = useState<any[]>([]);
   const [interval, setInterval] = useState('hourly');
-  
+
   const { activeAlerts } = useSocket();
+  const { user } = useAuth();
+  const isCustomer = user?.role === 'customer';
 
   useEffect(() => {
     fetchDashboardData();
@@ -111,9 +114,9 @@ const Dashboard: React.FC = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      
-      // Fetch all dashboard data in parallel
-      const [statsRes, consumptionRes, areaStatsRes, topConsumersRes] = await Promise.all([
+
+      // Prepare API calls - exclude area-stats for customer users
+      const apiCalls = [
         axios.get('/dashboard/stats', {
           params: selectedArea !== 'all' ? { areaId: selectedArea } : {}
         }),
@@ -123,20 +126,33 @@ const Dashboard: React.FC = () => {
             ...(selectedArea !== 'all' ? { areaId: selectedArea } : {})
           }
         }),
-        axios.get('/dashboard/area-stats'),
         axios.get('/dashboard/top-consumers', {
           params: selectedArea !== 'all' ? { areaId: selectedArea } : {}
         }),
-      ]);
+      ];
 
-      setStats(statsRes.data.data);
-      setConsumptionData(consumptionRes.data.data.datasets[0].data.map((value: number, index: number) => ({
-        time: consumptionRes.data.data.labels[index],
+      // Only fetch area stats for non-customer users
+      if (!isCustomer) {
+        apiCalls.splice(2, 0, axios.get('/dashboard/area-stats'));
+      }
+
+      const responses = await Promise.all(apiCalls);
+
+      setStats(responses[0].data.data);
+      setConsumptionData(responses[1].data.data.datasets[0].data.map((value: number, index: number) => ({
+        time: responses[1].data.data.labels[index],
         energy: value,
-        power: consumptionRes.data.data.datasets[1]?.data[index] || 0,
+        power: responses[1].data.data.datasets[1]?.data[index] || 0,
       })));
-      setAreaStats(areaStatsRes.data.data);
-      setTopConsumers(topConsumersRes.data.data);
+
+      // Set area stats and top consumers based on whether area-stats was fetched
+      if (!isCustomer) {
+        setAreaStats(responses[2].data.data);
+        setTopConsumers(responses[3].data.data);
+      } else {
+        setAreaStats([]);
+        setTopConsumers(responses[2].data.data);
+      }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
       toast.error('Failed to load dashboard data');
@@ -239,21 +255,24 @@ const Dashboard: React.FC = () => {
           Dashboard Overview
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>Area Filter</InputLabel>
-            <Select
-              value={selectedArea}
-              onChange={(e) => setSelectedArea(e.target.value)}
-              label="Area Filter"
-            >
-              <MenuItem value="all">All Areas</MenuItem>
-              {areas.map((area) => (
-                <MenuItem key={area._id} value={area._id}>
-                  {area.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          {/* Hide area filter for customer users - they only see their assigned areas */}
+          {!isCustomer && (
+            <FormControl size="small" sx={{ minWidth: 150 }}>
+              <InputLabel>Area Filter</InputLabel>
+              <Select
+                value={selectedArea}
+                onChange={(e) => setSelectedArea(e.target.value)}
+                label="Area Filter"
+              >
+                <MenuItem value="all">All Areas</MenuItem>
+                {areas.map((area) => (
+                  <MenuItem key={area._id} value={area._id}>
+                    {area.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
           <FormControl size="small" sx={{ minWidth: 120 }}>
             <InputLabel>Interval</InputLabel>
             <Select
@@ -376,61 +395,63 @@ const Dashboard: React.FC = () => {
 
       {/* Area Statistics and Top Consumers */}
       <Grid container spacing={3}>
-        {/* Area Statistics */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, borderRadius: 3 }}>
-            <Typography variant="h6" sx={{ mb: 2, color: '#344767', fontWeight: 600 }}>
-              Area-wise Meter Status
-            </Typography>
-            <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
-              {areaStats.map((area) => (
-                <Box 
-                  key={area._id}
-                  sx={{ 
-                    p: 2, 
-                    mb: 1, 
-                    borderRadius: 2,
-                    bgcolor: '#f8f9fa',
-                    '&:hover': {
-                      bgcolor: '#e9ecef',
-                    }
-                  }}
-                >
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Box>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#344767' }}>
-                        {area.name}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: '#8392AB' }}>
-                        Code: {area.code}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', gap: 1 }}>
-                      <Chip 
-                        label={`Total: ${area.meterCount}`} 
-                        size="small"
-                        sx={{ bgcolor: '#e3f2fd', color: '#1976d2' }}
-                      />
-                      <Chip 
-                        label={`Online: ${area.onlineCount}`} 
-                        size="small"
-                        sx={{ bgcolor: '#e8f5e9', color: '#4caf50' }}
-                      />
-                      <Chip 
-                        label={`Offline: ${area.offlineCount}`} 
-                        size="small"
-                        sx={{ bgcolor: '#ffebee', color: '#f44336' }}
-                      />
+        {/* Area Statistics - Hidden for customer users */}
+        {!isCustomer && (
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 3, borderRadius: 3 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: '#344767', fontWeight: 600 }}>
+                Area-wise Meter Status
+              </Typography>
+              <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
+                {areaStats.map((area) => (
+                  <Box
+                    key={area._id}
+                    sx={{
+                      p: 2,
+                      mb: 1,
+                      borderRadius: 2,
+                      bgcolor: '#f8f9fa',
+                      '&:hover': {
+                        bgcolor: '#e9ecef',
+                      }
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#344767' }}>
+                          {area.name}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#8392AB' }}>
+                          Code: {area.code}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Chip
+                          label={`Total: ${area.meterCount}`}
+                          size="small"
+                          sx={{ bgcolor: '#e3f2fd', color: '#1976d2' }}
+                        />
+                        <Chip
+                          label={`Online: ${area.onlineCount}`}
+                          size="small"
+                          sx={{ bgcolor: '#e8f5e9', color: '#4caf50' }}
+                        />
+                        <Chip
+                          label={`Offline: ${area.offlineCount}`}
+                          size="small"
+                          sx={{ bgcolor: '#ffebee', color: '#f44336' }}
+                        />
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              ))}
-            </Box>
-          </Paper>
-        </Grid>
+                ))}
+              </Box>
+            </Paper>
+          </Grid>
+        )}
 
         {/* Top Consumers */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={isCustomer ? 12 : 6}>
           <Paper sx={{ p: 3, borderRadius: 3 }}>
             <Typography variant="h6" sx={{ mb: 2, color: '#344767', fontWeight: 600 }}>
               Top Energy Consumers
@@ -482,15 +503,17 @@ const Dashboard: React.FC = () => {
         </Grid>
       </Grid>
 
-      {/* AI Insights and Anomaly Detection Section */}
-      <Grid container spacing={3} sx={{ mt: 2 }}>
-        <Grid item xs={12} lg={6}>
-          <AIInsights />
+      {/* AI Insights and Anomaly Detection Section - Hidden for customer users */}
+      {!isCustomer && (
+        <Grid container spacing={3} sx={{ mt: 2 }}>
+          <Grid item xs={12} lg={6}>
+            <AIInsights />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <AIAnomalyDetection />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={6}>
-          <AIAnomalyDetection />
-        </Grid>
-      </Grid>
+      )}
 
       {/* Active Alerts Section */}
       {activeAlerts.length > 0 && (

@@ -35,6 +35,7 @@ import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import { getOBISByCategory, getOBISDescription, getOBISUnit, type OBISCategory } from '../../utils/obis-codes';
 import { exportToCSV, printElement } from '../../utils/exportUtils';
+import MeterAutocomplete from '../../components/MeterAutocomplete';
 
 interface Meter {
   _id: string;
@@ -228,20 +229,18 @@ const MeterReading: React.FC = () => {
 
               <Stack spacing={2}>
                 <Box>
-                  <TextField
-                    fullWidth
-                    label="Meter Number"
+                  <MeterAutocomplete
                     value={meterNumber}
-                    onChange={(e) => setMeterNumber(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && searchMeter()}
-                    placeholder="Enter meter number"
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton onClick={searchMeter} disabled={loading}>
-                          {loading ? <CircularProgress size={24} /> : <SearchIcon />}
-                        </IconButton>
-                      ),
+                    onChange={(value) => {
+                      setMeterNumber(value);
+                      // Auto-search when a meter is selected from autocomplete
+                      if (value && value.length >= 2) {
+                        setTimeout(() => searchMeter(), 100);
+                      }
                     }}
+                    label="Meter Number"
+                    placeholder="Type to search for meters..."
+                    disabled={loading}
                   />
                 </Box>
 

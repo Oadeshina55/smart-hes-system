@@ -199,6 +199,28 @@ const AuditTrail: React.FC = () => {
     return colors[method] || 'default';
   };
 
+  const getOperationType = (method: string) => {
+    const types: any = {
+      GET: 'Read',
+      POST: 'Write',
+      PUT: 'Modification',
+      PATCH: 'Modification',
+      DELETE: 'Delete',
+    };
+    return types[method] || 'Unknown';
+  };
+
+  const getOperationColor = (method: string) => {
+    const colors: any = {
+      GET: 'info',
+      POST: 'success',
+      PUT: 'warning',
+      PATCH: 'warning',
+      DELETE: 'error',
+    };
+    return colors[method] || 'default';
+  };
+
   const getActionColor = (action: string) => {
     const colors: any = {
       login: 'success',
@@ -427,28 +449,36 @@ const AuditTrail: React.FC = () => {
                 <Table>
                   <TableHead>
                     <TableRow sx={{ backgroundColor: 'primary.main' }}>
-                      <TableCell sx={{ color: 'white', fontWeight: 700 }}>Timestamp</TableCell>
+                      <TableCell sx={{ color: 'white', fontWeight: 700 }}>Date & Time</TableCell>
                       <TableCell sx={{ color: 'white', fontWeight: 700 }}>User</TableCell>
                       <TableCell sx={{ color: 'white', fontWeight: 700 }}>Action</TableCell>
                       <TableCell sx={{ color: 'white', fontWeight: 700 }}>Resource</TableCell>
-                      <TableCell sx={{ color: 'white', fontWeight: 700 }}>Method</TableCell>
+                      <TableCell sx={{ color: 'white', fontWeight: 700 }}>Operation Type</TableCell>
+                      <TableCell sx={{ color: 'white', fontWeight: 700 }}>Endpoint</TableCell>
                       <TableCell sx={{ color: 'white', fontWeight: 700 }}>Status</TableCell>
-                      <TableCell sx={{ color: 'white', fontWeight: 700 }}>IP Address</TableCell>
-                      <TableCell sx={{ color: 'white', fontWeight: 700 }}>Actions</TableCell>
+                      <TableCell sx={{ color: 'white', fontWeight: 700 }}>Details</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {logs.map((log) => (
                       <TableRow key={log._id} hover>
                         <TableCell>
-                          <Typography variant="caption">
-                            {format(new Date(log.timestamp), 'MMM dd, yyyy HH:mm:ss')}
+                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                            {format(new Date(log.timestamp), 'MMM dd, yyyy')}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {format(new Date(log.timestamp), 'HH:mm:ss')}
                           </Typography>
                         </TableCell>
                         <TableCell>
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>
                             {log.userId?.username || log.username || 'System'}
                           </Typography>
+                          {log.userId?.email && (
+                            <Typography variant="caption" color="text.secondary" display="block">
+                              {log.userId.email}
+                            </Typography>
+                          )}
                         </TableCell>
                         <TableCell>
                           <Chip
@@ -458,15 +488,27 @@ const AuditTrail: React.FC = () => {
                           />
                         </TableCell>
                         <TableCell>
-                          <Typography variant="body2">{log.resource}</Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                            {log.resource}
+                          </Typography>
+                          {log.resourceId && (
+                            <Typography variant="caption" color="text.secondary" display="block" sx={{ fontFamily: 'monospace' }}>
+                              ID: {log.resourceId.substring(0, 8)}...
+                            </Typography>
+                          )}
                         </TableCell>
                         <TableCell>
                           <Chip
-                            label={log.method}
+                            label={getOperationType(log.method)}
                             size="small"
-                            color={getMethodColor(log.method) as any}
-                            variant="outlined"
+                            color={getOperationColor(log.method) as any}
+                            variant="filled"
                           />
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="caption" sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>
+                            {log.method} {log.endpoint}
+                          </Typography>
                         </TableCell>
                         <TableCell>
                           <Chip
@@ -477,11 +519,8 @@ const AuditTrail: React.FC = () => {
                           />
                         </TableCell>
                         <TableCell>
-                          <Typography variant="caption">{log.ipAddress || 'N/A'}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Tooltip title="View Details">
-                            <IconButton size="small" onClick={() => handleViewDetails(log)}>
+                          <Tooltip title="View Full Details">
+                            <IconButton size="small" color="primary" onClick={() => handleViewDetails(log)}>
                               <ViewIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
