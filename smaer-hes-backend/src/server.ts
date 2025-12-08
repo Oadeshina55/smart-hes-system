@@ -27,6 +27,7 @@ import loadProfileRoutes from './routes/loadProfile.routes';
 import powerQualityRoutes from './routes/powerQuality.routes';
 import auditRoutes from './routes/audit.routes';
 import mobileRoutes from './routes/mobile.routes';
+import priorityMetricsRoutes from './routes/priorityMetrics.routes';
 
 // Import middleware
 import { auditLogger } from './middleware/audit.middleware';
@@ -152,6 +153,7 @@ app.use('/api/load-profile', loadProfileRoutes);
 app.use('/api/power-quality', powerQualityRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/mobile', mobileRoutes);
+app.use('/api/priority-metrics', priorityMetricsRoutes);  // Priority OBIS metrics for billing & diagnostics
 
 // Health check endpoint
 app.get('/health', (req, res) => {
