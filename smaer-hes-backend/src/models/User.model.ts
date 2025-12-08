@@ -5,11 +5,13 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  role: 'admin' | 'operator' | 'customer';
+  role: 'admin' | 'operator' | 'customer' | 'customer-operator';
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  assignedAreas?: mongoose.Types.ObjectId[]; // For customer role: areas they can access
+  // Multi-tenant support
+  customerNetwork?: mongoose.Types.ObjectId; // For customer-operator: which network they manage
+  assignedAreas?: mongoose.Types.ObjectId[]; // DEPRECATED - kept for backward compatibility
   isActive: boolean;
   lastLogin?: Date;
   permissions?: string[];
@@ -45,7 +47,7 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['admin', 'operator', 'customer'],
+      enum: ['admin', 'operator', 'customer', 'customer-operator'],
       default: 'customer'
     },
     firstName: {
@@ -61,6 +63,12 @@ const userSchema = new Schema<IUser>(
     phoneNumber: {
       type: String,
       trim: true
+    },
+    customerNetwork: {
+      type: Schema.Types.ObjectId,
+      ref: 'CustomerNetwork',
+      default: null,
+      index: true
     },
     assignedAreas: [{
       type: Schema.Types.ObjectId,
@@ -109,5 +117,6 @@ userSchema.methods.comparePassword = async function(candidatePassword: string): 
 userSchema.index({ username: 1 });
 userSchema.index({ email: 1 });
 userSchema.index({ role: 1 });
+userSchema.index({ customerNetwork: 1 });
 
 export const User = mongoose.model<IUser>('User', userSchema);

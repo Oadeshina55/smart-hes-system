@@ -7,8 +7,11 @@ export interface IMeter {
   brand: string;
   model: string;
   firmware: string;
-  area: mongoose.Types.ObjectId;
-  customer?: mongoose.Types.ObjectId;
+  // Multi-tenant support
+  customerNetwork: mongoose.Types.ObjectId; // Utility company/network that owns this meter
+  area: mongoose.Types.ObjectId; // DEPRECATED - kept for backward compatibility
+  endCustomer?: mongoose.Types.ObjectId; // The actual consumer (renamed from customer)
+  customer?: mongoose.Types.ObjectId; // DEPRECATED - use endCustomer instead
   simCard?: mongoose.Types.ObjectId;
   ipAddress?: string;
   port?: number;
@@ -77,10 +80,22 @@ const meterSchema = new Schema<IMeter>(
       type: String,
       trim: true
     },
+    customerNetwork: {
+      type: Schema.Types.ObjectId,
+      ref: 'CustomerNetwork',
+      required: true,
+      index: true
+    },
     area: {
       type: Schema.Types.ObjectId,
       ref: 'Area',
-      required: true
+      required: false  // Made optional for migration
+    },
+    endCustomer: {
+      type: Schema.Types.ObjectId,
+      ref: 'EndCustomer',
+      default: null,
+      index: true
     },
     customer: {
       type: Schema.Types.ObjectId,
@@ -198,9 +213,12 @@ const meterSchema = new Schema<IMeter>(
 
 // Create indexes
 meterSchema.index({ meterNumber: 1 });
+meterSchema.index({ customerNetwork: 1 });
 meterSchema.index({ area: 1 });
+meterSchema.index({ endCustomer: 1 });
 meterSchema.index({ customer: 1 });
 meterSchema.index({ status: 1 });
+meterSchema.index({ customerNetwork: 1, status: 1 });
 meterSchema.index({ 'tamperStatus.coverOpen': 1 });
 meterSchema.index({ 'tamperStatus.magneticTamper': 1 });
 meterSchema.index({ lastSeen: -1 });

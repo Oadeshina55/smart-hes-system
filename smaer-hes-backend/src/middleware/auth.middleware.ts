@@ -97,9 +97,68 @@ export const optionalAuth = async (req: AuthRequest, res: Response, next: NextFu
 };
 
 /**
- * Get area filter for customer users
- * Returns null for admin/operator (no filtering)
- * Returns area filter object for customer users
+ * Get customer network filter for multi-tenant access control
+ * Returns null for admin (no filtering - sees all networks)
+ * Returns network filter for customer-operators (sees only their network)
+ */
+export const getNetworkFilter = (user?: IUser): any => {
+  if (!user) {
+    return { customerNetwork: { $in: [] } }; // No access without auth
+  }
+
+  // Admin: No filtering - sees all networks
+  if (user.role === 'admin') {
+    return null;
+  }
+
+  // System operator: No filtering - sees all networks
+  if (user.role === 'operator') {
+    return null;
+  }
+
+  // Customer-operator: Filter by their assigned network
+  if (user.role === 'customer-operator' && user.customerNetwork) {
+    return { customerNetwork: user.customerNetwork };
+  }
+
+  // Customer (end-user): Filter by their network if assigned
+  if (user.role === 'customer' && user.customerNetwork) {
+    return { customerNetwork: user.customerNetwork };
+  }
+
+  // No network assigned: return filter that matches nothing
+  return { customerNetwork: { $in: [] } };
+};
+
+/**
+ * Check if user has access to a specific customer network
+ */
+export const hasAccessToNetwork = (user: IUser, networkId: string): boolean => {
+  // Admin has access to all networks
+  if (user.role === 'admin') {
+    return true;
+  }
+
+  // System operator has access to all networks
+  if (user.role === 'operator') {
+    return true;
+  }
+
+  // Customer-operator or customer: check if network matches their assigned network
+  if (user.role === 'customer-operator' || user.role === 'customer') {
+    if (!user.customerNetwork) {
+      return false;
+    }
+    return user.customerNetwork.toString() === networkId.toString();
+  }
+
+  return false;
+};
+
+/**
+ * DEPRECATED: Get area filter for customer users
+ * Kept for backward compatibility during migration
+ * Use getNetworkFilter for new code
  */
 export const getAreaFilter = (user?: IUser): any => {
   if (!user || user.role === 'admin' || user.role === 'operator') {
@@ -116,7 +175,9 @@ export const getAreaFilter = (user?: IUser): any => {
 };
 
 /**
- * Check if user has access to a specific area
+ * DEPRECATED: Check if user has access to a specific area
+ * Kept for backward compatibility during migration
+ * Use hasAccessToNetwork for new code
  */
 export const hasAccessToArea = (user: IUser, areaId: string): boolean => {
   // Admin and operator have access to all areas
