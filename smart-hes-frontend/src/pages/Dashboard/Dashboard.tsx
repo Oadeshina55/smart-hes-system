@@ -71,6 +71,9 @@ interface DashboardStats {
   customers: {
     total: number;
   };
+  customerNetworks: {
+    total: number;
+  };
   areas: {
     total: number;
   };
@@ -84,9 +87,12 @@ const COLORS = ['#66BB6A', '#EC407A', '#FFA726', '#26C6DA'];
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [consumptionData, setConsumptionData] = useState<any[]>([]);
+  const [networkStats, setNetworkStats] = useState<any[]>([]);
   const [areaStats, setAreaStats] = useState<any[]>([]);
   const [topConsumers, setTopConsumers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedNetwork, setSelectedNetwork] = useState<string>('all');
+  const [customerNetworks, setCustomerNetworks] = useState<any[]>([]);
   const [selectedArea, setSelectedArea] = useState<string>('all');
   const [areas, setAreas] = useState<any[]>([]);
   const [interval, setInterval] = useState('hourly');
@@ -94,13 +100,41 @@ const Dashboard: React.FC = () => {
   const { activeAlerts } = useSocket();
   const { user } = useAuth();
   const isCustomer = user?.role === 'customer';
+  const isAdmin = user?.role === 'admin';
+  const isOperator = user?.role === 'operator';
+  const isCustomerOperator = user?.role === 'customer-operator';
+
+  // Dashboard title based on role
+  const getDashboardTitle = () => {
+    if (isAdmin || isOperator) {
+      return 'New Hampshire Capital-HES System';
+    }
+    if (isCustomerOperator && user?.customerNetwork) {
+      // In a real app, fetch the network name from user data
+      return `${user.customerNetwork} Head End System`;
+    }
+    return 'Dashboard Overview';
+  };
 
   useEffect(() => {
     fetchDashboardData();
+    fetchCustomerNetworks();
     fetchAreas();
     const intervalId = window.setInterval(fetchDashboardData, 30000); // Refresh every 30 seconds
     return () => window.clearInterval(intervalId);
-  }, [selectedArea, interval]);
+  }, [selectedNetwork, selectedArea, interval]);
+
+  const fetchCustomerNetworks = async () => {
+    try {
+      // Only admins and operators can see all networks
+      if (isAdmin || isOperator) {
+        const response = await axios.get('/customer-networks');
+        setCustomerNetworks(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching customer networks:', error);
+    }
+  };
 
   const fetchAreas = async () => {
     try {
@@ -115,25 +149,30 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
 
-      // Prepare API calls - exclude area-stats for customer users
+      // Build filter params - multi-tenant: prefer network over area
+      const filterParams: any = {};
+      if (selectedNetwork !== 'all') {
+        filterParams.customerNetworkId = selectedNetwork;
+      } else if (selectedArea !== 'all') {
+        filterParams.areaId = selectedArea;
+      }
+
+      // Prepare API calls
       const apiCalls = [
-        axios.get('/dashboard/stats', {
-          params: selectedArea !== 'all' ? { areaId: selectedArea } : {}
-        }),
+        axios.get('/dashboard/stats', { params: filterParams }),
         axios.get('/dashboard/consumption-chart', {
-          params: {
-            interval,
-            ...(selectedArea !== 'all' ? { areaId: selectedArea } : {})
-          }
+          params: { interval, ...filterParams }
         }),
-        axios.get('/dashboard/top-consumers', {
-          params: selectedArea !== 'all' ? { areaId: selectedArea } : {}
-        }),
+        axios.get('/dashboard/top-consumers', { params: filterParams }),
       ];
 
-      // Only fetch area stats for non-customer users
-      if (!isCustomer) {
-        apiCalls.splice(2, 0, axios.get('/dashboard/area-stats'));
+      // Fetch network stats for admin/operator
+      if (isAdmin || isOperator) {
+        apiCalls.push(axios.get('/dashboard/network-stats'));
+      }
+      // Fetch area stats for backward compatibility (non-customer users)
+      else if (!isCustomer && !isCustomerOperator) {
+        apiCalls.push(axios.get('/dashboard/area-stats'));
       }
 
       const responses = await Promise.all(apiCalls);
@@ -144,14 +183,18 @@ const Dashboard: React.FC = () => {
         energy: value,
         power: responses[1].data.data.datasets[1]?.data[index] || 0,
       })));
+      setTopConsumers(responses[2].data.data);
 
-      // Set area stats and top consumers based on whether area-stats was fetched
-      if (!isCustomer) {
-        setAreaStats(responses[2].data.data);
-        setTopConsumers(responses[3].data.data);
-      } else {
+      // Set network/area stats based on role
+      if (isAdmin || isOperator) {
+        setNetworkStats(responses[3]?.data.data || []);
         setAreaStats([]);
-        setTopConsumers(responses[2].data.data);
+      } else if (!isCustomer && !isCustomerOperator) {
+        setAreaStats(responses[3]?.data.data || []);
+        setNetworkStats([]);
+      } else {
+        setNetworkStats([]);
+        setAreaStats([]);
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -251,12 +294,35 @@ const Dashboard: React.FC = () => {
   return (
     <Box>
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, color: '#344767' }}>
-          Dashboard Overview
-        </Typography>
+        <Box>
+          <Typography variant="h4" sx={{ fontWeight: 700, color: '#344767' }}>
+            {getDashboardTitle()}
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#67748e', mt: 0.5 }}>
+            {isAdmin || isOperator ? 'Multi-Tenant HES Platform' : 'Dashboard Overview'}
+          </Typography>
+        </Box>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          {/* Hide area filter for customer users - they only see their assigned areas */}
-          {!isCustomer && (
+          {/* Multi-tenant: Network filter for admin/operator */}
+          {(isAdmin || isOperator) && (
+            <FormControl size="small" sx={{ minWidth: 180 }}>
+              <InputLabel>Customer Network</InputLabel>
+              <Select
+                value={selectedNetwork}
+                onChange={(e) => setSelectedNetwork(e.target.value)}
+                label="Customer Network"
+              >
+                <MenuItem value="all">All Networks</MenuItem>
+                {customerNetworks.map((network) => (
+                  <MenuItem key={network._id} value={network._id}>
+                    {network.networkName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+          {/* Backward compatibility: Area filter for non-customer users */}
+          {!isCustomer && !isCustomerOperator && !isAdmin && !isOperator && (
             <FormControl size="small" sx={{ minWidth: 150 }}>
               <InputLabel>Area Filter</InputLabel>
               <Select
@@ -323,10 +389,11 @@ const Dashboard: React.FC = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <StatCard
-            title="Total Customers"
+            title={isAdmin || isOperator ? "Customer Networks" : "Total Customers"}
             value={stats?.customers.total || 0}
             icon={<People sx={{ color: 'white' }} />}
             color="#FFA726"
+            subtitle={isAdmin || isOperator ? `${stats?.customerNetworks?.total || 0} utility companies` : undefined}
           />
         </Grid>
       </Grid>
@@ -393,10 +460,76 @@ const Dashboard: React.FC = () => {
         </Grid>
       </Grid>
 
-      {/* Area Statistics and Top Consumers */}
+      {/* Network/Area Statistics and Top Consumers */}
       <Grid container spacing={3}>
-        {/* Area Statistics - Hidden for customer users */}
-        {!isCustomer && (
+        {/* Multi-tenant: Network Statistics for Admin/Operator */}
+        {(isAdmin || isOperator) && (
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 3, borderRadius: 3 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: '#344767', fontWeight: 600 }}>
+                Customer Network Status
+              </Typography>
+              <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
+                {networkStats.map((network) => (
+                  <Box
+                    key={network._id}
+                    sx={{
+                      p: 2,
+                      mb: 1,
+                      borderRadius: 2,
+                      bgcolor: '#f8f9fa',
+                      '&:hover': {
+                        bgcolor: '#e9ecef',
+                      }
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                      <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#344767' }}>
+                          {network.networkName}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#8392AB' }}>
+                          Code: {network.networkCode} • {network.endCustomerCount} End Customers
+                        </Typography>
+                      </Box>
+                      <Chip
+                        label={network.subscriptionStatus}
+                        size="small"
+                        color={network.subscriptionStatus === 'active' ? 'success' : 'default'}
+                        sx={{ textTransform: 'capitalize' }}
+                      />
+                    </Box>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      <Chip
+                        label={`Total: ${network.meterCount}`}
+                        size="small"
+                        sx={{ bgcolor: '#e3f2fd', color: '#1976d2' }}
+                      />
+                      <Chip
+                        label={`Online: ${network.onlineCount}`}
+                        size="small"
+                        sx={{ bgcolor: '#e8f5e9', color: '#4caf50' }}
+                      />
+                      <Chip
+                        label={`Offline: ${network.offlineCount}`}
+                        size="small"
+                        sx={{ bgcolor: '#ffebee', color: '#f44336' }}
+                      />
+                      <Chip
+                        label={`${network.onlinePercentage?.toFixed(1) || 0}% online`}
+                        size="small"
+                        sx={{ bgcolor: '#fff3e0', color: '#f57c00' }}
+                      />
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Paper>
+          </Grid>
+        )}
+
+        {/* Backward compatibility: Area Statistics for non-admin, non-operator, non-customer users */}
+        {!isCustomer && !isCustomerOperator && !isAdmin && !isOperator && (
           <Grid item xs={12} md={6}>
             <Paper sx={{ p: 3, borderRadius: 3 }}>
               <Typography variant="h6" sx={{ mb: 2, color: '#344767', fontWeight: 600 }}>
@@ -451,7 +584,7 @@ const Dashboard: React.FC = () => {
         )}
 
         {/* Top Consumers */}
-        <Grid item xs={12} md={isCustomer ? 12 : 6}>
+        <Grid item xs={12} md={isCustomer || isCustomerOperator || (isAdmin || isOperator ? 6 : 12) : 6}>
           <Paper sx={{ p: 3, borderRadius: 3 }}>
             <Typography variant="h6" sx={{ mb: 2, color: '#344767', fontWeight: 600 }}>
               Top Energy Consumers
