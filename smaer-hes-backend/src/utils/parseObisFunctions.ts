@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { loadSoftwareConfigurations, EnhancedObisCode } from './softwareConfigParser';
+import { translateChinese, containsChinese } from './translateObis';
 
 export interface ObisFunction {
 	code: string;                    // OBIS code (e.g., "0-0:96.7.21.255")
@@ -55,13 +56,17 @@ function parseHexingObis(filePath: string): ObisFunction[] {
 
 		for (const m of decMatches) {
 			const code = m.trim();
+			const translatedName = containsChinese(nameCandidate) ? translateChinese(nameCandidate) : nameCandidate;
+			const translatedDesc = containsChinese(raw) ? translateChinese(raw) : raw;
+			const group = categorizeObisCode(code, translatedName, translatedDesc);
+
 			functions.push({
 				code,
-				name: nameCandidate || code,
-				description: raw.trim(),
+				name: translatedName || code,
+				description: translatedDesc.trim(),
 				unit: guessUnit(raw) || undefined,
 				brand: 'hexing',
-				group: 'General',
+				group,
 				attributeId: 2,
 			});
 		}
@@ -75,13 +80,17 @@ function parseHexingObis(filePath: string): ObisFunction[] {
 			const e = h.substring(8, 10);
 			const f = h.substring(10, 12);
 			const code = `${parseInt(a, 16)}-${parseInt(b, 16)}:${parseInt(c, 16)}.${parseInt(d, 16)}.${parseInt(e, 16)}.${parseInt(f, 16)}`;
+			const translatedName = containsChinese(nameCandidate) ? translateChinese(nameCandidate) : nameCandidate;
+			const translatedDesc = containsChinese(raw) ? translateChinese(raw) : raw;
+			const group = categorizeObisCode(code, translatedName, translatedDesc);
+
 			functions.push({
 				code,
-				name: nameCandidate || code,
-				description: raw.trim(),
+				name: translatedName || code,
+				description: translatedDesc.trim(),
 				unit: guessUnit(raw) || undefined,
 				brand: 'hexing',
-				group: 'General',
+				group,
 				attributeId: 2,
 			});
 		}
@@ -129,13 +138,17 @@ function parseHexcellObis(filePath: string): ObisFunction[] {
 
 		for (const m of decMatches) {
 			const code = m.trim();
+			const translatedName = containsChinese(nameCandidate) ? translateChinese(nameCandidate) : nameCandidate;
+			const translatedDesc = containsChinese(raw) ? translateChinese(raw) : raw;
+			const group = categorizeObisCode(code, translatedName, translatedDesc);
+
 			functions.push({
 				code,
-				name: nameCandidate || code,
-				description: raw.trim(),
+				name: translatedName || code,
+				description: translatedDesc.trim(),
 				unit: guessUnit(raw) || undefined,
 				brand: 'hexcell',
-				group: 'General',
+				group,
 				attributeId: 2,
 			});
 		}
@@ -149,13 +162,17 @@ function parseHexcellObis(filePath: string): ObisFunction[] {
 			const e = h.substring(8, 10);
 			const f = h.substring(10, 12);
 			const code = `${parseInt(a, 16)}-${parseInt(b, 16)}:${parseInt(c, 16)}.${parseInt(d, 16)}.${parseInt(e, 16)}.${parseInt(f, 16)}`;
+			const translatedName = containsChinese(nameCandidate) ? translateChinese(nameCandidate) : nameCandidate;
+			const translatedDesc = containsChinese(raw) ? translateChinese(raw) : raw;
+			const group = categorizeObisCode(code, translatedName, translatedDesc);
+
 			functions.push({
 				code,
-				name: nameCandidate || code,
-				description: raw.trim(),
+				name: translatedName || code,
+				description: translatedDesc.trim(),
 				unit: guessUnit(raw) || undefined,
 				brand: 'hexcell',
-				group: 'General',
+				group,
 				attributeId: 2,
 			});
 		}
@@ -165,19 +182,125 @@ function parseHexcellObis(filePath: string): ObisFunction[] {
 }
 
 /**
- * Convert EnhancedObisCode to ObisFunction format
+ * Categorize OBIS code into functional groups
+ */
+function categorizeObisCode(code: string, name: string, description?: string): string {
+	const nameLower = name.toLowerCase();
+	const descLower = (description || '').toLowerCase();
+	const combined = `${nameLower} ${descLower}`;
+
+	// Energy and consumption
+	if (combined.includes('energy') || combined.includes('kwh') || combined.includes('wh') ||
+	    combined.includes('电能') || code.includes('1.8') || code.includes('2.8')) {
+		return 'Energy';
+	}
+
+	// Demand
+	if (combined.includes('demand') || combined.includes('maximum') || combined.includes('peak') ||
+	    combined.includes('需量') || code.includes('1.6') || code.includes('2.6')) {
+		return 'Demand';
+	}
+
+	// Instantaneous values
+	if (combined.includes('voltage') || combined.includes('current') || combined.includes('power') ||
+	    combined.includes('frequency') || combined.includes('电压') || combined.includes('电流') ||
+	    combined.includes('功率') || code.includes('32.7') || code.includes('52.7') ||
+	    code.includes('31.7') || code.includes('51.7') || code.includes('14.7')) {
+		return 'Instantaneous';
+	}
+
+	// Thresholds and limits
+	if (combined.includes('threshold') || combined.includes('limit') || combined.includes('门限') ||
+	    combined.includes('阈值') || combined.includes('upper') || combined.includes('lower') ||
+	    nameLower.includes('th_')) {
+		return 'Threshold';
+	}
+
+	// Events and counters
+	if (combined.includes('event') || combined.includes('counter') || combined.includes('count') ||
+	    combined.includes('number of') || combined.includes('事件') || combined.includes('次数') ||
+	    code.includes('96.7') || code.includes('99.98')) {
+		return 'Event';
+	}
+
+	// Relay control
+	if (combined.includes('relay') || combined.includes('disconnect') || combined.includes('connect') ||
+	    combined.includes('继电器') || combined.includes('开关') || code.includes('96.3')) {
+		return 'Relay Control';
+	}
+
+	// Tariff and billing
+	if (combined.includes('tariff') || combined.includes('billing') || combined.includes('rate') ||
+	    combined.includes('费率') || code.includes('0-0:11')) {
+		return 'Tariff';
+	}
+
+	// Clock and time
+	if (combined.includes('clock') || combined.includes('time') || combined.includes('date') ||
+	    combined.includes('时间') || combined.includes('日期') || code.includes('0-0:1.0.0')) {
+		return 'Clock';
+	}
+
+	// Status and information
+	if (combined.includes('status') || combined.includes('state') || combined.includes('serial') ||
+	    combined.includes('version') || combined.includes('状态') || combined.includes('信息') ||
+	    code.includes('96.1') || code.includes('0-0:0.')) {
+		return 'Information';
+	}
+
+	// Tamper detection
+	if (combined.includes('tamper') || combined.includes('cover') || combined.includes('magnetic') ||
+	    combined.includes('防窃电') || code.includes('96.5')) {
+		return 'Tamper Detection';
+	}
+
+	// Prepayment
+	if (combined.includes('prepayment') || combined.includes('credit') || combined.includes('balance') ||
+	    combined.includes('预付费') || code.includes('19.')) {
+		return 'Prepayment';
+	}
+
+	// Load profile
+	if (combined.includes('profile') || combined.includes('load') || code.includes('99.1') || code.includes('99.2')) {
+		return 'Load Profile';
+	}
+
+	// Configuration
+	if (combined.includes('config') || combined.includes('setting') || combined.includes('parameter') ||
+	    combined.includes('配置') || combined.includes('设置')) {
+		return 'Configuration';
+	}
+
+	return 'Other';
+}
+
+/**
+ * Convert EnhancedObisCode to ObisFunction format with translation
  */
 function convertToObisFunction(enhanced: EnhancedObisCode): ObisFunction {
+	// Translate name and description if they contain Chinese
+	const translatedName = containsChinese(enhanced.name) ? translateChinese(enhanced.name) : enhanced.name;
+	const translatedDescription = enhanced.description && containsChinese(enhanced.description)
+		? translateChinese(enhanced.description)
+		: enhanced.description;
+
+	// Determine better functional grouping
+	const functionalGroup = categorizeObisCode(
+		enhanced.code,
+		translatedName,
+		translatedDescription
+	);
+
 	return {
 		code: enhanced.code,
-		name: enhanced.name,
-		description: enhanced.description,
+		name: translatedName,
+		description: translatedDescription,
 		unit: enhanced.unit,
 		scaler: enhanced.scaler,
 		dataType: enhanced.dataType,
 		classId: enhanced.classId?.toString(),
 		attributeId: enhanced.attributeId,
-		group: enhanced.category || enhanced.subcategory || 'General',
+		group: functionalGroup,
 		brand: enhanced.brand,
 		accessRight: enhanced.accessRight?.read ? (enhanced.accessRight?.write ? 'RW' : 'R') : 'W',
 	};

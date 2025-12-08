@@ -93,17 +93,22 @@ const MeterReading: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(`/meters`, {
-        params: { search: meterNumber }
+        params: {
+          search: meterNumber,
+          limit: 50  // Get more results to find exact match
+        }
       });
 
       const meters = response.data.data;
       if (meters && meters.length > 0) {
-        const foundMeter = meters.find((m: Meter) =>
+        // Try to find exact match first (case insensitive)
+        const exactMatch = meters.find((m: Meter) =>
           m.meterNumber.toUpperCase() === meterNumber.toUpperCase()
-        ) || meters[0];
+        );
 
+        const foundMeter = exactMatch || meters[0];
         setMeter(foundMeter);
-        toast.success('Meter found');
+        toast.success(`Meter ${foundMeter.meterNumber} found`);
       } else {
         toast.error('Meter not found');
         setMeter(null);
