@@ -26,6 +26,8 @@ interface ObisParameter {
   unit?: string;
   dataType?: string;
   accessRight?: string;
+  group?: string;
+  writable: boolean;
   currentValue?: any;
   newValue?: string;
 }
@@ -43,20 +45,56 @@ export default function MeterSettings() {
   const [parameterValues, setParameterValues] = useState<Record<string, any>>({});
   const [newValues, setNewValues] = useState<Record<string, string>>({});
 
-  // Step 1: Fetch writeable parameters
+  // Step 1: Fetch writeable parameters from ALL OBIS functions
   const fetchWriteableParameters = async () => {
     if (!meterIdOrNumber) return toast.error('Enter meter ID or number');
     setLoading(true);
     try {
-      const resp = await axios.get(`/meters/${encodeURIComponent(meterIdOrNumber)}/writeable-parameters`);
-      const { writeableParameters } = resp.data.data;
+      // Fetch ALL OBIS functions
+      const resp = await axios.get('/obis/functions');
 
-      setWriteableGroups(writeableParameters || []);
+      if (!resp.data.success || !resp.data.data.functions) {
+        throw new Error('Failed to load OBIS functions');
+      }
+
+      const allFunctions = resp.data.data.functions;
+
+      // Filter for writeable parameters only
+      const writeableParams = allFunctions.filter((func: any) =>
+        func.accessRight === 'RW' || func.accessRight === 'W'
+      );
+
+      // Group by category
+      const grouped: Record<string, ObisParameter[]> = {};
+      writeableParams.forEach((func: any) => {
+        const group = func.group || 'Other';
+        if (!grouped[group]) {
+          grouped[group] = [];
+        }
+        grouped[group].push({
+          code: func.code,
+          name: func.name || func.code,
+          description: func.description,
+          unit: func.unit,
+          dataType: func.dataType,
+          accessRight: func.accessRight,
+          group: func.group,
+          writable: true,
+        });
+      });
+
+      // Convert to array of groups
+      const groups: ObisGroup[] = Object.entries(grouped).map(([name, items]) => ({
+        name,
+        items,
+      }));
+
+      setWriteableGroups(groups);
       setSelectedGroupIdx(0);
       setParameterValues({});
       setNewValues({});
 
-      toast.success(`Found ${resp.data.data.totalCount} writeable parameters`);
+      toast.success(`Found ${writeableParams.length} writeable parameters in ${groups.length} groups`);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to fetch writeable parameters');
     } finally {

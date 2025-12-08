@@ -97,14 +97,16 @@ function App() {
                       <Route path="/system/areas" element={<AreaManagement />} />
                     </Route>
                     
+                    {/* Meter Management Routes - Available to all authenticated users */}
+                    <Route path="/meters" element={<MeterManagement />} />
+                    <Route path="/meters/reading" element={<MeterReading />} />
+
                     {/* Meter Management Routes - Admin & Operator only */}
                     <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
-                      <Route path="/meters" element={<MeterManagement />} />
                       <Route path="/meters/add" element={<AddMeter />} />
                       <Route path="/meters/edit/:id" element={<EditMeter />} />
                       <Route path="/meters/import" element={<MeterImport />} />
                       <Route path="/meters/sims" element={<SimManagement />} />
-                      <Route path="/meters/reading" element={<MeterReading />} />
                       <Route path="/meters/settings" element={<MeterSettings />} />
                     </Route>
                     

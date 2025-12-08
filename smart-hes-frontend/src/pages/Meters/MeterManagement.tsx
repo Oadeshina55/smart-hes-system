@@ -44,6 +44,7 @@ import {
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { CSVLink } from 'react-csv';
+import { useAuth } from '../../contexts/AuthContext';
 
 const meterTypes = ['single-phase', 'three-phase', 'prepaid', 'postpaid'];
 
@@ -79,6 +80,9 @@ interface Meter {
 }
 
 const MeterManagement: React.FC = () => {
+  const { user } = useAuth();
+  const isCustomer = user?.role === 'customer';
+
   const [meters, setMeters] = useState<Meter[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -308,22 +312,26 @@ const MeterManagement: React.FC = () => {
           Meter Management
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            onClick={handleOpenAddDialog}
-            sx={{
-              background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
-            }}
-          >
-            Add Meter
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => window.location.href = '/meters/import'}
-          >
-            Import CSV
-          </Button>
+          {!isCustomer && (
+            <>
+              <Button
+                variant="contained"
+                startIcon={<Add />}
+                onClick={handleOpenAddDialog}
+                sx={{
+                  background: 'linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%)',
+                }}
+              >
+                Add Meter
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => window.location.href = '/meters/import'}
+              >
+                Import CSV
+              </Button>
+            </>
+          )}
           <CSVLink data={csvData} filename="meters_export.csv" style={{ textDecoration: 'none' }}>
             <Button variant="outlined" startIcon={<Download />}>
               Export CSV
@@ -466,23 +474,27 @@ const MeterManagement: React.FC = () => {
                       >
                         <Visibility />
                       </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => window.location.href = `/meters/edit/${meter._id}`}
-                        sx={{ color: '#FFA726' }}
-                      >
-                        <Edit />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => {
-                          setSelectedMeter(meter);
-                          setDeleteDialog(true);
-                        }}
-                        sx={{ color: '#EC407A' }}
-                      >
-                        <Delete />
-                      </IconButton>
+                      {!isCustomer && (
+                        <>
+                          <IconButton
+                            size="small"
+                            onClick={() => window.location.href = `/meters/edit/${meter._id}`}
+                            sx={{ color: '#FFA726' }}
+                          >
+                            <Edit />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              setSelectedMeter(meter);
+                              setDeleteDialog(true);
+                            }}
+                            sx={{ color: '#EC407A' }}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </>
+                      )}
                     </Box>
                   </TableCell>
                 </TableRow>
