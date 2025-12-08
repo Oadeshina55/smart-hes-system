@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticate, authorize, getAreaFilter } from '../middleware/auth.middleware';
+import { authenticate, authorize, getNetworkFilter, hasAccessToNetwork } from '../middleware/auth.middleware';
 import { Meter } from '../models/Meter.model';
 import { parseObisForBrand } from '../utils/obisParser';
 import { Consumption } from '../models/Consumption.model';
@@ -7,6 +7,7 @@ import { MeterReading, IObisReading } from '../models/MeterReading.model';
 import { Event, EVENT_TYPES } from '../models/Event.model';
 import { Alert, ALERT_TYPES } from '../models/Alert.model';
 import { Area } from '../models/Area.model';
+import { CustomerNetwork } from '../models/CustomerNetwork.model';
 import { SimCard } from '../models/SimCard.model';
 import { MeterStatusService } from '../services/meterStatus.service';
 import { meterPollingService } from '../services/meterPolling.service';
@@ -20,7 +21,7 @@ const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
 // Create meter
-router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.post('/', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const body = { ...(req.body || {}) };
 
@@ -33,11 +34,12 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
       });
     }
 
-    if (!body.area) {
+    // Multi-tenant: customerNetwork is now required
+    if (!body.customerNetwork) {
       return res.status(400).json({
         success: false,
-        message: 'Area is required',
-        error: 'area is a required field'
+        message: 'Customer network is required',
+        error: 'customerNetwork is a required field'
       });
     }
 
@@ -63,14 +65,37 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
       });
     }
 
-    // Validate area exists
-    const areaExists = await Area.findById(body.area);
-    if (!areaExists) {
+    // Validate customer network exists
+    const networkExists = await CustomerNetwork.findById(body.customerNetwork);
+    if (!networkExists) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid area',
-        error: 'The specified area does not exist'
+        message: 'Invalid customer network',
+        error: 'The specified customer network does not exist'
       });
+    }
+
+    // Multi-tenant access control: Customer-operators can only add meters to their own network
+    if (req.user.role === 'customer-operator') {
+      if (!hasAccessToNetwork(req.user, body.customerNetwork)) {
+        return res.status(403).json({
+          success: false,
+          message: 'Access denied',
+          error: 'You can only add meters to your own customer network'
+        });
+      }
+    }
+
+    // Backward compatibility: Support area field if provided
+    if (body.area) {
+      const areaExists = await Area.findById(body.area);
+      if (!areaExists) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid area',
+          error: 'The specified area does not exist'
+        });
+      }
     }
 
     // normalize brand
@@ -82,8 +107,13 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
 
     const meter = await Meter.create(body);
 
+    // Update network statistics
+    await CustomerNetwork.findByIdAndUpdate(body.customerNetwork, {
+      $inc: { meterCount: 1 }
+    });
+
     // Log success
-    console.log(`✓ Meter created: ${meter.meterNumber} (${meter._id})`);
+    console.log(`✓ Meter created: ${meter.meterNumber} (${meter._id}) for network ${body.customerNetwork}`);
 
     res.status(201).json({
       success: true,
@@ -121,8 +151,25 @@ router.post('/', authenticate, authorize('admin', 'operator'), async (req: any, 
 });
 
 // Update meter
-router.put('/:id', authenticate, authorize('admin', 'operator'), async (req, res) => {
+router.put('/:id', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
+    // Multi-tenant access control: Check if user has access to this meter's network
+    const existingMeter = await Meter.findById(req.params.id);
+    if (!existingMeter) {
+      return res.status(404).json({ success: false, message: 'Meter not found' });
+    }
+
+    // Customer-operators can only update meters in their own network
+    if (req.user.role === 'customer-operator') {
+      if (!hasAccessToNetwork(req.user, existingMeter.customerNetwork.toString())) {
+        return res.status(403).json({
+          success: false,
+          message: 'Access denied',
+          error: 'You can only update meters in your own customer network'
+        });
+      }
+    }
+
     const meter = await Meter.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!meter) return res.status(404).json({ success: false, message: 'Meter not found' });
     res.json({ success: true, message: 'Meter updated', data: meter });
@@ -143,7 +190,7 @@ router.delete('/:id', authenticate, authorize('admin'), async (req, res) => {
 });
 
 // Import meters via CSV
-router.post('/import', authenticate, authorize('admin', 'operator'), upload.single('file'), async (req: any, res) => {
+router.post('/import', authenticate, authorize('admin', 'operator', 'customer-operator'), upload.single('file'), async (req: any, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: 'CSV file is required' });
 
@@ -167,12 +214,37 @@ router.post('/import', authenticate, authorize('admin', 'operator'), upload.sing
               firmware: row.firmware || '',
               ipAddress: row.ipAddress || process.env.METER_HOST || '0.0.0.0',
               port: row.port ? Number(row.port) : (process.env.METER_PORT ? Number(process.env.METER_PORT) : 5000),
+              customerNetwork: row.customerNetwork || undefined,
               area: row.area || undefined,
+              endCustomer: row.endCustomer || undefined,
               customer: row.customer || undefined,
               simCard: row.simCard || undefined,
             };
 
+            // Multi-tenant: For customer-operators, enforce their network
+            if (req.user.role === 'customer-operator' && req.user.customerNetwork) {
+              createBody.customerNetwork = req.user.customerNetwork;
+            }
+
+            // Validate customerNetwork is provided (required field)
+            if (!createBody.customerNetwork) {
+              throw new Error('customerNetwork is required for each meter');
+            }
+
+            // Multi-tenant access control: Customer-operators can only import to their network
+            if (req.user.role === 'customer-operator') {
+              if (!hasAccessToNetwork(req.user, createBody.customerNetwork)) {
+                throw new Error('You can only import meters to your own customer network');
+              }
+            }
+
             const meter = await Meter.create(createBody);
+
+            // Update network statistics
+            await CustomerNetwork.findByIdAndUpdate(createBody.customerNetwork, {
+              $inc: { meterCount: 1 }
+            });
+
             rowResults.push({ index: i, success: true, data: meter });
           } catch (err: any) {
             rowResults.push({ index: i, success: false, error: err.message || String(err), row });
@@ -198,26 +270,33 @@ router.post('/import', authenticate, authorize('admin', 'operator'), upload.sing
 // Get all meters with filters
 router.get('/', authenticate, async (req: any, res) => {
   try {
-    const { status, area, customer, search, page = 1, limit = 10 } = req.query;
+    const { status, area, customerNetwork, endCustomer, search, page = 1, limit = 10 } = req.query;
 
     const filter: any = { isActive: true };
 
-    // Apply area-based filtering for customer users
-    const areaFilter = getAreaFilter(req.user);
-    if (areaFilter) {
-      Object.assign(filter, areaFilter);
+    // Multi-tenant: Apply network-based filtering
+    const networkFilter = getNetworkFilter(req.user);
+    if (networkFilter) {
+      Object.assign(filter, networkFilter);
     }
 
     if (status && status !== 'all') {
       filter.status = status;
     }
 
+    // Multi-tenant: Filter by customer network
+    if (customerNetwork && customerNetwork !== 'all') {
+      filter.customerNetwork = customerNetwork;
+    }
+
+    // Backward compatibility: Support area filter
     if (area && area !== 'all') {
       filter.area = area;
     }
 
-    if (customer) {
-      filter.customer = customer;
+    // Multi-tenant: Filter by end customer
+    if (endCustomer) {
+      filter.endCustomer = endCustomer;
     }
 
     if (search) {
@@ -229,7 +308,9 @@ router.get('/', authenticate, async (req: any, res) => {
     }
 
     const meters = await Meter.find(filter)
+      .populate('customerNetwork', 'networkName networkCode')
       .populate('area', 'name code')
+      .populate('endCustomer', 'customerName accountNumber')
       .populate('customer', 'customerName accountNumber')
       .populate('simCard', 'simNumber ipAddress')
       .sort('-createdAt')
@@ -270,10 +351,10 @@ router.get('/autocomplete/search', authenticate, async (req: any, res) => {
 
     const filter: any = { isActive: true };
 
-    // Apply area-based filtering for customer users
-    const areaFilter = getAreaFilter(req.user);
-    if (areaFilter) {
-      Object.assign(filter, areaFilter);
+    // Multi-tenant: Apply network-based filtering
+    const networkFilter = getNetworkFilter(req.user);
+    if (networkFilter) {
+      Object.assign(filter, networkFilter);
     }
 
     // Search by meter number (starts with query)
@@ -281,8 +362,10 @@ router.get('/autocomplete/search', authenticate, async (req: any, res) => {
 
     // Fetch only meter numbers (lightweight)
     const meters = await Meter.find(filter)
-      .select('meterNumber brand area customer')
+      .select('meterNumber brand customerNetwork area endCustomer customer')
+      .populate('customerNetwork', 'networkName')
       .populate('area', 'name')
+      .populate('endCustomer', 'customerName')
       .populate('customer', 'customerName')
       .limit(10)
       .sort('meterNumber');
@@ -290,7 +373,9 @@ router.get('/autocomplete/search', authenticate, async (req: any, res) => {
     const suggestions = meters.map(m => ({
       meterNumber: m.meterNumber,
       brand: m.brand,
+      customerNetwork: (m.customerNetwork as any)?.networkName,
       area: (m.area as any)?.name,
+      endCustomer: (m.endCustomer as any)?.customerName,
       customer: (m.customer as any)?.customerName,
     }));
 
@@ -316,7 +401,9 @@ router.get('/:id', authenticate, async (req, res) => {
     // Try by object ID first, otherwise treat as meterNumber
     try {
       meter = await Meter.findById(param)
+        .populate('customerNetwork', 'networkName networkCode contactInfo subscriptionStatus')
         .populate('area', 'name code')
+        .populate('endCustomer', 'customerName accountNumber email phoneNumber')
         .populate('customer', 'firstName lastName accountNumber email phoneNumber')
         .populate('simCard', 'iccid phoneNumber provider status');
     } catch (e) {
@@ -325,7 +412,9 @@ router.get('/:id', authenticate, async (req, res) => {
 
     if (!meter) {
       meter = await Meter.findOne({ meterNumber: String(param).toUpperCase() })
+        .populate('customerNetwork', 'networkName networkCode contactInfo subscriptionStatus')
         .populate('area', 'name code')
+        .populate('endCustomer', 'customerName accountNumber email phoneNumber')
         .populate('customer', 'firstName lastName accountNumber email phoneNumber')
         .populate('simCard', 'iccid phoneNumber provider status');
     }
@@ -351,7 +440,7 @@ router.get('/:id', authenticate, async (req, res) => {
 });
 
 // Request an immediate meter read (emit to meter via socket)
-router.post('/:id/read', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.post('/:id/read', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const param = req.params.id;
     let meter = null;
@@ -390,7 +479,7 @@ router.post('/:id/read', authenticate, authorize('admin', 'operator'), async (re
 });
 
 // Get meter settings (OBIS configuration / metadata)
-router.get('/:id/settings', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.get('/:id/settings', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const param = req.params.id;
     let meter: any = null;
@@ -418,7 +507,7 @@ router.get('/:id/settings', authenticate, authorize('admin', 'operator'), async 
 });
 
 // Update meter settings (and optionally write to meter)
-router.post('/:id/settings', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.post('/:id/settings', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const param = req.params.id;
     const { settings, metadata, writeToMeter } = req.body;
@@ -478,7 +567,7 @@ router.post('/:id/settings', authenticate, authorize('admin', 'operator'), async
 });
 
 // Get writeable OBIS parameters for a meter
-router.get('/:id/writeable-parameters', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.get('/:id/writeable-parameters', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const param = req.params.id;
     let meter: any = null;
@@ -536,7 +625,7 @@ router.get('/:id/writeable-parameters', authenticate, authorize('admin', 'operat
 });
 
 // Read current meter OBIS values from the physical meter
-router.post('/:id/read-current-values', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.post('/:id/read-current-values', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const param = req.params.id;
     const { obisCodes } = req.body;
@@ -704,7 +793,7 @@ router.post('/data-ingestion', async (req, res) => {
 });
 
 // Read specific OBIS parameters from meter (on-demand)
-router.post('/:id/read-obis', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.post('/:id/read-obis', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const { obisCodes } = req.body;
 
@@ -732,7 +821,7 @@ router.post('/:id/read-obis', authenticate, authorize('admin', 'operator'), asyn
 });
 
 // Write specific OBIS parameter to meter
-router.post('/:id/write-obis', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.post('/:id/write-obis', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const { obisCode, value } = req.body;
 
@@ -870,7 +959,7 @@ router.get('/polling/status', authenticate, authorize('admin', 'operator'), asyn
 });
 
 // Batch configure meters for online monitoring
-router.post('/batch/configure-online', authenticate, authorize('admin', 'operator'), async (req: any, res) => {
+router.post('/batch/configure-online', authenticate, authorize('admin', 'operator', 'customer-operator'), async (req: any, res) => {
   try {
     const { meterIds, ipAddress, port, status } = req.body;
 
