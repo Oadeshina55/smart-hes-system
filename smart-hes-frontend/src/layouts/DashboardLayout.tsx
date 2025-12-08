@@ -58,6 +58,7 @@ import {
   Timeline,
   Psychology,
   Assessment,
+  Business,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../contexts/SocketContext';
@@ -90,6 +91,12 @@ const menuItems: MenuItemType[] = [
     title: 'Area Management',
     path: '/system/areas',
     icon: <LocationOn />,
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Customer Networks',
+    path: '/system/customer-networks',
+    icon: <Business />,
     roles: ['admin', 'operator'],
   },
   {

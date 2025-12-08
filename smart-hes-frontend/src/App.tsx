@@ -20,6 +20,7 @@ import MeterReading from './pages/Meters/MeterReadingEnhanced';
 import MeterSettings from './pages/Meters/MeterSettings';
 import SimManagement from './pages/Meters/SimManagement';
 import AreaManagement from './pages/System/AreaManagement';
+import CustomerNetworkManagement from './pages/System/CustomerNetworkManagement';
 import CustomerManagement from './pages/Customers/CustomerManagement';
 import ImportCustomers from './pages/Customers/ImportCustomers';
 import RealTimeMonitoring from './pages/TaskQuery/RealTimeMonitoring';
@@ -95,6 +96,7 @@ function App() {
                     {/* System Routes - Admin & Operator only */}
                     <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>
                       <Route path="/system/areas" element={<AreaManagement />} />
+                      <Route path="/system/customer-networks" element={<CustomerNetworkManagement />} />
                     </Route>
                     
                     {/* Meter Management Routes - Available to all authenticated users */}
