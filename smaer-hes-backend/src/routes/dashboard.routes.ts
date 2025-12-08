@@ -1,10 +1,12 @@
 import express from 'express';
-import { authenticate, authorize, getAreaFilter } from '../middleware/auth.middleware';
+import { authenticate, authorize, getNetworkFilter } from '../middleware/auth.middleware';
 import { Meter } from '../models/Meter.model';
 import { Alert } from '../models/Alert.model';
 import { Event } from '../models/Event.model';
 import { Consumption } from '../models/Consumption.model';
 import { Customer } from '../models/Customer.model';
+import { EndCustomer } from '../models/EndCustomer.model';
+import { CustomerNetwork } from '../models/CustomerNetwork.model';
 import { Area } from '../models/Area.model';
 import { AlertService } from '../services/alert.service';
 import moment from 'moment';
@@ -14,15 +16,21 @@ const router = express.Router();
 // Get dashboard statistics
 router.get('/stats', authenticate, async (req: any, res) => {
   try {
-    const { areaId } = req.query;
+    const { areaId, customerNetworkId } = req.query;
     const filter: any = { isActive: true };
 
-    // Apply area-based filtering for customer users
-    const areaFilter = getAreaFilter(req.user);
-    if (areaFilter) {
-      Object.assign(filter, areaFilter);
+    // Multi-tenant: Apply network-based filtering
+    const networkFilter = getNetworkFilter(req.user);
+    if (networkFilter) {
+      Object.assign(filter, networkFilter);
     }
 
+    // Multi-tenant: Filter by specific network if provided
+    if (customerNetworkId) {
+      filter.customerNetwork = customerNetworkId;
+    }
+
+    // Backward compatibility: Support area filter
     if (areaId) {
       filter.area = areaId;
     }
@@ -45,9 +53,23 @@ router.get('/stats', authenticate, async (req: any, res) => {
     // Get alert statistics
     const activeAlerts = await AlertService.getActiveAlertsCount();
 
-    // Get customer and area counts
-    const [totalCustomers, totalAreas] = await Promise.all([
-      Customer.countDocuments({ isActive: true }),
+    // Multi-tenant: Customer count depends on user role
+    let totalCustomers;
+    if (req.user.role === 'admin' || req.user.role === 'operator') {
+      // Admin sees total number of customer networks (utility companies)
+      totalCustomers = await CustomerNetwork.countDocuments({ isActive: true });
+    } else {
+      // Customer-operators see their end customers with meters
+      const endCustomerFilter: any = {};
+      if (req.user.customerNetwork) {
+        endCustomerFilter.customerNetwork = req.user.customerNetwork;
+      }
+      totalCustomers = await EndCustomer.countDocuments(endCustomerFilter);
+    }
+
+    // Get network and area counts
+    const [totalNetworks, totalAreas] = await Promise.all([
+      CustomerNetwork.countDocuments({ isActive: true }),
       Area.countDocuments({ isActive: true })
     ]);
 
@@ -72,6 +94,9 @@ router.get('/stats', authenticate, async (req: any, res) => {
         customers: {
           total: totalCustomers
         },
+        customerNetworks: {
+          total: totalNetworks
+        },
         areas: {
           total: totalAreas
         },
@@ -92,7 +117,7 @@ router.get('/stats', authenticate, async (req: any, res) => {
 // Get energy consumption chart data (last 24 hours)
 router.get('/consumption-chart', authenticate, async (req: any, res) => {
   try {
-    const { areaId, interval = 'hourly' } = req.query;
+    const { areaId, customerNetworkId, interval = 'hourly' } = req.query;
     const now = moment();
     let startDate: Date;
     let groupInterval: string;
@@ -120,15 +145,26 @@ router.get('/consumption-chart', authenticate, async (req: any, res) => {
       interval: groupInterval
     };
 
-    // Apply area-based filtering for customer users
-    const areaFilter = getAreaFilter(req.user);
-    if (areaFilter && areaFilter.area) {
-      match.area = areaFilter.area;
+    // Multi-tenant: Build meter filter for consumption lookup
+    const meterFilter: any = { isActive: true };
+    const networkFilter = getNetworkFilter(req.user);
+    if (networkFilter) {
+      Object.assign(meterFilter, networkFilter);
     }
 
+    if (customerNetworkId) {
+      meterFilter.customerNetwork = customerNetworkId;
+    }
+
+    // Backward compatibility: Support area filter
     if (areaId) {
       match.area = areaId;
     }
+
+    // Get meter IDs that match the filter
+    const meters = await Meter.find(meterFilter).select('_id');
+    const meterIds = meters.map(m => m._id);
+    match.meter = { $in: meterIds };
 
     const consumptionData = await Consumption.aggregate([
       { $match: match },
@@ -291,7 +327,7 @@ router.get('/area-stats', authenticate, async (req, res) => {
 // Get top consuming meters
 router.get('/top-consumers', authenticate, async (req: any, res) => {
   try {
-    const { limit = 10, areaId } = req.query;
+    const { limit = 10, areaId, customerNetworkId } = req.query;
     const yesterday = moment().subtract(1, 'day').startOf('day').toDate();
     const today = moment().startOf('day').toDate();
 
@@ -300,15 +336,26 @@ router.get('/top-consumers', authenticate, async (req: any, res) => {
       interval: 'daily'
     };
 
-    // Apply area-based filtering for customer users
-    const areaFilter = getAreaFilter(req.user);
-    if (areaFilter && areaFilter.area) {
-      match.area = areaFilter.area;
+    // Multi-tenant: Build meter filter
+    const meterFilter: any = { isActive: true };
+    const networkFilter = getNetworkFilter(req.user);
+    if (networkFilter) {
+      Object.assign(meterFilter, networkFilter);
     }
 
+    if (customerNetworkId) {
+      meterFilter.customerNetwork = customerNetworkId;
+    }
+
+    // Backward compatibility: Support area filter
     if (areaId) {
       match.area = areaId;
     }
+
+    // Get meter IDs that match the filter
+    const meters = await Meter.find(meterFilter).select('_id');
+    const meterIds = meters.map(m => m._id);
+    match.meter = { $in: meterIds };
 
     const topConsumers = await Consumption.aggregate([
       { $match: match },
@@ -391,7 +438,7 @@ router.get('/health-metrics', authenticate, authorize('admin'), async (req, res)
         tamperAlerts,
         communicationFailures,
         averageOnlineRate: averageOnlineRate[0]?.onlineRate || 0,
-        status: criticalAlerts === 0 ? 'healthy' : 
+        status: criticalAlerts === 0 ? 'healthy' :
                 criticalAlerts < 5 ? 'warning' : 'critical'
       }
     });
@@ -399,6 +446,89 @@ router.get('/health-metrics', authenticate, authorize('admin'), async (req, res)
     res.status(500).json({
       success: false,
       message: 'Failed to get health metrics',
+      error: error.message
+    });
+  }
+});
+
+// Multi-tenant: Get network-wise statistics
+router.get('/network-stats', authenticate, authorize('admin', 'operator'), async (req, res) => {
+  try {
+    const networkStats = await CustomerNetwork.aggregate([
+      { $match: { isActive: true } },
+      {
+        $lookup: {
+          from: 'meters',
+          localField: '_id',
+          foreignField: 'customerNetwork',
+          as: 'meters'
+        }
+      },
+      {
+        $lookup: {
+          from: 'endcustomers',
+          localField: '_id',
+          foreignField: 'customerNetwork',
+          as: 'endCustomers'
+        }
+      },
+      {
+        $project: {
+          networkName: 1,
+          networkCode: 1,
+          subscriptionStatus: 1,
+          meterCount: { $size: '$meters' },
+          endCustomerCount: { $size: '$endCustomers' },
+          onlineCount: {
+            $size: {
+              $filter: {
+                input: '$meters',
+                as: 'meter',
+                cond: { $eq: ['$$meter.status', 'online'] }
+              }
+            }
+          },
+          offlineCount: {
+            $size: {
+              $filter: {
+                input: '$meters',
+                as: 'meter',
+                cond: { $eq: ['$$meter.status', 'offline'] }
+              }
+            }
+          },
+          activeCount: {
+            $size: {
+              $filter: {
+                input: '$meters',
+                as: 'meter',
+                cond: { $eq: ['$$meter.status', 'active'] }
+              }
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          onlinePercentage: {
+            $cond: {
+              if: { $gt: ['$meterCount', 0] },
+              then: { $multiply: [{ $divide: ['$onlineCount', '$meterCount'] }, 100] },
+              else: 0
+            }
+          }
+        }
+      }
+    ]);
+
+    res.json({
+      success: true,
+      data: networkStats
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get network statistics',
       error: error.message
     });
   }
