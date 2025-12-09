@@ -5,6 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const meterTypes = ['single-phase', 'three-phase', 'prepaid', 'postpaid'];
 
@@ -13,17 +14,40 @@ const METER_NUMBER_HINT = 'Meter number must be exactly 11 or 13 digits';
 
 export default function AddMeter() {
 	const navigate = useNavigate();
+	const { user } = useAuth();
 	const [meterNumber, setMeterNumber] = useState('');
 	const [meterType, setMeterType] = useState('single-phase');
 	const [brand, setBrand] = useState('hexing');
 	const [model, setModel] = useState('');
 	const [ipAddress, setIpAddress] = useState('');
 	const [port, setPort] = useState('');
+	const [customerNetworks, setCustomerNetworks] = useState<any[]>([]);
+	const [customerNetwork, setCustomerNetwork] = useState('');
 	const [areas, setAreas] = useState<any[]>([]);
 	const [area, setArea] = useState('');
 	const [meterNumberError, setMeterNumberError] = useState('');
 
-	useEffect(() => { fetchAreas(); }, []);
+	const isCustomerOperator = user?.role === 'customer-operator';
+
+	useEffect(() => {
+		fetchCustomerNetworks();
+		fetchAreas(); // Keep for backward compatibility
+
+		// Auto-select customer network for customer-operators
+		if (isCustomerOperator && user?.customerNetwork) {
+			setCustomerNetwork(user.customerNetwork as string);
+		}
+	}, [user]);
+
+	const fetchCustomerNetworks = async () => {
+		try {
+			const res = await axios.get('/customer-networks');
+			setCustomerNetworks(res.data.data || []);
+		} catch (err) {
+			console.error(err);
+			toast.error('Failed to load customer networks');
+		}
+	};
 
 	const fetchAreas = async () => {
 		try {
@@ -31,7 +55,7 @@ export default function AddMeter() {
 			setAreas(res.data.data || []);
 		} catch (err) {
 			console.error(err);
-			toast.error('Failed to load areas');
+			// Don't show error for areas as it's deprecated
 		}
 	};
 
@@ -69,8 +93,8 @@ export default function AddMeter() {
 			toast.error('Model is required');
 			return;
 		}
-		if (!area) {
-			toast.error('Area is required');
+		if (!customerNetwork) {
+			toast.error('Customer network is required');
 			return;
 		}
 
@@ -80,7 +104,8 @@ export default function AddMeter() {
 				meterType,
 				brand: brand.toLowerCase(),
 				model,
-				area,
+				customerNetwork, // Multi-tenant: Required field
+				area: area || undefined, // Deprecated: For backward compatibility
 				ipAddress: ipAddress || undefined,
 				port: port ? Number(port) : undefined
 			});
@@ -158,16 +183,32 @@ export default function AddMeter() {
 						<TextField
 							select
 							fullWidth
-							label="Area"
-							value={area}
-							onChange={(e) => setArea(e.target.value)}
+							label="Customer Network"
+							value={customerNetwork}
+							onChange={(e) => setCustomerNetwork(e.target.value)}
 							required
-							helperText="Area assignment is required"
+							disabled={isCustomerOperator}
+							helperText={isCustomerOperator ? "Auto-assigned to your network" : "Select customer network (utility company)"}
 						>
-							<MenuItem value="">Select Area</MenuItem>
-							{areas.map(a => <MenuItem key={a._id} value={a._id}>{a.name}</MenuItem>)}
+							<MenuItem value="">Select Customer Network</MenuItem>
+							{customerNetworks.map(cn => <MenuItem key={cn._id} value={cn._id}>{cn.networkName}</MenuItem>)}
 						</TextField>
 					</Grid>
+					{!isCustomerOperator && (
+						<Grid item xs={12} md={6}>
+							<TextField
+								select
+								fullWidth
+								label="Area (Optional - Deprecated)"
+								value={area}
+								onChange={(e) => setArea(e.target.value)}
+								helperText="Legacy area assignment - use Customer Network instead"
+							>
+								<MenuItem value="">Select Area</MenuItem>
+								{areas.map(a => <MenuItem key={a._id} value={a._id}>{a.name}</MenuItem>)}
+							</TextField>
+						</Grid>
+					)}
 					<Grid item xs={12}>
 						<Button
 							variant="contained"
