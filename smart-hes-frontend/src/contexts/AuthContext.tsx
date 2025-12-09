@@ -6,9 +6,10 @@ interface User {
   id: string;
   username: string;
   email: string;
-  role: 'admin' | 'operator' | 'customer';
+  role: 'admin' | 'operator' | 'customer' | 'customer-operator';
   firstName: string;
   lastName: string;
+  customerNetwork?: string;
 }
 
 interface AuthContextType {

@@ -38,7 +38,7 @@ import {
   Speed as SpeedIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface CustomerNetwork {
   _id: string;
