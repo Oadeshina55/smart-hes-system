@@ -469,7 +469,9 @@ const DashboardLayout: React.FC = () => {
           </IconButton>
 
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 600, fontSize: '1.125rem' }}>
-            New Hampshire Capital - Head End System
+            {user?.role === 'customer-operator' && user?.customerNetwork
+              ? `${user.customerNetwork} - Head End System`
+              : 'New Hampshire Capital - Head End System'}
           </Typography>
 
           <IconButton onClick={toggleTheme} color="inherit" sx={{ mr: 1 }}>

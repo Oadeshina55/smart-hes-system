@@ -153,6 +153,107 @@ router.post('/register', registerValidation, async (req: express.Request, res: e
   }
 });
 
+// Register a new customer network with operator account
+router.post('/register-network', async (req: express.Request, res: express.Response) => {
+  try {
+    const {
+      networkName,
+      networkCode,
+      networkEmail,
+      networkPhone,
+      networkAddress,
+      operatorFirstName,
+      operatorLastName,
+      operatorUsername,
+      operatorPassword,
+    } = req.body;
+
+    // Validation
+    if (!networkName || !networkCode || !networkEmail || !operatorUsername || !operatorPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'All required fields must be provided',
+      });
+    }
+
+    // Check if network code already exists
+    const { CustomerNetwork } = require('../models/CustomerNetwork.model');
+    const existingNetwork = await CustomerNetwork.findOne({ networkCode });
+    if (existingNetwork) {
+      return res.status(400).json({
+        success: false,
+        message: 'Network code already exists. Please choose a different code.',
+      });
+    }
+
+    // Check if operator username already exists
+    const existingUser = await User.findOne({ username: operatorUsername });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username already exists. Please choose a different username.',
+      });
+    }
+
+    // Create customer network
+    const customerNetwork = await CustomerNetwork.create({
+      networkName,
+      networkCode,
+      parentCompany: 'New Hampshire', // Default parent company
+      contactInfo: {
+        email: networkEmail,
+        phoneNumber: networkPhone || '',
+        address: networkAddress || '',
+      },
+      subscriptionStatus: 'trial', // Start with trial status
+      settings: {
+        canAddMeters: true,
+        canAddCustomers: true,
+        canManageOperators: false, // Only main operator for now
+      },
+      isActive: true,
+      meterCount: 0,
+      endCustomerCount: 0,
+      activeMeters: 0,
+    });
+
+    // Create customer-operator user account
+    const operatorUser = await User.create({
+      username: operatorUsername,
+      email: networkEmail,
+      password: operatorPassword,
+      firstName: operatorFirstName,
+      lastName: operatorLastName,
+      role: 'customer-operator',
+      customerNetwork: customerNetwork._id,
+      isActive: true,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Customer network registered successfully. You can now log in with your credentials.',
+      data: {
+        network: {
+          id: customerNetwork._id,
+          networkName: customerNetwork.networkName,
+          networkCode: customerNetwork.networkCode,
+        },
+        operator: {
+          id: operatorUser._id,
+          username: operatorUser.username,
+          role: operatorUser.role,
+        },
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Network registration failed',
+      error: error.message,
+    });
+  }
+});
+
 // Login
 router.post('/login', loginValidation, async (req: express.Request, res: express.Response) => {
   try {
@@ -230,21 +331,31 @@ router.post('/login', loginValidation, async (req: express.Request, res: express
     // Generate token
     const token = generateToken(user._id.toString());
 
-    // Get user with assignedAreas populated
-    const userWithAreas = await User.findById(user._id).select('-password').populate('assignedAreas', 'name code');
+    // Get user with assignedAreas and customerNetwork populated
+    const userWithData = await User.findById(user._id)
+      .select('-password')
+      .populate('assignedAreas', 'name code')
+      .populate('customerNetwork', 'networkName networkCode');
+
+    // Extract customer network name if exists
+    let customerNetworkName = null;
+    if (userWithData.customerNetwork && typeof userWithData.customerNetwork === 'object') {
+      customerNetworkName = (userWithData.customerNetwork as any).networkName;
+    }
 
     res.json({
       success: true,
       message: 'Login successful',
       data: {
         user: {
-          id: userWithAreas._id,
-          username: userWithAreas.username,
-          email: userWithAreas.email,
-          role: userWithAreas.role,
-          firstName: userWithAreas.firstName,
-          lastName: userWithAreas.lastName,
-          assignedAreas: userWithAreas.assignedAreas
+          id: userWithData._id,
+          username: userWithData.username,
+          email: userWithData.email,
+          role: userWithData.role,
+          firstName: userWithData.firstName,
+          lastName: userWithData.lastName,
+          assignedAreas: userWithData.assignedAreas,
+          customerNetwork: customerNetworkName, // Network name for branding
         },
         token
       }
