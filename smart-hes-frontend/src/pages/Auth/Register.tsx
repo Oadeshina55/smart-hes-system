@@ -98,7 +98,8 @@ const Register: React.FC = () => {
       return;
     }
 
-    if (!networkName || !networkCode || !networkEmail || !operatorUsername || !operatorPassword) {
+    if (!networkName || !networkCode || !networkEmail || !networkPhone || !networkAddress ||
+        !operatorFirstName || !operatorLastName || !operatorUsername || !operatorPassword) {
       setError('Please fill in all required fields');
       return;
     }

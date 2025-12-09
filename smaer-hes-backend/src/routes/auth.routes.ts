@@ -2,6 +2,7 @@ import express from 'express';
 import * as expressValidator from 'express-validator';
 const { body, validationResult } = expressValidator;
 import { User } from '../models/User.model';
+import { CustomerNetwork } from '../models/CustomerNetwork.model';
 import { generateToken, authenticate } from '../middleware/auth.middleware';
 import { otpService } from '../services/otp.service';
 import axios from 'axios';
@@ -177,7 +178,6 @@ router.post('/register-network', async (req: express.Request, res: express.Respo
     }
 
     // Check if network code already exists
-    const { CustomerNetwork } = require('../models/CustomerNetwork.model');
     const existingNetwork = await CustomerNetwork.findOne({ networkCode });
     if (existingNetwork) {
       return res.status(400).json({
