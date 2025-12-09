@@ -229,6 +229,10 @@ router.post('/register-network', async (req: express.Request, res: express.Respo
       isActive: true,
     });
 
+    // Update network with createdBy reference
+    customerNetwork.createdBy = operatorUser._id;
+    await customerNetwork.save();
+
     res.status(201).json({
       success: true,
       message: 'Customer network registered successfully. You can now log in with your credentials.',

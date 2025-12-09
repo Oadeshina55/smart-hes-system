@@ -170,7 +170,7 @@ const customerNetworkSchema = new Schema<ICustomerNetwork>(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: false // Optional: self-service registration doesn't have a creator
     }
   },
   {
