@@ -38,6 +38,7 @@ import SecurityAudit from './pages/Advanced/SecurityAudit';
 import UserAccessControl from './pages/Advanced/UserAccessControl';
 import AuditTrail from './pages/Advanced/AuditTrail';
 import AIDashboard from './pages/AI/AIDashboard';
+import PriorityMetricsDashboard from './pages/Metrics/PriorityMetricsDashboard';
 import SessionLockModal from './components/SessionLockModal';
 
 // Create a client
@@ -128,6 +129,11 @@ function App() {
 
                     {/* AI Dashboard - All authenticated users */}
                     <Route path="/ai/dashboard" element={<AIDashboard />} />
+
+                    {/* Priority Metrics - Admin, Operator & Customer-Operator */}
+                    <Route element={<PrivateRoute allowedRoles={['admin', 'operator', 'customer-operator']} />}>
+                      <Route path="/metrics/priority" element={<PriorityMetricsDashboard />} />
+                    </Route>
 
                     {/* Advanced HES Features - Admin & Operator only */}
                     <Route element={<PrivateRoute allowedRoles={['admin', 'operator']} />}>

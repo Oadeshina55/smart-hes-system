@@ -88,6 +88,12 @@ const menuItems: MenuItemType[] = [
     icon: <Psychology />,
   },
   {
+    title: 'Priority Metrics',
+    path: '/metrics/priority',
+    icon: <Assessment />,
+    roles: ['admin', 'operator', 'customer-operator'],
+  },
+  {
     title: 'Area Management',
     path: '/system/areas',
     icon: <LocationOn />,
