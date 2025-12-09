@@ -584,7 +584,17 @@ const Dashboard: React.FC = () => {
         )}
 
         {/* Top Consumers */}
-        <Grid item xs={12} md={isCustomer || isCustomerOperator || isAdmin || isOperator ? 6 : 12}>
+        <Grid
+          item
+          xs={12}
+          md={
+            isCustomer || isCustomerOperator
+              ? 6
+              : isAdmin || isOperator
+              ? 6
+              : 12
+          }
+        >
           <Paper sx={{ p: 3, borderRadius: 3 }}>
             <Typography variant="h6" sx={{ mb: 2, color: '#344767', fontWeight: 600 }}>
               Top Energy Consumers
