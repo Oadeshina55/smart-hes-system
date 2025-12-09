@@ -13,6 +13,7 @@ import meterRoutes from './routes/meter.routes';
 import areaRoutes from './routes/area.routes';
 import customerRoutes from './routes/customer.routes';
 import customerNetworkRoutes from './routes/customerNetwork.routes';
+import endCustomerRoutes from './routes/endCustomer.routes';
 import consumptionRoutes from './routes/consumption.routes';
 import eventRoutes from './routes/event.routes';
 import alertRoutes from './routes/alert.routes';
@@ -139,6 +140,7 @@ app.use('/api/meters', meterRoutes);
 app.use('/api/areas', areaRoutes);  // DEPRECATED - use customer-networks
 app.use('/api/customers', customerRoutes);  // DEPRECATED - use end-customers
 app.use('/api/customer-networks', customerNetworkRoutes);  // Multi-tenant utility companies
+app.use('/api/end-customers', endCustomerRoutes);  // Multi-tenant end customers (electricity consumers)
 app.use('/api/consumption', consumptionRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/alerts', alertRoutes);
