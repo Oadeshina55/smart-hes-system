@@ -534,4 +534,108 @@ router.get('/network-stats', authenticate, authorize('admin', 'operator'), async
   }
 });
 
+// Get network consumption data - Admin/Operator only
+router.get('/network-consumption', authenticate, authorize('admin', 'operator'), async (req, res) => {
+  try {
+    const { days = 30 } = req.query;
+    const startDate = moment().subtract(Number(days), 'days').toDate();
+
+    // Get all active customer networks
+    const networks = await CustomerNetwork.find({ isActive: true }).select('_id networkName networkCode');
+
+    // Get consumption data aggregated by network
+    const networkConsumption = await Promise.all(
+      networks.map(async (network) => {
+        // Get all meters for this network
+        const meters = await Meter.find({ customerNetwork: network._id }).select('_id');
+        const meterIds = meters.map(m => m._id);
+
+        if (meterIds.length === 0) {
+          return {
+            networkId: network._id,
+            networkName: network.networkName,
+            networkCode: network.networkCode,
+            totalEnergy: 0,
+            totalCost: 0,
+            meterCount: 0,
+            avgEnergyPerMeter: 0,
+            peakPower: 0,
+            consumptionTrend: [],
+          };
+        }
+
+        // Aggregate consumption for all meters in this network
+        const aggregation = await Consumption.aggregate([
+          {
+            $match: {
+              meter: { $in: meterIds },
+              timestamp: { $gte: startDate },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalEnergy: { $sum: '$energy.activeEnergy' },
+              totalCost: { $sum: '$cost' },
+              peakPower: { $max: '$power.maxDemand' },
+              dataPoints: { $sum: 1 },
+            },
+          },
+        ]);
+
+        // Get daily consumption trend
+        const dailyTrend = await Consumption.aggregate([
+          {
+            $match: {
+              meter: { $in: meterIds },
+              timestamp: { $gte: startDate },
+              interval: 'daily',
+            },
+          },
+          {
+            $group: {
+              _id: { $dateToString: { format: '%Y-%m-%d', date: '$timestamp' } },
+              energy: { $sum: '$energy.activeEnergy' },
+            },
+          },
+          {
+            $sort: { _id: 1 },
+          },
+          {
+            $limit: 30,
+          },
+        ]);
+
+        const stats = aggregation[0] || { totalEnergy: 0, totalCost: 0, peakPower: 0 };
+
+        return {
+          networkId: network._id,
+          networkName: network.networkName,
+          networkCode: network.networkCode,
+          totalEnergy: stats.totalEnergy || 0,
+          totalCost: stats.totalCost || 0,
+          meterCount: meterIds.length,
+          avgEnergyPerMeter: meterIds.length > 0 ? (stats.totalEnergy || 0) / meterIds.length : 0,
+          peakPower: stats.peakPower || 0,
+          consumptionTrend: dailyTrend.map((d: any) => ({
+            date: d._id,
+            energy: d.energy,
+          })),
+        };
+      })
+    );
+
+    res.json({
+      success: true,
+      data: networkConsumption,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get network consumption data',
+      error: error.message,
+    });
+  }
+});
+
 export default router;

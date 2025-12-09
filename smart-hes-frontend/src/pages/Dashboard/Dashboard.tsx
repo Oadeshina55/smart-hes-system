@@ -88,6 +88,7 @@ const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [consumptionData, setConsumptionData] = useState<any[]>([]);
   const [networkStats, setNetworkStats] = useState<any[]>([]);
+  const [networkConsumption, setNetworkConsumption] = useState<any[]>([]);
   const [areaStats, setAreaStats] = useState<any[]>([]);
   const [topConsumers, setTopConsumers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -169,6 +170,7 @@ const Dashboard: React.FC = () => {
       // Fetch network stats for admin/operator
       if (isAdmin || isOperator) {
         apiCalls.push(axios.get('/dashboard/network-stats'));
+        apiCalls.push(axios.get('/dashboard/network-consumption', { params: { days: 30 } }));
       }
       // Fetch area stats for backward compatibility (non-customer users)
       else if (!isCustomer && !isCustomerOperator) {
@@ -188,12 +190,15 @@ const Dashboard: React.FC = () => {
       // Set network/area stats based on role
       if (isAdmin || isOperator) {
         setNetworkStats(responses[3]?.data.data || []);
+        setNetworkConsumption(responses[4]?.data.data || []);
         setAreaStats([]);
       } else if (!isCustomer && !isCustomerOperator) {
         setAreaStats(responses[3]?.data.data || []);
         setNetworkStats([]);
+        setNetworkConsumption([]);
       } else {
         setNetworkStats([]);
+        setNetworkConsumption([]);
         setAreaStats([]);
       }
     } catch (error) {
@@ -459,6 +464,127 @@ const Dashboard: React.FC = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      {/* Network Consumption Statistics - Admin/Operator only */}
+      {(isAdmin || isOperator) && networkConsumption.length > 0 && (
+        <Grid container spacing={3} sx={{ mb: 3 }}>
+          <Grid item xs={12}>
+            <Paper sx={{ p: 3, borderRadius: 3 }}>
+              <Typography variant="h6" sx={{ mb: 3, color: '#344767', fontWeight: 600 }}>
+                Network Consumption Analytics (Last 30 Days)
+              </Typography>
+
+              {/* Consumption Comparison Bar Chart */}
+              <Box sx={{ mb: 4 }}>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={networkConsumption}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                    <XAxis dataKey="networkName" stroke="#8392AB" angle={-45} textAnchor="end" height={80} />
+                    <YAxis stroke="#8392AB" />
+                    <Tooltip
+                      formatter={(value: any) => value.toFixed(2)}
+                      contentStyle={{ borderRadius: 8, border: '1px solid #e0e0e0' }}
+                    />
+                    <Legend />
+                    <Bar dataKey="totalEnergy" fill="#49a3f1" name="Total Energy (kWh)" radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="avgEnergyPerMeter" fill="#66BB6A" name="Avg per Meter (kWh)" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Box>
+
+              {/* Detailed Network Consumption Cards */}
+              <Grid container spacing={2}>
+                {networkConsumption.map((network) => (
+                  <Grid item xs={12} md={6} lg={4} key={network.networkId}>
+                    <Card sx={{
+                      borderRadius: 2,
+                      border: '1px solid #e0e0e0',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+                        transform: 'translateY(-2px)',
+                      }
+                    }}>
+                      <CardContent>
+                        <Box sx={{ mb: 2 }}>
+                          <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#344767', mb: 0.5 }}>
+                            {network.networkName}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#8392AB' }}>
+                            {network.networkCode} • {network.meterCount} Meters
+                          </Typography>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography variant="body2" sx={{ color: '#67748e' }}>
+                              Total Energy
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 600, color: '#49a3f1' }}>
+                              {network.totalEnergy.toFixed(2)} kWh
+                            </Typography>
+                          </Box>
+
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography variant="body2" sx={{ color: '#67748e' }}>
+                              Total Cost
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 600, color: '#EC407A' }}>
+                              ${network.totalCost.toFixed(2)}
+                            </Typography>
+                          </Box>
+
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography variant="body2" sx={{ color: '#67748e' }}>
+                              Avg per Meter
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 600, color: '#66BB6A' }}>
+                              {network.avgEnergyPerMeter.toFixed(2)} kWh
+                            </Typography>
+                          </Box>
+
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography variant="body2" sx={{ color: '#67748e' }}>
+                              Peak Power
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 600, color: '#FFA726' }}>
+                              {network.peakPower.toFixed(2)} kW
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                        {network.consumptionTrend && network.consumptionTrend.length > 0 && (
+                          <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid #e0e0e0' }}>
+                            <Typography variant="caption" sx={{ color: '#8392AB', mb: 1, display: 'block' }}>
+                              Consumption Trend (Last {network.consumptionTrend.length} days)
+                            </Typography>
+                            <ResponsiveContainer width="100%" height={60}>
+                              <LineChart data={network.consumptionTrend}>
+                                <Line
+                                  type="monotone"
+                                  dataKey="energy"
+                                  stroke="#49a3f1"
+                                  strokeWidth={2}
+                                  dot={false}
+                                />
+                                <Tooltip
+                                  formatter={(value: any) => `${value.toFixed(2)} kWh`}
+                                  labelFormatter={(label) => `Date: ${label}`}
+                                  contentStyle={{ fontSize: 10, borderRadius: 4 }}
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </Box>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+      )}
 
       {/* Network/Area Statistics and Top Consumers */}
       <Grid container spacing={3}>

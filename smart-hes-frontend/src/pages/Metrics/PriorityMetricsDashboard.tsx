@@ -24,6 +24,10 @@ import {
   MenuItem,
   Tab,
   Tabs,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Divider,
 } from '@mui/material';
 import {
   ElectricBolt,
@@ -41,6 +45,14 @@ import {
   Refresh,
   CheckCircle,
   Error,
+  Info,
+  ExpandMore,
+  MonetizationOn,
+  Shield,
+  NetworkWifi,
+  Event,
+  Timer,
+  VpnKey,
 } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
@@ -399,52 +411,512 @@ const PriorityMetricsDashboard: React.FC = () => {
             </Grid>
           </Grid>
 
-          {/* 14 Priority Metrics Reference */}
+          {/* 14 Priority Metrics Reference - Enhanced */}
           <Card sx={{ mb: 3 }}>
             <CardContent>
-              <Typography variant="h6" gutterBottom>
-                14 Priority OBIS Metrics
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Assessment sx={{ mr: 1, fontSize: 28, color: 'primary.main' }} />
+                <Box>
+                  <Typography variant="h6">
+                    14 Critical OBIS Parameters - Detailed Reference
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Essential metrics for billing accuracy, security monitoring, and network diagnostics
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Alert severity="info" sx={{ mb: 3 }}>
+                These 14 parameters are industry-standard OBIS codes used for smart meter monitoring.
+                Each metric serves a specific purpose in ensuring accurate billing, detecting fraud, and maintaining grid reliability.
+              </Alert>
+
+              {/* Category 1: Billing & Revenue Protection */}
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: 'primary.main', display: 'flex', alignItems: 'center' }}>
+                <MonetizationOn sx={{ mr: 1 }} /> Billing & Revenue Protection
+              </Typography>
+              <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#1" size="small" color="primary" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Cumulative Active Energy</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 1-0:1.8.0.255</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Total electrical energy consumed (in kWh) since meter installation.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> This is the PRIMARY billing parameter. All customer invoices are calculated from this value.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Monthly billing calculations</Typography></li>
+                        <li><Typography variant="body2">Revenue assurance and reconciliation</Typography></li>
+                        <li><Typography variant="body2">Energy consumption trend analysis</Typography></li>
+                        <li><Typography variant="body2">Fraud detection (sudden drops indicate tampering)</Typography></li>
+                      </ul>
+                      <Alert severity="warning" sx={{ mt: 1 }}>
+                        Any discrepancy in this parameter directly impacts revenue. Monitor for unexpected resets or negative values.
+                      </Alert>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#3" size="small" color="primary" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Current Credit Balance</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: Prepaid Registers</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Remaining credit balance on prepaid meters (in currency units).
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Prevents service disruptions and enables proactive customer engagement.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Automatic low-credit alerts to customers</Typography></li>
+                        <li><Typography variant="body2">Preventing unexpected disconnections</Typography></li>
+                        <li><Typography variant="body2">Cash flow forecasting for utility</Typography></li>
+                        <li><Typography variant="body2">Customer segmentation by usage patterns</Typography></li>
+                      </ul>
+                      <Alert severity="info" sx={{ mt: 1 }}>
+                        Send SMS/email alerts when credit falls below configurable thresholds (e.g., 20% remaining).
+                      </Alert>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#11" size="small" color="primary" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Cumulative Reactive Energy</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 1-0:3.8.0.255</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Total reactive power consumed (in kVArh) - energy that doesn't perform useful work.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Industrial customers are often charged for poor power factor. Helps utilities manage grid efficiency.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Power factor penalty calculations</Typography></li>
+                        <li><Typography variant="body2">Identifying customers with inductive loads</Typography></li>
+                        <li><Typography variant="body2">Grid voltage regulation planning</Typography></li>
+                        <li><Typography variant="body2">Recommending power factor correction equipment</Typography></li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#12" size="small" color="primary" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Time-of-Use Energy</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 1-0:1.8.1/2.255</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Energy consumption separated by tariff periods (peak, off-peak, shoulder).
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Enables dynamic pricing to incentivize off-peak consumption and reduce grid strain.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Multi-tariff billing (peak/off-peak rates)</Typography></li>
+                        <li><Typography variant="body2">Demand response programs</Typography></li>
+                        <li><Typography variant="body2">Load shifting incentives</Typography></li>
+                        <li><Typography variant="body2">Revenue optimization during peak hours</Typography></li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              </Grid>
+
+              {/* Category 2: Security & Fraud Detection */}
+              <Divider sx={{ my: 3 }} />
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: 'error.main', display: 'flex', alignItems: 'center' }}>
+                <Shield sx={{ mr: 1 }} /> Security & Fraud Detection
+              </Typography>
+              <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#2" size="small" color="error" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Last Tamper Event</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: Various Tamper Codes</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Timestamp and type of the most recent tamper detection (cover open, magnetic interference, etc.).
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Tamper events indicate potential meter bypass or fraud attempts, leading to revenue loss.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Tamper types monitored:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Cover open/terminal block removal</Typography></li>
+                        <li><Typography variant="body2">Magnetic field interference</Typography></li>
+                        <li><Typography variant="body2">Phase reversal or missing phase</Typography></li>
+                        <li><Typography variant="body2">Neutral disturbance</Typography></li>
+                      </ul>
+                      <Alert severity="error" sx={{ mt: 1 }}>
+                        <strong>Action required:</strong> Dispatch field technician for on-site inspection within 24-48 hours.
+                      </Alert>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#8" size="small" color="error" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">TID Counter (Token ID)</Typography>
+                          <Typography variant="caption" color="text.secondary">STS Security Parameter</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Sequential counter embedded in each prepaid token to prevent token replay attacks.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Prevents fraudsters from reusing old tokens to steal electricity.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Security mechanism:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Meter rejects tokens with TID lower than last accepted value</Typography></li>
+                        <li><Typography variant="body2">Each token must have a higher TID than previous</Typography></li>
+                        <li><Typography variant="body2">Detects cloned/duplicate tokens</Typography></li>
+                      </ul>
+                      <Alert severity="warning" sx={{ mt: 1 }}>
+                        TID rollback attempts indicate fraud. Flag account for investigation.
+                      </Alert>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#14" size="small" color="error" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">STS Encryption Keys</Typography>
+                          <Typography variant="caption" color="text.secondary">STS Key Management</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Current encryption key version used for token generation and validation.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Ensures only authorized vending systems can generate valid tokens for each meter.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Key management best practices:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Rotate keys periodically (annually recommended)</Typography></li>
+                        <li><Typography variant="body2">Store keys in HSM (Hardware Security Module)</Typography></li>
+                        <li><Typography variant="body2">Audit key usage and token generation</Typography></li>
+                        <li><Typography variant="body2">Never share keys across customer networks</Typography></li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              </Grid>
+
+              {/* Category 3: Service & Reliability */}
+              <Divider sx={{ my: 3 }} />
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: 'success.main', display: 'flex', alignItems: 'center' }}>
+                <PowerOff sx={{ mr: 1 }} /> Service & Grid Reliability
+              </Typography>
+              <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#4" size="small" color="success" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Connection Status</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 0-0:96.5.5.255</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Current relay status (connected/disconnected) and control mode.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Enables remote service connect/disconnect, reducing operational costs and improving customer service.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Remote disconnection for non-payment</Typography></li>
+                        <li><Typography variant="body2">Same-day reconnection after payment</Typography></li>
+                        <li><Typography variant="body2">Emergency load shedding coordination</Typography></li>
+                        <li><Typography variant="body2">Verify successful service restoration</Typography></li>
+                      </ul>
+                      <Alert severity="success" sx={{ mt: 1 }}>
+                        Eliminates costly truck rolls for routine connections/disconnections.
+                      </Alert>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#5" size="small" color="success" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Power Outage/Restoration Events</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 0-0:96.7.0.255</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Counter of power failure events and timestamps of last outage/restoration.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Tracks grid reliability metrics (SAIDI/SAIFI) and helps identify problem areas.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Calculate average outage duration per customer</Typography></li>
+                        <li><Typography variant="body2">Identify feeders/transformers with frequent failures</Typography></li>
+                        <li><Typography variant="body2">Regulatory compliance reporting (SAIDI/SAIFI)</Typography></li>
+                        <li><Typography variant="body2">Prioritize infrastructure investment</Typography></li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              </Grid>
+
+              {/* Category 4: Real-Time Monitoring */}
+              <Divider sx={{ my: 3 }} />
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: 'info.main', display: 'flex', alignItems: 'center' }}>
+                <Speed sx={{ mr: 1 }} /> Real-Time Load & Power Quality
+              </Typography>
+              <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#6" size="small" color="info" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Instantaneous Power</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 1-0:1.7.0.255</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Current power consumption in real-time (kW).
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Detects abnormal load patterns, unauthorized connections, and enables load management.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Real-time load monitoring dashboards</Typography></li>
+                        <li><Typography variant="body2">Detect sudden load spikes (possible theft or bypass)</Typography></li>
+                        <li><Typography variant="body2">Customer energy usage coaching</Typography></li>
+                        <li><Typography variant="body2">Demand response program activation</Typography></li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#7" size="small" color="info" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Instantaneous Voltage</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 1-0:32.7.0.255 (Phase A)</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Current voltage level on Phase A (Volts).
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Monitors power quality. Under/over voltage damages customer equipment and indicates grid problems.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Alert thresholds:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2"><strong>Under-voltage:</strong> Below 207V (230V -10%)</Typography></li>
+                        <li><Typography variant="body2"><strong>Over-voltage:</strong> Above 253V (230V +10%)</Typography></li>
+                        <li><Typography variant="body2">Sustained deviations require corrective action</Typography></li>
+                      </ul>
+                      <Alert severity="warning" sx={{ mt: 1 }}>
+                        Poor voltage quality leads to customer complaints and equipment damage claims.
+                      </Alert>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#13" size="small" color="info" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Maximum Demand</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 1-0:1.6.0.255</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Highest average power recorded over a billing period (typically 15-30 minute intervals).
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Industrial customers are charged based on peak demand, not just total energy. Critical for capacity planning.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Demand charge billing for commercial/industrial</Typography></li>
+                        <li><Typography variant="body2">Transformer sizing and upgrade planning</Typography></li>
+                        <li><Typography variant="body2">Identify customers exceeding contracted capacity</Typography></li>
+                        <li><Typography variant="body2">Load forecasting and generation planning</Typography></li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              </Grid>
+
+              {/* Category 5: Diagnostics & Analytics */}
+              <Divider sx={{ my: 3 }} />
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: 'secondary.main', display: 'flex', alignItems: 'center' }}>
+                <ShowChart sx={{ mr: 1 }} /> Diagnostics & Advanced Analytics
               </Typography>
               <Grid container spacing={2}>
-                {[
-                  { num: 1, name: 'Cumulative Active Energy', obis: '1-0:1.8.0.255', purpose: 'Billing' },
-                  { num: 2, name: 'Last Tamper Event', obis: 'Various', purpose: 'Security' },
-                  { num: 3, name: 'Current Credit Balance', obis: 'Prepaid', purpose: 'Revenue' },
-                  { num: 4, name: 'Connection Status', obis: '0-0:96.5.5.255', purpose: 'Service' },
-                  { num: 5, name: 'Power Outage/Restoration', obis: '0-0:96.7.0.255', purpose: 'Reliability' },
-                  { num: 6, name: 'Instantaneous Power', obis: '1-0:1.7.0.255', purpose: 'Load' },
-                  { num: 7, name: 'Instantaneous Voltage', obis: '1-0:32.7.0.255', purpose: 'Quality' },
-                  { num: 8, name: 'TID Counter', obis: 'STS', purpose: 'Security' },
-                  { num: 9, name: 'Load Profile Data', obis: '1-0:99.1.0.255', purpose: 'Analysis' },
-                  { num: 10, name: 'Signal Strength (RSSI)', obis: 'Modem', purpose: 'Connectivity' },
-                  { num: 11, name: 'Cumulative Reactive Energy', obis: '1-0:3.8.0.255', purpose: 'Power Factor' },
-                  { num: 12, name: 'Time-of-Use Energy', obis: '1-0:1.8.1/2.255', purpose: 'Tariff' },
-                  { num: 13, name: 'Maximum Demand', obis: '1-0:1.6.0.255', purpose: 'Capacity' },
-                  { num: 14, name: 'STS Keys', obis: 'STS', purpose: 'Token Security' },
-                ].map((metric) => (
-                  <Grid item xs={12} sm={6} md={3} key={metric.num}>
-                    <Paper sx={{ p: 2, height: '100%' }}>
-                      <Chip
-                        label={`#${metric.num}`}
-                        size="small"
-                        color="primary"
-                        sx={{ mb: 1 }}
-                      />
-                      <Typography variant="body2" fontWeight="bold" gutterBottom>
-                        {metric.name}
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#9" size="small" color="secondary" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Load Profile Data</Typography>
+                          <Typography variant="caption" color="text.secondary">OBIS: 1-0:99.1.0.255</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Time-series energy consumption data (typically 15-30 minute intervals).
                       </Typography>
-                      <Typography variant="caption" color="text.secondary" display="block">
-                        OBIS: {metric.obis}
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Provides granular consumption patterns for analytics, forecasting, and billing dispute resolution.
                       </Typography>
-                      <Chip
-                        label={metric.purpose}
-                        size="small"
-                        variant="outlined"
-                        sx={{ mt: 1 }}
-                      />
-                    </Paper>
-                  </Grid>
-                ))}
+                      <Typography variant="body2" paragraph>
+                        <strong>Use cases:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2">Time-of-use billing verification</Typography></li>
+                        <li><Typography variant="body2">Customer usage pattern analysis</Typography></li>
+                        <li><Typography variant="body2">Load forecasting and peak prediction</Typography></li>
+                        <li><Typography variant="body2">Billing dispute investigation</Typography></li>
+                        <li><Typography variant="body2">AI/ML anomaly detection models</Typography></li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Chip label="#10" size="small" color="secondary" sx={{ mr: 2 }} />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography variant="body1" fontWeight="bold">Signal Strength (RSSI)</Typography>
+                          <Typography variant="caption" color="text.secondary">Communication Module Parameter</Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography variant="body2" paragraph>
+                        <strong>What it measures:</strong> Cellular/RF signal strength in dBm (Received Signal Strength Indicator).
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Why it's critical:</strong> Poor signal causes communication failures, leading to missed billing data and operational blind spots.
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        <strong>Signal quality guidelines:</strong>
+                      </Typography>
+                      <ul style={{ marginTop: 0 }}>
+                        <li><Typography variant="body2"><strong>Excellent:</strong> -50 to -70 dBm</Typography></li>
+                        <li><Typography variant="body2"><strong>Good:</strong> -70 to -85 dBm</Typography></li>
+                        <li><Typography variant="body2"><strong>Fair:</strong> -85 to -100 dBm (may experience drops)</Typography></li>
+                        <li><Typography variant="body2"><strong>Poor:</strong> Below -100 dBm (frequent failures)</Typography></li>
+                      </ul>
+                      <Alert severity="info" sx={{ mt: 1 }}>
+                        Consider external antennas or repeaters for meters with persistent poor signal.
+                      </Alert>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
               </Grid>
             </CardContent>
           </Card>
