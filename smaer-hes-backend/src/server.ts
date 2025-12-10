@@ -29,6 +29,7 @@ import powerQualityRoutes from './routes/powerQuality.routes';
 import auditRoutes from './routes/audit.routes';
 import mobileRoutes from './routes/mobile.routes';
 import priorityMetricsRoutes from './routes/priorityMetrics.routes';
+import meterControlRoutes from './routes/meterControl.routes';
 
 // Import middleware
 import { auditLogger } from './middleware/audit.middleware';
@@ -41,6 +42,8 @@ import { meterPollingService } from './services/meterPolling.service';
 import obisFunctionService from './services/obisFunction.service';
 import aiMonitoringService from './services/aiMonitoring.service';
 import { NotificationService } from './services/notification.service';
+import { meterCommService } from './services/meterComm.service';
+import { meterScheduler } from './services/meterScheduler.service';
 
 // Load environment variables
 dotenv.config();
@@ -156,6 +159,7 @@ app.use('/api/power-quality', powerQualityRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/mobile', mobileRoutes);
 app.use('/api/priority-metrics', priorityMetricsRoutes);  // Priority OBIS metrics for billing & diagnostics
+app.use('/api/meter-control', meterControlRoutes);  // Meter communication and control
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -188,9 +192,30 @@ io.on('connection', (socket) => {
 });
 
 // Initialize services
-function initializeServices() {
+async function initializeServices() {
   // OBIS function database is loaded automatically on import
   console.log('✅ OBIS function database loaded');
+
+  // Initialize MQTT connection for meter communication
+  const mqttEnabled = process.env.MQTT_ENABLED !== 'false';
+  if (mqttEnabled) {
+    try {
+      const mqttBroker = process.env.MQTT_BROKER_URL || 'mqtt://localhost:1883';
+      console.log(`🔌 Connecting to MQTT broker: ${mqttBroker}...`);
+      await meterCommService.initializeMQTT(mqttBroker);
+      console.log('✅ MQTT meter communication service initialized');
+
+      // Start automatic meter reading scheduler
+      const readingInterval = parseInt(process.env.METER_READ_INTERVAL || '30');
+      meterScheduler.startAutoReading(readingInterval);
+      console.log(`⏰ Meter reading scheduler started (every ${readingInterval} minutes)`);
+    } catch (error) {
+      console.error('❌ Failed to initialize MQTT service:', error);
+      console.log('⚠️  Meter communication will be unavailable');
+    }
+  } else {
+    console.log('ℹ️  MQTT meter communication disabled (set MQTT_ENABLED=true to enable)');
+  }
 
   // Start meter polling service (default: every 60 seconds)
   const pollingInterval = parseInt(process.env.METER_POLLING_INTERVAL || '60000');

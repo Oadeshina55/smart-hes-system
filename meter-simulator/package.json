@@ -1,0 +1,17 @@
+{
+  "name": "meter-simulator",
+  "version": "1.0.0",
+  "description": "Smart meter simulator for testing HES system",
+  "main": "simulator.js",
+  "scripts": {
+    "start": "node simulator.js",
+    "simulate-single": "node simulator.js single",
+    "simulate-multiple": "node simulator.js multiple"
+  },
+  "keywords": ["meter", "simulator", "MQTT", "smart-meter"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "mqtt": "^5.0.0"
+  }
+}
