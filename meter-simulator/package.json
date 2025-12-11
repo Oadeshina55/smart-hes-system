@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node simulator.js",
     "simulate-single": "node simulator.js single",
-    "simulate-multiple": "node simulator.js multiple"
+    "simulate-multiple": "node simulator.js multiple",
+    "simulate-existing": "node simulator-existing.js",
+    "simulate-your-meters": "node simulator-existing.js 14534557799 46000755036"
   },
   "keywords": ["meter", "simulator", "MQTT", "smart-meter"],
   "author": "",
